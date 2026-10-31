@@ -1,0 +1,223 @@
+Enhance Quote Creation Page with Dynamic Data Integration (Do Not Change UI Design)
+
+The current Quote Creation page UI is correct. Do not modify the layout, styling, spacing, colors, or responsiveness. Only implement the following functional improvements.
+
+1. Quote Number
+Quote Number must be auto-generated.
+
+Format:
+
+EST-000001
+EST-000002
+EST-000003
+It should automatically increment based on the last created quotation.
+User should not be able to edit this field.
+2. Quote Date & Valid Till Date
+Quote Date should default to Today's Date.
+Valid Till Date should automatically be 7 days after the Quote Date.
+If the Quote Date changes, Valid Till Date should automatically recalculate.
+User may manually override the Valid Till Date if required.
+
+Example:
+
+Quote Date : 23-07-2026
+Valid Till : 30-07-2026
+3. Client Name
+
+Rename
+
+Customer Name
+
+to
+
+Client Name
+
+Make it a searchable dropdown.
+
+The dropdown should fetch all active clients from the Clients Master.
+
+Display:
+
+ABC Pvt Ltd
+XYZ Technologies
+Nido Industries
+...
+4. Auto Populate Client Information
+
+When a Client is selected, automatically fetch the following from the Client Master.
+
+Contact Person
+
+Populate from Client Details.
+
+Billing Address
+
+Populate from Client Billing Address.
+
+Email Recipients
+
+Automatically populate all configured quotation email recipients for that client.
+
+If multiple emails exist, load them all.
+
+Example
+
+sales@abc.com
+purchase@abc.com
+accounts@abc.com
+
+Users should still be able to add or remove email recipients manually.
+
+5. Shipping Address
+
+If
+
+☑ Same as Billing Address
+
+is checked
+
+Automatically copy Billing Address into Shipping Address.
+
+If unchecked
+
+Shipping Address becomes editable.
+
+6. Line Item Product Selection
+
+The Item Name dropdown should fetch all products from the Master Catalogue.
+
+Display format:
+
+Laptop HP ProBook
+Dell Monitor 24"
+Canon Printer
+Mouse Logitech
+...
+
+Use search functionality for easier selection.
+
+7. Auto Populate Product Details
+
+When a product is selected, automatically populate the following from the Master Catalogue:
+
+Description
+HSN/SAC Code
+Default GST %
+Unit of Measure (if available)
+
+The user should only enter:
+
+Quantity
+Rate
+Discount (optional)
+8. GST Calculation
+
+GST must calculate dynamically.
+
+When GST % changes for a product, immediately update:
+
+Line Amount
+GST Amount
+Invoice Total
+9. GST Summary
+
+The GST summary on the right side must group taxes based on GST rate.
+
+Example:
+
+Products
+
+Laptop
+GST 18%
+
+Mouse
+GST 18%
+
+Office Chair
+GST 12%
+
+Water Bottle
+GST 5%
+
+Summary should become:
+
+Subtotal
+
+GST 18%
+CGST 9%
+SGST 9%
+
+GST 12%
+CGST 6%
+SGST 6%
+
+GST 5%
+CGST 2.5%
+SGST 2.5%
+
+Grand Total
+
+Do not combine different GST percentages into one total.
+
+Each GST slab should appear separately.
+
+10. Multiple Line Items
+
+Support unlimited line items.
+
+Each row should calculate independently.
+
+Invoice totals should update instantly whenever:
+
+Product changes
+Quantity changes
+Rate changes
+Discount changes
+GST % changes
+11. Data Sources
+
+Use existing data only.
+
+Client Information
+
+Fetch from:
+
+Clients Master
+Client Details
+
+Fields:
+
+Client Name
+Contact Person
+Billing Address
+Email Recipients
+Product Information
+
+Fetch from:
+
+Master Catalogue
+
+Fields:
+
+Product Name
+Description
+HSN/SAC
+GST %
+Unit
+
+Do not duplicate product data.
+
+Always use the existing Master Catalogue records.
+
+12. Performance
+
+Use existing APIs/database queries.
+
+Do not create duplicate tables.
+
+Do not break existing quotation functionality.
+
+Important
+Do not change the current UI design.
+Do not modify page layout, spacing, colors, typography, or responsiveness.
+Only implement the above business logic and data integrations while preserving the existing design exactly as it is.

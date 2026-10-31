@@ -1,0 +1,394 @@
+The next session should continue from the existing audit. It should not repeat the full project audit.
+
+Already completed
+Added protected routes:
+/portal/users
+/portal/roles
+/portal/addresses
+Updated replit.md with the audit findings and continuation notes.
+No packages, database schema, or existing workflows were changed.
+Remaining corrections
+1. Add secure server-side authentication
+Current issue:
+
+Authentication is handled in localStorage
+Sessions are not validated by the server
+Users can modify nido_user in browser storage
+The backend has no authentication middleware
+Required:
+
+Use an approved authentication provider or existing project authentication system
+Do not create a second login system
+Add server-side session/token validation
+Keep the current login page and redirect behavior
+Do not trust userType, clientId, role, or permissions from browser storage
+Server should derive the authenticated user from the validated session
+Relevant files:
+
+src/contexts/AuthContext.tsx
+src/pages/LoginPage.tsx
+src/lib/nidoUsersStore.ts
+src/lib/portalUserStore.ts
+server/index.js
+server/routes/
+
+2. Move users and clients from localStorage to secure persistence
+Current issue:
+
+NIDO users are stored in localStorage
+Client portal users are stored in localStorage
+Clients, orders, and purchase orders are also primarily frontend/localStorage data
+Required:
+
+Add database-backed persistence using the approved database
+Preserve existing records and local demo behavior during migration
+Do not create duplicate user or client tables
+Add migrations instead of destructive schema changes
+The database should eventually support:
+
+Users
+Clients
+Organizations/tenants if required by the existing architecture
+Client-user relationships
+Roles
+Permissions
+Invitations
+Sessions or refresh tokens
+Password-reset requests
+Audit events
+Do not modify the database until the existing schema is inspected and the database connection is available.
+
+3. Remove plaintext password storage
+Current issue:
+
+src/lib/nidoUsersStore.ts stores passwords directly
+src/lib/portalUserStore.ts stores passwords directly
+Portal user forms expose passwords as plain text
+Seed credentials are present in frontend source
+Required:
+
+Never store plaintext passwords
+Use the selected authentication provider for password creation and reset
+Do not create a custom password hashing system if the provider supports password management
+Remove passwords from client/user profile records
+Avoid exposing temporary passwords in frontend state or localStorage
+Replace demo seed credentials safely
+4. Complete Client Management → Users & Access
+The existing Client Detail page already has Users and Roles tabs. Extend those existing modules instead of creating a duplicate page.
+
+Relevant files:
+
+src/pages/ClientDetailPage.tsx
+src/pages/ClientUsersPage.tsx
+src/pages/ClientRolesPage.tsx
+src/components/ClientUsersTable.tsx
+src/lib/clientStore.ts
+
+The existing client-user management should support:
+
+First name
+Last name
+Email
+Username, if supported
+Mobile number
+Client relationship
+Role
+Permissions
+Status
+Invitation status
+Last login
+Created date
+Admin actions should include:
+
+View user
+Edit user
+Activate
+Deactivate
+Suspend
+Reset password through the auth provider
+Send invitation
+Resend invitation
+Revoke invitation
+Change role
+Manage permissions
+View audit history
+The selected client must always establish the client-user relationship. A client user must not be created without a valid client assignment.
+
+5. Implement secure invitations
+Current issue:
+
+Email templates exist, but there is no complete invitation flow
+No secure invitation token lifecycle exists
+Required statuses:
+
+Pending
+Accepted
+Expired
+Revoked
+
+Required flow:
+
+Admin creates client user
+→ Secure invitation token generated
+→ Invitation email sent
+→ User opens expiring invitation
+→ User creates password through auth provider
+→ Invitation accepted
+→ User becomes Active
+
+Required admin actions:
+
+Send invitation
+Resend invitation
+Revoke invitation
+Rules:
+
+Tokens must be secure and expiring
+Do not store plaintext invitation tokens if avoidable
+Do not create duplicate active invitations unnecessarily
+Resending should safely invalidate or supersede the previous pending invitation
+Email-related files:
+
+server/routes/email.js
+server/services/emailService.js
+server/templateDefaults.js
+server/migrate.js
+
+The email database currently requires:
+
+SUPABASE_DB_URL
+
+Do not invent this value. Use the environment secrets flow when the user provides or connects the required service.
+
+6. Implement status enforcement
+Current issue:
+
+Some status controls exist only in the UI/localStorage
+Portal users have only active/inactive
+Status is not enforced by a backend authorization layer
+Required statuses:
+
+Invited
+Active
+Inactive
+Suspended
+
+Rules:
+
+Inactive users cannot access the Client Portal
+Suspended users cannot log in
+Status changes must immediately affect authorization
+Status must be checked server-side
+Do not only hide users or buttons in React
+Existing relevant files:
+
+src/lib/nidoUsersStore.ts
+src/lib/portalUserStore.ts
+src/contexts/AuthContext.tsx
+src/App.tsx
+
+7. Unify or map existing roles and permissions
+There are currently separate local role systems:
+
+NIDO internal roles in nidoUsersStore.ts
+NIDO permission matrix in permissionsStore.ts
+Client portal roles in ClientPortalRolesPage.tsx
+Do not create duplicate roles.
+
+Use existing roles where possible, or create a clear mapping to:
+
+Client Admin
+Buyer
+Approver
+Viewer
+Required:
+
+Role assignment must be persisted securely
+Permission changes must apply immediately
+Client Admin should be able to manage client users only when permitted
+Buyer should be able to shop and place orders
+Approver should be able to approve/reject permitted orders
+Viewer should be read-only
+Backend authorization must enforce permissions, not just PermissionGate
+Relevant files:
+
+src/lib/permissionsStore.ts
+src/lib/permissions.ts
+src/contexts/PermissionsContext.tsx
+src/components/layout/PermissionGate.tsx
+src/pages/ClientRolesPage.tsx
+src/pages/ClientPortalRolesPage.tsx
+
+8. Enforce client/tenant data isolation
+This is the highest-priority security correction.
+
+Current issue:
+
+Client filtering happens mainly in React/localStorage
+A user could modify browser storage or URL parameters
+The backend has no tenant authorization
+Required:
+
+Derive client/tenant identity from the authenticated server session
+Do not trust clientId from URL parameters, query parameters, request bodies, or localStorage
+Every backend query must verify the user’s client relationship
+Reject cross-client access to:
+Catalog
+Pricing
+Vendors
+Cart
+Orders
+Invoices
+Reports
+Profile
+Purchase orders
+Enforce access at the API/database layer
+Preserve existing portal UI and routes
+Relevant files:
+
+src/App.tsx
+src/pages/ClientDetailPage.tsx
+src/contexts/OrdersContext.tsx
+src/lib/clientCatalogStore.ts
+src/lib/purchaseOrderStore.ts
+server/index.js
+server/routes/
+
+9. Add a real audit log
+Current issue:
+
+Internal login history exists
+AuditLogPage.tsx is currently a placeholder
+There is no central audit-event system
+Record at least:
+
+User created
+Invitation sent
+Invitation resent
+Invitation accepted
+Invitation revoked
+User activated
+User deactivated
+User suspended
+Role changed
+Permission changed
+Password reset requested
+Password changed
+User deleted
+Login success/failure
+Cross-client access denied
+Each event should include:
+
+Actor
+Target user
+Client
+Action
+Timestamp
+Safe metadata
+Never record:
+
+Passwords
+Access tokens
+Invitation secrets
+Recovery codes
+Relevant files:
+
+src/pages/AuditLogPage.tsx
+src/pages/AuditTrailPage.tsx
+src/lib/nidoUsersStore.ts
+server/migrate.js
+server/routes/
+
+10. Preserve the existing procurement workflow
+Do not redesign or rebuild:
+
+Shop
+Cart
+Checkout
+Orders
+Vendor management
+Product catalog
+Pricing engine
+Stock reservation
+Draft purchase orders
+Verify the existing flow still works:
+
+Client user login
+→ Client Portal
+→ Client catalog
+→ Vendor selection
+→ Cart
+→ Stock reservation
+→ Checkout
+→ Order
+→ Draft purchase order
+
+Relevant files:
+
+src/pages/ProductDetailPage.tsx
+src/pages/ShopPage.tsx
+src/contexts/CartContext.tsx
+src/pages/CartPage.tsx
+src/pages/CheckoutPage.tsx
+src/pages/ReviewPage.tsx
+src/pages/OrderDetailsPage.tsx
+src/lib/purchaseOrderStore.ts
+
+The selected vendor must remain attached to the cart item, order, and draft PO.
+
+11. Add tests for the important security cases
+Test these scenarios:
+
+Admin creates a client user
+User appears under the correct client
+Admin sends an invitation
+Invitation shows as Pending
+User accepts invitation
+User creates a password securely
+User becomes Active
+User logs into the correct client portal
+User cannot access another client’s order
+User cannot access another client’s catalog or invoice
+Admin deactivates a user
+Deactivated user cannot access the portal
+Admin suspends a user
+Suspended user cannot log in
+Admin changes a role
+Permissions update correctly
+Admin resends an invitation safely
+Vendor selection remains intact through Cart → Order → Draft PO
+Multiple users under one client see only permitted client data
+Browser storage manipulation does not bypass server authorization
+Copy this prompt on the next import
+Continue the NIDO client-user-management corrections from the audit and handoff already recorded in replit.md.
+Do not repeat the full project audit. Do not reinstall dependencies. Do not modify package.json or package-lock.json. Do not create a second authentication system, second user-management page, duplicate roles, duplicate client tables, or duplicate client portal.
+Inspect only the relevant files needed for the next correction.
+Work in small phases:
+1. First inspect the existing database connection and approved authentication approach.
+2. Do not modify the database until the existing schema is confirmed.
+3. Implement secure server-side authentication and sessions.
+4. Move client-user authentication away from plaintext localStorage passwords.
+5. Add database-backed client users, client relationships, roles, permissions, invitations, status, and audit events using migrations.
+6. Reuse the existing ClientDetailPage Users/Roles tabs and existing portal pages.
+7. Add secure invitations with Pending, Accepted, Expired, and Revoked states.
+8. Enforce Active, Inactive, Suspended, and Invited status server-side.
+9. Enforce client/tenant isolation on the backend and database layer.
+10. Preserve the existing portal, shop, cart, checkout, vendor-selection, order, stock, and draft-PO workflows.
+11. Test cross-client access denial and the complete invitation/login/order flow.
+12. Stop after the current phase if the database connection, auth provider, or required secret is unavailable. Report the exact blocker instead of inventing values.
+The previous session already added these routes:
+- /portal/users
+- /portal/roles
+- /portal/addresses
+Do not redo those route changes.
+Before implementation, state:
+- Which existing files will change
+- Which database tables/migrations are needed
+- Which authentication provider is being reused
+- What is intentionally deferred to the next phase
+Keep the work credit-efficient:
+- Read replit.md first
+- Search only relevant files
+- Do not scan the entire repository
+- Do not run unnecessary builds, tests, screenshots, or dependency commands
+- Restart the existing workflow only after code changes

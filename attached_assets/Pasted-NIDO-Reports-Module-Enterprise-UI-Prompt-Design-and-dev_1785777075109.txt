@@ -1,0 +1,748 @@
+NIDO Reports Module - Enterprise UI Prompt
+Design and develop a complete Enterprise Reports Module for the NIDO Procurement Management Platform.
+
+IMPORTANT:
+This is NOT a simple reporting page.
+
+This is the central reporting and business intelligence module for the entire platform.
+
+The design language must match modern ERP systems such as SAP Fiori, Oracle Fusion, Microsoft Dynamics, Zoho Enterprise, Odoo Enterprise and ServiceNow while maintaining the existing NIDO UI style.
+
+The reports must automatically pull data from all existing platform modules.
+
+Use React + TailwindCSS + Shadcn UI.
+
+The design should be premium, clean, professional, spacious, modern, responsive and dashboard-oriented.
+
+Avoid clutter.
+
+Use cards with subtle shadows, rounded corners, professional charts, KPI widgets, filters, expandable sections and export options.
+
+The reports should work with the existing stores already available in the application.
+
+---------------------------------------------------
+GLOBAL REPORT HEADER
+---------------------------------------------------
+
+Top Header
+
+Title:
+Reports & Business Intelligence
+
+Subtitle:
+Analyze procurement, sales, finance, vendor performance, inventory, SLA compliance and operational insights across the organization.
+
+Top Right Buttons
+
+Export PDF
+
+Export Excel
+
+Schedule Report
+
+Save Report
+
+Share Report
+
+Print
+
+Refresh
+
+---------------------------------------------------
+GLOBAL FILTER BAR
+---------------------------------------------------
+
+Sticky filter section
+
+Date Range
+
+Today
+
+Yesterday
+
+This Week
+
+Last Week
+
+This Month
+
+Last Month
+
+Quarter
+
+Financial Year
+
+Custom
+
+Organization
+
+Branch
+
+Location
+
+Department
+
+Cost Center
+
+Client
+
+Vendor
+
+Category
+
+Sub Category
+
+Brand
+
+Order Status
+
+Payment Status
+
+Ticket Status
+
+User
+
+Approver
+
+Currency
+
+Apply Filter
+
+Reset Filter
+
+Save Filter
+
+---------------------------------------------------
+TOP KPI SECTION
+---------------------------------------------------
+
+Large modern KPI cards
+
+Total Revenue
+
+Total Procurement Spend
+
+Gross Profit
+
+Net Profit
+
+Purchase Orders
+
+Sales Orders
+
+Invoices Generated
+
+Payments Received
+
+Pending Payments
+
+Vendor Count
+
+Client Count
+
+Open Support Tickets
+
+Completed Tickets
+
+Inventory Value
+
+Low Stock Products
+
+Average Procurement Cycle
+
+Average SLA Compliance
+
+Each KPI card should contain
+
+Icon
+
+Value
+
+Percentage increase/decrease
+
+Mini sparkline
+
+---------------------------------------------------
+MAIN REPORT MODULES
+---------------------------------------------------
+
+Create left side navigation.
+
+1.
+
+Executive Dashboard
+
+Business Summary
+
+Revenue
+
+Expenses
+
+Profit
+
+Orders
+
+Growth
+
+KPI trends
+
+Charts
+
+2.
+
+Sales Reports
+
+Sales Summary
+
+Sales by Client
+
+Sales by Product
+
+Sales by Category
+
+Sales by Brand
+
+Sales by Region
+
+Sales by Executive
+
+Sales Conversion
+
+Quote to Order Conversion
+
+Invoice Trends
+
+Revenue Trend
+
+Top Selling Products
+
+Top Customers
+
+Customer Acquisition
+
+Average Order Value
+
+Monthly Sales Comparison
+
+Yearly Sales Comparison
+
+3.
+
+Procurement Reports
+
+Purchase Summary
+
+Purchase by Vendor
+
+Purchase by Category
+
+Purchase Cost Analysis
+
+Procurement Cycle Time
+
+Purchase Approval Time
+
+Vendor Comparison
+
+Vendor Spend
+
+Purchase Trend
+
+Pending Procurement
+
+Purchase Order Status
+
+Approval Bottlenecks
+
+4.
+
+Vendor Performance
+
+Vendor Rating
+
+On-Time Delivery
+
+Delayed Deliveries
+
+Quality Score
+
+Return Percentage
+
+Average Lead Time
+
+Vendor SLA
+
+Vendor Purchase Value
+
+Vendor Order Volume
+
+Vendor Comparison Chart
+
+Vendor Ranking Table
+
+5.
+
+Client Reports
+
+Client Revenue
+
+Client Profit
+
+Client Purchase Pattern
+
+Client Outstanding Payments
+
+Top Clients
+
+Inactive Clients
+
+Client Growth
+
+Client Portal Activity
+
+Contract Status
+
+Contract Expiry
+
+6.
+
+Inventory Reports
+
+Current Stock
+
+Stock Movement
+
+Inventory Value
+
+Low Stock
+
+Out of Stock
+
+Reorder Level
+
+Fast Moving Items
+
+Slow Moving Items
+
+Dead Stock
+
+Warehouse Comparison
+
+Vendor Stock Availability
+
+Category Stock Distribution
+
+7.
+
+Finance Reports
+
+Income
+
+Expenses
+
+Profit
+
+Tax Summary
+
+GST Summary
+
+Receivables
+
+Payables
+
+Outstanding Invoices
+
+Payment Aging
+
+Cash Flow
+
+Profit Margin
+
+Recurring Revenue
+
+Purchase Payments
+
+Sales Receipts
+
+8.
+
+Support Reports
+
+Open Tickets
+
+Closed Tickets
+
+Average Resolution Time
+
+Average Response Time
+
+SLA Breaches
+
+Engineer Performance
+
+Ticket Category
+
+Child Ticket Analysis
+
+Customer Satisfaction
+
+Support Trend
+
+9.
+
+SLA Reports
+
+SLA Compliance
+
+Breached Tickets
+
+Pending SLA
+
+Average Resolution
+
+Resolution Heatmap
+
+Priority Analysis
+
+Department SLA
+
+Monthly SLA Trend
+
+10.
+
+Approval Reports
+
+Approval Time
+
+Pending Approvals
+
+Rejected Requests
+
+Approved Requests
+
+Approval Bottlenecks
+
+Approver Performance
+
+Average Approval Duration
+
+11.
+
+Tax Reports
+
+GST Summary
+
+CGST
+
+SGST
+
+IGST
+
+HSN Summary
+
+SAC Summary
+
+Tax Collected
+
+Tax Paid
+
+Tax Audit
+
+12.
+
+Audit Reports
+
+User Login History
+
+System Activity
+
+Configuration Changes
+
+Permission Changes
+
+Order History
+
+Price Changes
+
+Inventory Changes
+
+Security Logs
+
+Email Logs
+
+---------------------------------------------------
+CHART TYPES
+---------------------------------------------------
+
+Use professional enterprise charts.
+
+Line Chart
+
+Area Chart
+
+Bar Chart
+
+Horizontal Bar
+
+Donut Chart
+
+Pie Chart
+
+Stacked Bar
+
+Heat Map
+
+Radar Chart
+
+Tree Map
+
+Waterfall
+
+Scatter Plot
+
+Gauge
+
+Progress Ring
+
+Timeline
+
+Calendar Heatmap
+
+---------------------------------------------------
+REPORT TABLES
+---------------------------------------------------
+
+Every report should contain
+
+Search
+
+Column Filters
+
+Sorting
+
+Pagination
+
+Column Visibility
+
+Export
+
+Print
+
+Group By
+
+Pin Columns
+
+Sticky Header
+
+Resizable Columns
+
+Row Selection
+
+Bulk Export
+
+---------------------------------------------------
+REPORT DETAIL PAGE
+---------------------------------------------------
+
+Clicking any report opens detailed analytics.
+
+Header
+
+Breadcrumb
+
+Summary Cards
+
+Trend Charts
+
+Detailed Table
+
+Insights
+
+Recommendations
+
+AI Summary Panel
+
+Export
+
+Print
+
+---------------------------------------------------
+AI INSIGHTS PANEL
+---------------------------------------------------
+
+Generate intelligent observations.
+
+Examples
+
+Revenue increased by 18%.
+
+Vendor ABC has delayed 24 deliveries.
+
+Procurement cost increased 8%.
+
+Top performing category is Networking.
+
+Lowest margin client is XYZ.
+
+Highest inventory holding is Laptops.
+
+SLA compliance improved by 11%.
+
+---------------------------------------------------
+EXPORT OPTIONS
+---------------------------------------------------
+
+PDF
+
+Excel
+
+CSV
+
+Print
+
+Email Report
+
+Schedule Report
+
+---------------------------------------------------
+SCHEDULE REPORTS
+---------------------------------------------------
+
+Daily
+
+Weekly
+
+Monthly
+
+Quarterly
+
+Yearly
+
+Email Recipients
+
+Auto Generate
+
+---------------------------------------------------
+REPORTS SHOULD USE DATA FROM
+
+salesOrderStore
+
+invoiceStore
+
+purchaseOrderStore
+
+quoteStore
+
+vendorStore
+
+clientStore
+
+catalogStore
+
+stockHistoryStore
+
+taxEngine
+
+priceEngineStore
+
+supportTicketStore
+
+permissionsStore
+
+slaEngine
+
+auditStore
+
+paymentReceiptStore
+
+expenseStore
+
+recurringInvoiceStore
+
+purchasePaymentsStore
+
+---------------------------------------------------
+UI STYLE
+---------------------------------------------------
+
+Premium enterprise design.
+
+Large white cards.
+
+Minimal colors.
+
+Professional typography.
+
+Modern spacing.
+
+Soft shadows.
+
+Rounded corners.
+
+Sticky filters.
+
+Interactive charts.
+
+Responsive layout.
+
+Smooth animations.
+
+Dark mode compatible.
+
+---------------------------------------------------
+REPORT PERFORMANCE
+---------------------------------------------------
+
+Lazy loading
+
+Virtualized tables
+
+Memoized charts
+
+Reusable components
+
+Loading skeletons
+
+Empty state
+
+Error state
+
+Permission-based visibility
+
+---------------------------------------------------
+ROUTES
+---------------------------------------------------
+
+/reports
+
+/reports/executive
+
+/reports/sales
+
+/reports/procurement
+
+/reports/vendors
+
+/reports/clients
+
+/reports/inventory
+
+/reports/finance
+
+/reports/support
+
+/reports/sla
+
+/reports/approvals
+
+/reports/tax
+
+/reports/audit
+
+/reports/custom
+
+---------------------------------------------------
+FINAL GOAL
+---------------------------------------------------
+
+The Reports module should feel like a world-class Business Intelligence dashboard comparable to SAP Analytic

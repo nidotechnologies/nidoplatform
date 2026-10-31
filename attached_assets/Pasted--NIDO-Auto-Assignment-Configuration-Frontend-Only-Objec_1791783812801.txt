@@ -1,0 +1,204 @@
+# NIDO — Auto Assignment Configuration (Frontend Only)
+
+## Objective
+Implement a complete frontend-only Auto Assignment Configuration page in the existing NIDO platform. This page will manage automatic order assignment using client tiers and serial Round Robin employee rotation.
+
+**IMPORTANT: FRONTEND ONLY.** Do not implement or connect a backend, database, API, server action, authentication service, or external service. Use mock data and frontend state for demonstration purposes. Do not modify unrelated modules or rebuild existing NIDO pages.
+
+## 1. Page Location
+Add a new page under the existing navigation:
+
+Administration → Order Assignment → Auto Assignment Configuration
+
+Reuse the existing NIDO sidebar, header, layout, design system, typography, colors, buttons, tables, dialogs, dropdowns and responsive styles.
+
+Do not create a separate application or duplicate the existing navigation.
+
+## 2. Configuration Dashboard
+Create a professional administration interface containing:
+
+- A master toggle to enable or disable Auto Assignment.
+- Three client tier configuration sections: Premium, Medium and Standard.
+- Summary cards showing configured tiers, eligible employees, sample assigned orders and unassigned orders.
+- Employee sequence management.
+- Assignment preview.
+- Assignment rules.
+- Assignment history.
+- Clear empty, loading and disabled states where appropriate.
+
+Use realistic mock data. Clearly treat all counts, orders and assignment histories as demonstration data.
+
+## 3. Client Tier Configuration
+Create separate configurations for:
+
+- Premium
+- Medium
+- Standard
+
+Each tier must have its own settings:
+
+- Enable/disable toggle.
+- Assignment strategy: Serial Round Robin.
+- Eligible employee selection.
+- Employee sequence.
+- Current rotation position.
+- Fallback behavior when no employee is available.
+
+Allow administrators to select which employees are eligible for each tier. The same employee may belong to multiple tiers.
+
+Use these sample employees:
+
+1. Employee A — EMP-00001
+2. Employee B — EMP-00002
+3. Employee C — EMP-00003
+4. Employee D — EMP-00004
+
+Display employee names, employee IDs, departments, roles and active/inactive status using mock data.
+
+## 4. Employee Sequence Management
+Allow the administrator to:
+
+- Add or remove employees from a tier's sequence.
+- Change sequence order using drag-and-drop if an appropriate library already exists; otherwise provide simple Move Up and Move Down controls.
+- Prevent duplicate employees within the same tier.
+- Display sequence numbers clearly.
+- Preview the rotation order.
+- Reset a tier's demo rotation position.
+- Save or cancel configuration changes.
+
+Keep the sequence configuration independent for each client tier.
+
+## 5. Frontend Round Robin Simulation
+Implement a working Round Robin simulation using frontend state only.
+
+Example sequence:
+
+Employee A → Employee B → Employee C → Employee D → Employee A.
+
+Provide a **Simulate New Order** button that creates a mock order and assigns the next eligible employee according to the selected client's tier.
+
+Include a tier selector and a mock client selector so the administrator can test Premium, Medium and Standard assignment behavior.
+
+Each tier must maintain its own independent rotation position in frontend state.
+
+The simulation must:
+
+- Select the next employee in the configured sequence.
+- Skip employees marked inactive in the mock data.
+- Advance the rotation only after a successful simulated assignment.
+- Show the assigned employee and client tier.
+- Add the simulated order to the assignment history.
+- Allow the administrator to simulate several consecutive orders and verify the sequence.
+- Avoid changing the rotation position when a simulation fails or no eligible employee is available.
+
+Display a visible label: **Demo Mode — Changes are not saved to a backend.**
+
+Do not claim that these assignments are real client orders.
+
+## 6. Assignment Preview
+For each tier, show the next 5–10 simulated assignments in a table.
+
+Example:
+
+| Sequence | Client Tier | Employee |
+|---|---|---|
+| 1 | Premium | Employee A |
+| 2 | Premium | Employee B |
+| 3 | Premium | Employee C |
+| 4 | Premium | Employee D |
+| 5 | Premium | Employee A |
+
+Previewing must not advance the actual demo rotation position.
+
+The preview must update when the employee sequence or eligibility changes.
+
+## 7. Assignment History
+Create a frontend-only table with mock and simulated orders.
+
+Include:
+
+- Order ID
+- Client name
+- Client tier
+- Assigned employee
+- Assignment method
+- Assignment date/time
+- Assignment status
+
+Include filters for client tier, employee, status and assignment method.
+
+Add search, sorting and pagination if existing reusable components support them.
+
+Provide sample statuses such as Assigned, In Progress, Completed and Unassigned.
+
+Allow administrators to open a mock order detail dialog and perform a simulated manual reassignment. Require a reason and record the previous employee, new employee and reason in the frontend demo history.
+
+## 8. Configuration Actions
+Implement working frontend interactions for:
+
+- Enabling/disabling Auto Assignment.
+- Enabling/disabling individual tier rules.
+- Adding/removing eligible employees.
+- Reordering employees.
+- Saving and cancelling local configuration changes.
+- Previewing future assignments.
+- Simulating new orders.
+- Filtering assignment history.
+- Resetting demo data with a confirmation dialog.
+
+Use local component state or the project's existing frontend state-management approach. Use browser local storage only if appropriate for the existing project and easy to replace later.
+
+Clearly communicate that all data is demo data and can be reset. Do not represent browser storage as a database.
+
+## 9. Frontend Architecture
+Before coding, inspect the existing frontend structure and reuse the current components, routing and styling conventions.
+
+Keep the implementation modular and easy to connect to a future backend:
+
+- Auto Assignment Configuration page.
+- Client tier configuration component.
+- Employee sequence component.
+- Assignment preview component.
+- Assignment history component.
+- Mock assignment service or utility containing the Round Robin simulation logic.
+
+Keep mock data and assignment logic separate from UI components so they can later be replaced by backend API calls.
+
+Do not add unnecessary packages. Do not replace the existing framework or rewrite unrelated modules.
+
+## 10. Validation and User Experience
+Provide clear validation and feedback for:
+
+- Empty employee sequences.
+- Disabled tier rules.
+- Inactive employees.
+- Duplicate employees.
+- No eligible employees.
+- Invalid configuration.
+- Successful local saves.
+- Successful or failed order simulations.
+
+Use the existing notification and confirmation dialog components where available.
+
+Make the page responsive for desktop and tablet. Preserve NIDO's current visual design.
+
+## 11. Acceptance Criteria
+The frontend is complete when:
+
+1. The configuration page is accessible from the intended NIDO navigation.
+2. Premium, Medium and Standard tiers can be configured independently.
+3. Employee eligibility and sequence can be changed interactively.
+4. Simulated orders follow the configured Round Robin sequence.
+5. Each tier maintains an independent demo rotation position.
+6. Inactive employees are skipped.
+7. Assignment previews do not change rotation positions.
+8. Simulated assignments appear in the history table.
+9. Manual reassignment works in demo mode.
+10. Filters and configuration controls work.
+11. Existing NIDO pages and navigation remain unaffected.
+12. All demonstration data is clearly identified as mock data.
+
+## Final Instruction
+Implement the frontend completely using mock data and local state. Do not create backend endpoints, database tables, migrations or server integrations.
+
+At completion, summarize the files changed and explain how to test the frontend simulation. Keep the code minimal, reusable and ready for future backend integration.

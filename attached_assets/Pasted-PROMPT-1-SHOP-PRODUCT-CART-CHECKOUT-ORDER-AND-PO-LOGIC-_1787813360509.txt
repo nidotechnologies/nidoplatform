@@ -1,0 +1,894 @@
+PROMPT 1 — SHOP, PRODUCT, CART, CHECKOUT, ORDER AND PO LOGIC
+
+# NIDO — Add Physical and Digital Shop Support
+
+## IMPORTANT
+
+Do not rebuild, redesign, or replace existing NIDO modules.
+
+The current NIDO procurement flow is already working. Make only the smallest required changes.
+
+Before coding:
+
+1. Inspect the existing codebase.
+2. Identify the current Product, Vendor, Client Catalogue, Shop, Product Details, Cart, Checkout, Order, Order Item, Inventory, and PO logic.
+3. Reuse existing models, APIs, components, services, authentication, and UI.
+4. Do not create duplicate modules, pages, APIs, database tables, or frameworks.
+5. Do not change the existing Physical Product workflow except where required to support Digital Products.
+6. Do not build the detailed Digital Order Details page yet.
+7. Do not add mock data unless required for testing.
+8. Do not refactor unrelated code.
+9. Keep the implementation small and incremental to reduce Replit usage.
+
+---
+
+## EXISTING PHYSICAL FLOW
+
+The existing Physical Product flow must continue working exactly as it does:
+
+Master Catalogue
+→ Publish Product
+→ Assign Product to Vendor
+→ Enter Vendor Price, MOQ, Lead Time, Stock
+→ Add Product to Client Catalogue
+→ Configure Client Roles, Preferences, and Pricing
+→ Product Appears in Shop
+→ Client Selects Vendor
+→ Product Added to Cart with Vendor Snapshot
+→ Checkout
+→ Delivery Details
+→ Payment
+→ Review Order
+→ Place Order
+→ Client Order Created
+→ Vendor Stock Reserved
+→ Draft PO Created per Selected Vendor
+→ PO Review
+→ PO Confirmation
+→ Vendor Order
+→ Processing
+→ Shipped
+→ Delivered
+
+Do not break or redesign this flow.
+
+---
+
+# 1. PRODUCT TYPE
+
+Use the existing Product Type field if available.
+
+If Product Type already supports Physical and Digital, reuse it.
+
+If not, extend it minimally to support:
+
+* PHYSICAL
+* DIGITAL
+
+Do not create another duplicate field such as Shop Type unless absolutely necessary.
+
+Rules:
+
+* Product Type = PHYSICAL → show in Physical Shop.
+* Product Type = DIGITAL → show in Digital Shop.
+
+The Shop division must be derived from Product Type.
+
+Do not allow contradictory configuration such as:
+
+* Product Type = DIGITAL
+* Shop = PHYSICAL
+
+---
+
+# 2. SHOP DIVISIONS
+
+Reuse the existing Shop page and existing Shop infrastructure.
+
+Do not create two separate Shop applications or modules.
+
+Add a simple tab, filter, or toggle:
+
+* Physical Shop
+* Digital Shop
+
+### Physical Shop
+
+Show only products where:
+
+Product Type = PHYSICAL
+
+### Digital Shop
+
+Show only products where:
+
+Product Type = DIGITAL
+
+Preserve all existing:
+
+* Search
+* Categories
+* Filters
+* Product cards
+* Client Catalogue restrictions
+* Client pricing
+* Visibility rules
+* Product availability rules
+
+---
+
+# 3. PHYSICAL PRODUCT BEHAVIOR
+
+Keep the existing Physical Product behavior unchanged.
+
+Physical Products must continue to support:
+
+* Vendor comparison
+* Vendor selection
+* Vendor price
+* Landed cost
+* MOQ
+* Lead time
+* Available stock
+* Rating
+* Payment terms
+* Vendor snapshot on cart item
+* Vendor snapshot on order item
+* Physical inventory reservation
+* Draft PO generation
+
+The customer must continue selecting the vendor for Physical Products.
+
+---
+
+# 4. DIGITAL PRODUCT BEHAVIOR
+
+Digital Products must use the existing:
+
+* Master Catalogue
+* Vendor assignment
+* Client Catalogue
+* Shop
+* Product Details
+* Cart
+* Checkout
+* Order
+
+For Digital Products:
+
+* Do not show vendor comparison.
+* Do not show vendor selection.
+* Do not show vendor selection modal.
+* Do not require vendor selection before Add to Cart.
+* Show Add to Cart directly.
+* Do not require physical delivery for digital-only carts.
+* Do not generate a PO.
+
+Digital flow:
+
+Master Catalogue
+→ Publish Digital Product
+→ Assign Digital Supplier/Vendor
+→ Add to Client Catalogue
+→ Digital Shop
+→ View Digital Product
+→ Add directly to Cart
+→ Checkout
+→ Payment
+→ Review Order
+→ Place Order
+→ Client Order Created
+→ Digital Fulfillment Pending
+
+---
+
+# 5. DIGITAL VENDOR/SUPPLIER
+
+Do not remove the vendor relationship from Digital Products.
+
+Digital Products may still have an internal supplier/vendor.
+
+The difference is:
+
+* Physical Product: customer selects the vendor.
+* Digital Product: NIDO internally uses the configured default/preferred supplier.
+
+The customer must never be required to select the Digital supplier.
+
+Reuse the existing Vendor/Product relationship.
+
+Only add a preferred/default supplier field if the existing system does not already support this.
+
+Do not create duplicate supplier structures.
+
+For Digital Order Items, store the internal supplier/vendor snapshot if the existing architecture supports vendor snapshots.
+
+---
+
+# 6. PRODUCT CARD AND PRODUCT DETAILS
+
+Reuse the existing Product Card component.
+
+For Digital Products, show:
+
+* Product image
+* Product name
+* Category
+* Client price
+* Digital indicator
+* Add to Cart
+
+Do not show vendor selection on Digital Product cards.
+
+Reuse the existing Product Details page.
+
+For Digital Products:
+
+* Hide or disable “View & Select Vendor”.
+* Hide vendor comparison.
+* Show “Add to Cart” directly.
+
+For Physical Products, keep the existing Product Details behavior unchanged.
+
+---
+
+# 7. CART LOGIC
+
+Reuse the existing Cart.
+
+Do not create a separate Digital Cart.
+
+Physical and Digital Products must be allowed in the same cart.
+
+Example:
+
+| Product           | Type     | Vendor Selection        |
+| ----------------- | -------- | ----------------------- |
+| Laptop            | Physical | Customer selects vendor |
+| Microsoft License | Digital  | No customer selection   |
+
+### Physical Cart Item
+
+Keep the existing vendor snapshot behavior.
+
+### Digital Cart Item
+
+Do not require a customer-selected vendor.
+
+Retain the following where supported by the existing model:
+
+* Product ID
+* Product name
+* Product Type
+* Quantity
+* Client price
+* Tax information
+* HSN/SAC if applicable
+* Fulfillment Type if available
+
+Do not break existing cart calculations.
+
+---
+
+# 8. CHECKOUT LOGIC
+
+Reuse the existing Checkout.
+
+Do not create a separate Digital Checkout.
+
+Checkout must depend on cart contents.
+
+### Physical-only cart
+
+Require:
+
+* Delivery address
+* Payment details
+* Review
+
+### Digital-only cart
+
+Do not require:
+
+* Physical delivery address
+* Shipping information
+
+Still require:
+
+* Billing information if already required
+* Payment details
+* Review
+
+### Mixed cart
+
+If the cart contains at least one Physical Product:
+
+* Require delivery information.
+* Continue processing Digital Products in the same order.
+* Do not require separate delivery information for Digital Products.
+
+---
+
+# 9. ORDER CREATION
+
+Reuse the existing Order creation process.
+
+When an order is placed:
+
+* Create one normal Client Order.
+* Preserve existing order numbering.
+* Preserve existing order statuses.
+* Preserve existing pricing snapshots.
+* Preserve existing tax calculations.
+* Preserve existing client information.
+
+For Physical Order Items:
+
+* Continue storing the customer-selected vendor snapshot.
+
+For Digital Order Items:
+
+* Do not require customer-selected vendor.
+* Store the internally assigned/default supplier snapshot if available.
+
+Do not split mixed carts into separate customer orders unless the existing architecture absolutely requires it.
+
+---
+
+# 10. PO GENERATION
+
+Modify the existing PO generation logic minimally.
+
+Only Physical Order Items may generate POs.
+
+Use logic equivalent to:
+
+```text
+IF Order Item Product Type = PHYSICAL
+AND PO Required = true
+THEN include item in PO grouping.
+
+IF Order Item Product Type = DIGITAL
+OR PO Required = false
+THEN do not include item in PO grouping.
+```
+
+Continue grouping eligible Physical Order Items by vendor exactly as the current system does.
+
+Example:
+
+Order:
+
+* Laptop → Physical → Vendor A
+* Monitor → Physical → Vendor A
+* Microsoft License → Digital → Vendor C
+
+Expected result:
+
+PO-001
+Vendor A
+
+* Laptop
+* Monitor
+
+No PO for Microsoft License.
+
+Do not create a fake PO for Digital Products.
+
+---
+
+# 11. CLIENT CATALOGUE
+
+Keep the existing Client Catalogue behavior.
+
+Physical Product eligibility:
+
+Published Product
+
+* Active Physical Vendor
+  → Eligible for Client Catalogue
+
+Digital Product eligibility:
+
+Published Product
+
+* Active Digital Supplier/Vendor
+  → Eligible for Client Catalogue
+
+Reuse existing vendor assignment logic wherever possible.
+
+---
+
+# 12. INVENTORY
+
+Physical Products:
+
+Continue using the existing inventory logic:
+
+Physical Stock - Reserved Stock = Available Stock
+
+Digital Products:
+
+* Do not reserve physical inventory.
+* Do not modify the existing physical inventory system.
+* Only support digital/license inventory if the existing configuration already requires it.
+
+---
+
+# 13. UI CHANGES TO IMPLEMENT NOW
+
+Implement only these UI changes:
+
+1. Physical Shop and Digital Shop tab/filter.
+2. Product Type-based filtering.
+3. Hide vendor selection for Digital Products.
+4. Direct Add to Cart for Digital Products.
+5. Conditional checkout delivery requirement.
+6. Small Digital Product label or badge if needed.
+
+Do not:
+
+* Build a new Shop page.
+* Build a new Digital Order page.
+* Redesign the existing Order page.
+* Build the detailed Digital Order Details UI.
+* Add unnecessary UI components.
+
+---
+
+# 14. ACCEPTANCE TESTS
+
+## Physical Product
+
+Verify:
+
+1. Physical Product can be created.
+2. Product can be published.
+3. Product can be assigned to a Vendor.
+4. Product can be added to Client Catalogue.
+5. Product appears in Physical Shop.
+6. Product does not appear in Digital Shop.
+7. Customer sees vendor options.
+8. Customer selects a vendor.
+9. Vendor snapshot is stored on cart/order item.
+10. Checkout works.
+11. Delivery address is required.
+12. Order is created.
+13. Stock is reserved.
+14. Draft PO is created.
+15. Existing PO workflow still works.
+
+## Digital Product
+
+Verify:
+
+1. Digital Product can be created.
+2. Product can be published.
+3. Digital supplier/vendor can be assigned.
+4. Product can be added to Client Catalogue.
+5. Product appears in Digital Shop.
+6. Product does not appear in Physical Shop.
+7. Customer does not see vendor comparison.
+8. Customer does not select a vendor.
+9. Customer can directly Add to Cart.
+10. Checkout works.
+11. Delivery address is not required for digital-only cart.
+12. Order is created.
+13. No PO is created.
+14. Digital Fulfillment creation is handled by Prompt 2.
+
+## Mixed Cart
+
+Test:
+
+* One Physical Product
+* One Digital Product
+
+Expected:
+
+* One Client Order.
+* Physical item retains selected vendor.
+* Physical item generates PO.
+* Digital item generates no PO.
+* Delivery details are required because the cart contains a Physical Product.
+* Digital item is ready for Digital Fulfillment processing.
+
+---
+
+## FINAL IMPLEMENTATION RULE
+
+Implement only the Shop, Product, Cart, Checkout, Order, and PO changes described above.
+
+Do not implement the detailed Digital Fulfillment Order Details UI in this prompt.
+
+Preserve the existing Physical procurement workflow completely.
+
+Use the existing NIDO architecture and make the smallest safe changes possible.
+
+PROMPT 2 — DIGITAL FULFILLMENT BACKEND FOUNDATION
+
+# NIDO — Digital Fulfillment Backend Foundation
+
+## IMPORTANT
+
+Do not rebuild, redesign, or replace existing NIDO modules.
+
+This prompt is only for creating the minimum backend/data foundation for Digital Fulfillment.
+
+The Shop, Product, Cart, Checkout, Order, and PO changes are handled separately.
+
+Before coding:
+
+1. Inspect the existing codebase.
+2. Identify the existing Order, Order Item, Product Type, Vendor/Product relationship, file storage, authentication, authorization, RBAC, and audit systems.
+3. Reuse existing models, APIs, services, storage, authentication, and authorization.
+4. Do not create duplicate Order, Product, Vendor, or file systems.
+5. Do not build the detailed Digital Order Details page yet.
+6. Do not redesign the existing Order page.
+7. Do not add unnecessary dependencies.
+8. Do not create mock data unless required for testing.
+9. Make the smallest possible implementation to reduce Replit usage.
+
+---
+
+# 1. DIGITAL FULFILLMENT CREATION
+
+When a Digital Order Item is created, create one Digital Fulfillment record.
+
+Initial status:
+
+```text
+PENDING
+```
+
+The Digital Fulfillment record must be linked to:
+
+* Client Order
+* Digital Order Item
+* Digital Product
+* Client
+* Internal supplier/vendor if available
+
+Do not create a separate customer order for Digital Products.
+
+---
+
+# 2. DIGITAL FULFILLMENT STATUSES
+
+Use the minimum status structure required for the future workflow.
+
+Suggested statuses:
+
+* PENDING
+* LICENSE_UPLOADED
+* PENDING_RELEASE
+* RELEASED
+* DOWNLOADED
+* COMPLETED
+* CANCELLED
+
+If the existing system already has an equivalent status structure, reuse it.
+
+Do not create duplicate status systems.
+
+The Client Order status and Digital Fulfillment status must remain separate.
+
+Example:
+
+```text
+Client Order: PROCESSING
+Digital Fulfillment: PENDING
+```
+
+---
+
+# 3. DIGITAL FULFILLMENT DATA MODEL
+
+Inspect the existing schema first.
+
+Only add fields or a table if an equivalent structure does not already exist.
+
+A minimum Digital Fulfillment record should support:
+
+* id
+* order_item_id
+* order_id if required by existing relationships
+* product_id if required by existing relationships
+* client_id if required by existing relationships
+* supplier/vendor reference if needed
+* status
+* license file reference or secure storage path
+* license file name
+* encrypted password
+* uploaded_by
+* uploaded_at
+* released_by
+* released_at
+* downloaded_at
+* completed_at if needed
+* cancelled_at if needed
+* created_at
+* updated_at
+
+Do not add duplicate fields if the existing Order Item already provides the relationship.
+
+Use existing naming conventions.
+
+Use existing migration and schema tools.
+
+---
+
+# 4. LICENSE FILE SUPPORT
+
+Prepare the backend to support one password-protected license/digital asset file per Digital Fulfillment record.
+
+Reuse the existing NIDO file/storage system if available.
+
+The system should support:
+
+* Secure file storage reference
+* Original file name
+* Stored file name or storage key
+* File metadata if already supported
+* Upload timestamp
+* Uploading user
+* Release timestamp
+* Releasing user
+* Download timestamp
+
+Do not build a complicated file management system.
+
+Do not expose the file before it is released.
+
+---
+
+# 5. PASSWORD SECURITY
+
+The license file password must be securely stored.
+
+Requirements:
+
+1. Never store the password as plain text.
+2. Encrypt the password using the existing encryption/security utility if available.
+3. If no encryption utility exists, use the project’s existing secure secret/encryption approach.
+4. Do not return the password through client-facing APIs.
+5. Do not include the password in normal order responses.
+6. Only authorized internal users may create or update the password.
+7. Do not log the password.
+8. Do not expose the password in error messages.
+
+The client will receive the password separately through an approved communication method.
+
+---
+
+# 6. FUTURE DIGITAL LICENSE WORKFLOW
+
+Prepare the backend for this workflow:
+
+Order Created
+→ Digital Fulfillment = PENDING
+→ Authorized NIDO employee uploads password-protected license file
+→ Authorized NIDO employee manually enters the file password
+→ File is stored securely
+→ Password is encrypted and stored
+→ Fulfillment becomes LICENSE_UPLOADED or PENDING_RELEASE
+→ Authorized NIDO employee releases the license
+→ Fulfillment becomes RELEASED
+→ Client downloads the file
+→ Download timestamp is recorded
+→ Fulfillment becomes DOWNLOADED or COMPLETED
+
+Do not build the detailed UI yet.
+
+---
+
+# 7. MINIMUM API SUPPORT
+
+Inspect existing API patterns first.
+
+Reuse existing Order and authentication patterns.
+
+Add only the minimum backend endpoints required for the future Order Details UI.
+
+Possible internal endpoints:
+
+```text
+GET /internal/orders/:orderId/digital-fulfillments
+POST /internal/digital-fulfillments/:id/license
+POST /internal/digital-fulfillments/:id/release
+```
+
+Possible client endpoint:
+
+```text
+GET /client/digital-fulfillments/:id/download
+```
+
+Use the project’s existing route naming conventions instead of blindly creating these exact routes.
+
+Do not create duplicate APIs.
+
+---
+
+# 8. AUTHORIZATION
+
+Reuse existing authentication and RBAC.
+
+Internal actions such as:
+
+* Upload license
+* Replace license
+* Enter or update password
+* Release license
+* View fulfillment details
+
+must be restricted to authorized NIDO employees/admins.
+
+Client actions must be restricted to:
+
+* The client who owns the order
+* The specific Digital Fulfillment linked to that order
+
+Do not create a new authentication system.
+
+---
+
+# 9. DOWNLOAD SECURITY
+
+The client must not be able to download the file before release.
+
+Download rules:
+
+1. Verify the user is authenticated.
+2. Verify the user owns the related order.
+3. Verify the Digital Fulfillment belongs to that order.
+4. Verify status is RELEASED, DOWNLOADED, or COMPLETED as appropriate.
+5. Reject access if status is PENDING, LICENSE_UPLOADED, PENDING_RELEASE, or CANCELLED.
+6. Use a secure file response or signed URL according to the existing storage system.
+7. Do not expose internal storage paths.
+8. Record downloaded_at if not already recorded.
+9. Record download activity if the existing audit system supports it.
+
+Do not return the password to the client.
+
+---
+
+# 10. DIGITAL FULFILLMENT STATUS TRANSITIONS
+
+Use controlled transitions.
+
+Recommended transitions:
+
+```text
+PENDING
+→ LICENSE_UPLOADED
+→ PENDING_RELEASE
+→ RELEASED
+→ DOWNLOADED
+→ COMPLETED
+```
+
+Cancellation may occur where appropriate:
+
+```text
+PENDING → CANCELLED
+LICENSE_UPLOADED → CANCELLED
+PENDING_RELEASE → CANCELLED
+RELEASED → CANCELLED
+```
+
+Do not allow invalid transitions without authorization.
+
+If the existing system has a status transition service, reuse it.
+
+---
+
+# 11. ORDER CREATION INTEGRATION
+
+Integrate with the existing Order creation process.
+
+When an order contains Digital Order Items:
+
+* Create one Digital Fulfillment record per Digital Order Item.
+* Set status to PENDING.
+* Do not create a PO.
+* Do not reserve physical inventory.
+* Do not change the existing Client Order status.
+* Do not split the order.
+
+For mixed orders:
+
+* Physical items continue through the existing PO and inventory flow.
+* Digital items create Digital Fulfillment records.
+* One Client Order remains.
+
+---
+
+# 12. AUDIT TRAIL
+
+Reuse the existing audit system if available.
+
+Record these events where supported:
+
+* Digital Fulfillment created
+* License uploaded
+* License replaced
+* Password updated
+* License released
+* License downloaded
+* Fulfillment completed
+* Fulfillment cancelled
+
+Never record the actual password in the audit log.
+
+---
+
+# 13. UI SCOPE — DO NOT BUILD NOW
+
+Do not build:
+
+* Detailed Digital Order Details page
+* License upload form
+* Password input UI
+* Release button UI
+* Client download page
+* Download history UI
+* Digital Fulfillment dashboard
+* New Order page
+* New Shop page
+
+Only create the backend/data/API foundation required for these features later.
+
+If a minimal admin-only API test is needed, use the existing API/testing tools rather than building new UI.
+
+---
+
+# 14. ACCEPTANCE TESTS
+
+## Digital Order
+
+1. Create a Digital Product.
+2. Add it to the Client Catalogue.
+3. Add it to the cart.
+4. Place the order.
+5. Confirm one Client Order is created.
+6. Confirm one Digital Fulfillment record is created.
+7. Confirm status is PENDING.
+8. Confirm no PO is created.
+9. Confirm no physical inventory is reserved.
+
+## Mixed Order
+
+1. Add one Physical Product and one Digital Product to the same cart.
+2. Place the order.
+3. Confirm one Client Order is created.
+4. Confirm the Physical Product follows the existing PO flow.
+5. Confirm one Digital Fulfillment record is created for the Digital Product.
+6. Confirm no PO is created for the Digital Product.
+7. Confirm Digital Fulfillment status is PENDING.
+
+## Security
+
+1. Confirm the license file cannot be downloaded before RELEASED.
+2. Confirm unauthorized users cannot upload or release a license.
+3. Confirm a client cannot access another client’s fulfillment.
+4. Confirm the password is not stored as plain text.
+5. Confirm the password is not returned by client-facing APIs.
+6. Confirm the password is not written to logs.
+7. Confirm download activity is recorded if audit support exists.
+
+---
+
+# FINAL IMPLEMENTATION RULE
+
+Implement only the Digital Fulfillment backend foundation.
+
+Do not build the detailed Order Details page yet.
+
+Do not redesign existing pages.
+
+Do not modify unrelated modules.
+
+Do not duplicate existing systems.
+
+Use the existing NIDO architecture and make the smallest safe changes possible.

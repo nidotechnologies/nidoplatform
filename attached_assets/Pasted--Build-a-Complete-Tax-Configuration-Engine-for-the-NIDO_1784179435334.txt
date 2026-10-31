@@ -1,0 +1,458 @@
+# Build a Complete Tax Configuration Engine for the NIDO Procurement Platform Based on Product Categories and HSN/SAC Codes
+
+## Objective
+
+Create a fully functional **Tax Settings** module under the Configuration Hub.
+
+This module will act as the **single source of truth** for all tax calculations throughout the NIDO Procurement Platform.
+
+The Tax Configuration must be dynamic, configurable, scalable, and integrated with every module that performs price calculations.
+
+All tax calculations must be driven by **product categories**, **service categories**, and **HSN/SAC codes**.
+
+Do not hardcode any tax calculations anywhere in the application.
+
+Every tax calculation must use this centralized Tax Engine.
+
+---
+
+# Navigation
+
+Configuration Hub
+
+↓
+
+General Settings
+
+↓
+
+Tax Settings
+
+Inside Tax Settings, create the following tabs:
+
+1. Vendor Tax Settings
+2. Client Tax Settings
+3. Service Tax Settings
+
+Each section should have its own configuration while sharing the same centralized Tax Engine.
+
+---
+
+# Vendor Tax Settings
+
+This section controls taxes applicable to vendor procurement transactions.
+
+Allow configuration of:
+
+### General
+
+* Enable Vendor Tax
+* Default Tax Rule
+* Tax Inclusive / Exclusive Pricing
+* Default Vendor Currency
+* Product Category Based Tax Mapping
+
+### GST Configuration
+
+* GST Applicable
+* CGST %
+* SGST %
+* IGST %
+* UTGST %
+* GST Calculation Method
+
+### Vendor Specific Rules
+
+* Default Tax Category
+* Tax Exemption
+* Reverse Charge
+* TDS Applicable
+* TCS Applicable
+* Import Tax
+* Export Tax
+* Interstate Purchase Rules
+* Intrastate Purchase Rules
+
+### Product Category and HSN Based Rules
+
+* Map Tax Rules by Product Category
+* Map Tax Rules by HSN Code
+* Apply Tax by Product Type
+* Override Tax by Vendor Product Catalogue
+* Default Tax Rate by Category
+* Category Wise Tax Exemption
+* Category Wise Reverse Charge
+
+### Vendor Price Engine
+
+Whenever a vendor submits pricing:
+
+Base Price
+
+↓
+
+Product Category / HSN Based Vendor Tax Rules
+
+↓
+
+Applicable GST
+
+↓
+
+TDS/TCS
+
+↓
+
+Additional Charges
+
+↓
+
+Final Procurement Cost
+
+The Price Engine must automatically calculate taxes using these settings.
+
+---
+
+# Client Tax Settings
+
+This section controls taxes applied when selling to clients.
+
+Allow configuration of:
+
+### General
+
+* Enable Client Tax
+* Tax Inclusive / Exclusive Selling Price
+* Default Client Tax Category
+* Product Category Based Client Tax Mapping
+
+### GST
+
+* CGST %
+* SGST %
+* IGST %
+* GST Category
+* HSN Validation
+
+### Client Rules
+
+* Client Tax Exemption
+* Government Client Rules
+* SEZ Client Rules
+* Export Client Rules
+* Special Economic Zone Rules
+
+### Product Category and HSN Based Rules
+
+* Apply Tax by Product Category
+* Apply Tax by HSN Code
+* Category Wise GST Rate
+* Category Wise Tax Exemption
+* Product Wise Tax Override
+* Client Specific Category Override
+
+### Invoice Rules
+
+* Show Tax Breakdown
+* Round Off Rules
+* Tax Display Format
+* Tax Label Customization
+
+### Client Price Engine
+
+Selling Price
+
+↓
+
+Apply Product Category / HSN Based Client Tax Rules
+
+↓
+
+GST
+
+↓
+
+Additional Charges
+
+↓
+
+Final Client Price
+
+The selling price should automatically use these settings.
+
+---
+
+# Service Tax Settings
+
+This section controls taxation for services.
+
+Allow configuration of:
+
+* Enable Service Tax
+* GST on Services
+* SAC Code
+* Service Category
+* Tax Inclusive
+* Tax Exclusive
+* Reverse Charge
+* Professional Services
+* AMC Services
+* Installation Services
+* Maintenance Services
+* Support Services
+* Consultancy Services
+* Service Category Based Tax Mapping
+* SAC Based Tax Mapping
+
+Whenever a service quotation or invoice is created, the Service Tax Settings must automatically determine the tax calculation based on the assigned service category and SAC code.
+
+---
+
+# Tax Categories
+
+Allow creation of unlimited tax categories.
+
+Examples:
+
+* Standard GST
+* Zero Rated
+* Exempt
+* Nil Rated
+* Reverse Charge
+* Export
+* Import
+* Government
+* SEZ
+* Interstate
+* Intrastate
+* Service
+* Product
+
+Allow:
+
+* Add
+* Edit
+* Disable
+* Delete
+
+Tax categories should be assignable to product categories, service categories, HSN codes, and SAC codes.
+
+---
+
+# HSN / SAC Management
+
+Create a master list for:
+
+* HSN Codes
+* SAC Codes
+
+Each entry should contain:
+
+* Code
+* Description
+* GST Rate
+* Applicable Tax Category
+* Product Category
+* Service Category
+* Status
+
+Products and services should automatically inherit tax rules based on their assigned HSN/SAC code and category mapping.
+
+---
+
+# Product Category Tax Mapping
+
+Create a configuration layer for product category based taxation.
+
+Allow administrators to define:
+
+* Product Category
+* Default HSN Code
+* Applicable Tax Category
+* GST Rate
+* CGST %
+* SGST %
+* IGST %
+* Tax Inclusive / Exclusive Rule
+* Reverse Charge
+* Exemption Status
+* Priority Rule
+
+This mapping should ensure that every product automatically receives the correct tax treatment based on its category and HSN code.
+
+---
+
+# Tax Engine
+
+Create a centralized Tax Engine.
+
+Every module must calculate taxes through this engine.
+
+Never calculate taxes separately inside individual modules.
+
+The Tax Engine should support:
+
+* Inclusive Tax
+* Exclusive Tax
+* Multiple Tax Components
+* Compound Tax
+* Tax Priority
+* Reverse Charge
+* TDS
+* TCS
+* Rounding Rules
+* Tax Exemptions
+* Client Overrides
+* Vendor Overrides
+* Product Category Overrides
+* HSN Code Overrides
+* SAC Code Overrides
+
+---
+
+# Integration with Price Engine
+
+Integrate the Tax Engine directly with the existing Price Engine.
+
+Vendor Price Engine
+
+Vendor Base Price
+
+↓
+
+Vendor Tax Settings
+
+↓
+
+Product Category / HSN Based Tax Rules
+
+↓
+
+Additional Charges
+
+↓
+
+Freight
+
+↓
+
+Handling Charges
+
+↓
+
+Margin
+
+↓
+
+Client Tax Settings
+
+↓
+
+Final Client Selling Price
+
+Every price calculation should automatically use the configured tax rules.
+
+Changing any tax configuration should immediately affect future calculations.
+
+Existing completed transactions should remain unchanged unless explicitly recalculated.
+
+---
+
+# Integration with Modules
+
+Automatically integrate the Tax Engine with:
+
+* Vendors
+* Clients
+* Products
+* Services
+* Master Catalogue
+* Vendor Catalogue
+* Client Catalogue
+* Price Engine
+* Purchase Requests
+* Purchase Orders
+* Sales Orders
+* Quotations
+* Invoices
+* Credit Notes
+* Debit Notes
+* Delivery Challans
+* Contracts
+* Reports
+* Dashboard Analytics
+
+No module should maintain its own tax calculation logic.
+
+All product and service transactions must derive tax from the assigned product category, service category, HSN code, or SAC code.
+
+---
+
+# Real-Time Updates
+
+Whenever the NIDO Owner changes any Tax Setting:
+
+* The Tax Engine should immediately begin using the updated rules.
+* Newly created transactions should automatically apply the new tax settings.
+* No application restart or redeployment should be required.
+
+There should be only one source of truth for all tax-related calculations.
+
+---
+
+# Audit Log
+
+Record every tax configuration change.
+
+Store:
+
+* User
+* Date
+* Time
+* Previous Value
+* New Value
+* Module
+* Client IP
+* Reason (optional)
+
+Allow administrators to review the complete tax configuration history.
+
+---
+
+# Security
+
+Only Super Administrators and users with Tax Configuration permission may modify tax settings.
+
+Other users may have read-only access depending on their assigned role.
+
+All backend APIs must validate tax configuration permissions.
+
+---
+
+# Future Scalability
+
+Design the Tax Engine so additional tax types can be added without changing the core architecture.
+
+Examples:
+
+* VAT
+* Sales Tax
+* Excise Duty
+* Customs Duty
+* Environmental Tax
+* State Tax
+* International Tax
+
+The architecture should support multiple countries, multiple tax regimes, and category-based tax mapping in the future.
+
+---
+
+# Expected Result
+
+The Tax Settings module should become the centralized Tax Configuration Engine for the entire NIDO Procurement Platform.
+
+Vendor Tax Settings, Client Tax Settings, and Service Tax Settings should drive all tax calculations across the platform, especially within the Price Engine.
+
+Every quotation, order, invoice, contract, service, product, purchase, and report should obtain tax information from this centralized engine, ensuring consistent calculations, real-time configuration updates, and a scalable architecture suitable for enterprise procurement systems.
+
+All tax logic should be based on product categories, service categories, HSN codes, and SAC codes.

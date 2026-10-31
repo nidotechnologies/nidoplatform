@@ -1,0 +1,483 @@
+1. Super Admin
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	✓
+Shop	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Services	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Support	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Clients	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Vendors	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Orders	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Reports	✓	✓	✓	—	—	✓	—	✓	✓
+Sales	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Purchases	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Expenses	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Purchase Orders	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Bills	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Invoices	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Contracts	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Approvals	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Master Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Users	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Roles	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Departments	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Audit Logs	✓	—	—	—	—	✓	—	✓	✓
+Notifications	✓	✓	✓	✓	—	✓	✓	✓	✓
+Configuration	✓	✓	✓	✓	—	✓	✓	✓	✓
+Client User Impersonation	✓	—	—	—	—	—	—	✓	✓
+Vendor Quotations	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Vendor Payments	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Goods Receipt Notes	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Purchase Requisitions	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Stock Transfers	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Procurement Analytics	✓	—	—	—	—	✓	—	✓	✓
+Vendor Performance	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Vendor Compliance	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Payments	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Credit Notes	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Debit Notes	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Tax Management	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Budgets	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Cost Centres	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Financial Reports	✓	✓	✓	—	✓	✓	—	✓	✓
+Reconciliation	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Warehouses	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Locations	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Deliveries	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Shipments	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Returns	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Quality Checks	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Service Requests	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Maintenance	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Organization Settings	✓	✓	✓	✓	—	✓	✓	✓	✓
+Branches	✓	✓	✓	✓	—	✓	✓	✓	✓
+Teams	✓	✓	✓	✓	—	✓	✓	✓	✓
+User Groups	✓	✓	✓	✓	—	✓	✓	✓	✓
+Login History	✓	—	—	—	—	✓	—	✓	✓
+Security Settings	✓	✓	✓	✓	—	✓	✓	✓	✓
+API Access	✓	✓	✓	✓	—	✓	✓	✓	✓
+Data Import/Export	✓	✓	✓	—	—	✓	✓	✓	✓
+Client Dashboard	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Client Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Client Cart	✓	✓	✓	✓	—	✓	✓	✓	✓
+Client Checkout	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Client Orders	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Client Documents	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Client Support Tickets	✓	✓	✓	✓	✓	✓	✓	✓	✓
+2. Platform Admin
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	✓
+Reports	✓	—	—	—	—	✓	—	✓	—
+Clients	✓	✓	✓	✓	—	✓	✓	✓	—
+Vendors	✓	✓	✓	✓	—	✓	✓	✓	—
+Orders	✓	—	✓	—	✓	✓	—	✓	—
+Purchases	✓	✓	✓	—	✓	✓	✓	✓	—
+Purchase Orders	✓	✓	✓	—	✓	✓	✓	✓	—
+Bills	✓	—	✓	—	✓	✓	—	✓	—
+Invoices	✓	—	✓	—	✓	✓	—	✓	—
+Contracts	✓	✓	✓	—	✓	✓	—	✓	—
+Approvals	✓	—	✓	—	✓	✓	—	✓	✓
+Master Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Users	✓	✓	✓	✓	—	✓	✓	✓	✓
+Roles	✓	✓	✓	✓	—	✓	✓	✓	✓
+Departments	✓	✓	✓	✓	—	✓	✓	✓	✓
+Audit Logs	✓	—	—	—	—	✓	—	✓	—
+Notifications	✓	✓	✓	✓	—	✓	✓	✓	✓
+Configuration	✓	✓	✓	✓	—	✓	✓	✓	✓
+Organization Settings	✓	✓	✓	—	—	✓	✓	✓	✓
+Branches	✓	✓	✓	✓	—	✓	✓	✓	✓
+Teams	✓	✓	✓	✓	—	✓	✓	✓	✓
+User Groups	✓	✓	✓	✓	—	✓	✓	✓	✓
+Login History	✓	—	—	—	—	✓	—	✓	—
+Data Import/Export	✓	—	—	—	—	✓	✓	✓	✓
+Client Dashboard	✓	—	✓	—	—	✓	—	✓	—
+Client Catalogue	✓	✓	✓	—	✓	✓	✓	✓	✓
+Client Orders	✓	—	✓	—	✓	✓	—	✓	—
+Client Documents	✓	✓	✓	—	—	✓	—	✓	—
+Client Support Tickets	✓	—	✓	—	✓	✓	—	✓	—
+3. IT Platform Admin
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	✓
+Reports	✓	—	—	—	—	✓	—	✓	—
+Users	✓	✓	✓	✓	—	✓	✓	✓	✓
+Roles	✓	✓	✓	✓	—	✓	✓	✓	✓
+Departments	✓	✓	✓	✓	—	✓	✓	✓	✓
+Audit Logs	✓	—	—	—	—	✓	—	✓	✓
+Notifications	✓	✓	✓	✓	—	✓	✓	✓	✓
+Configuration	✓	✓	✓	✓	—	✓	✓	✓	✓
+Client User Impersonation	✓	—	—	—	—	—	—	✓	✓
+Organization Settings	✓	—	✓	—	—	✓	✓	✓	✓
+Branches	✓	✓	✓	✓	—	✓	✓	✓	✓
+Teams	✓	✓	✓	✓	—	✓	✓	✓	✓
+User Groups	✓	✓	✓	✓	—	✓	✓	✓	✓
+Login History	✓	—	—	—	—	✓	—	✓	✓
+Security Settings	✓	✓	✓	—	—	✓	✓	✓	✓
+API Access	✓	✓	✓	✓	—	✓	✓	✓	✓
+Data Import/Export	✓	✓	—	—	—	✓	✓	✓	✓
+Client Dashboard	✓	—	—	—	—	✓	—	✓	—
+Client Catalogue	✓	—	—	—	—	✓	—	✓	—
+Client Cart	✓	—	—	—	—	✓	—	✓	—
+Client Checkout	✓	—	—	—	—	✓	—	✓	—
+Client Orders	✓	—	—	—	—	✓	—	✓	—
+Client Documents	✓	—	—	—	—	✓	—	✓	—
+Client Support Tickets	✓	—	—	—	—	✓	—	✓	—
+
+The administration access follows the previously defined separation: IT Platform Admin has strong access to Login History, Security Settings, API Access and Data Import/Export.
+
+4. IT Application Admin
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	✓
+Reports	✓	—	—	—	—	✓	—	✓	—
+Users	✓	✓	✓	—	—	✓	✓	✓	—
+Roles	✓	—	✓	—	—	✓	—	✓	✓
+Departments	✓	✓	✓	—	—	✓	✓	✓	—
+Audit Logs	✓	—	—	—	—	✓	—	✓	✓
+Notifications	✓	✓	✓	—	—	✓	✓	✓	✓
+Configuration	✓	✓	✓	—	—	✓	✓	✓	✓
+Client User Impersonation	✓	—	—	—	—	—	—	✓	✓
+Login History	✓	—	—	—	—	✓	—	✓	—
+Security Settings	✓	—	✓	—	—	✓	—	✓	✓
+API Access	✓	✓	✓	—	—	✓	✓	✓	✓
+Data Import/Export	✓	—	—	—	—	✓	✓	✓	✓
+Client Dashboard	✓	—	—	—	—	✓	—	✓	—
+Client Catalogue	✓	—	—	—	—	✓	—	✓	—
+Client Cart	✓	—	—	—	—	✓	—	✓	—
+Client Checkout	✓	—	—	—	—	✓	—	✓	—
+Client Orders	✓	—	—	—	—	✓	—	✓	—
+Client Documents	✓	—	—	—	—	✓	—	✓	—
+Client Support Tickets	✓	—	—	—	—	✓	—	✓	—
+
+IT Application Admin is intended for application-level configuration, Login History/Security Settings visibility, API management and import/export support.
+
+5. Finance Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+Clients	✓	—	✓	—	—	✓	—	✓	—
+Vendors	✓	—	✓	—	—	✓	—	✓	—
+Orders	✓	—	✓	—	✓	✓	—	✓	—
+Sales	✓	—	✓	—	✓	✓	—	✓	—
+Purchases	✓	—	✓	—	✓	✓	—	✓	—
+Expenses	✓	✓	✓	✓	✓	✓	✓	✓	—
+Purchase Orders	✓	—	✓	—	✓	✓	—	✓	—
+Bills	✓	✓	✓	✓	✓	✓	✓	✓	—
+Invoices	✓	✓	✓	✓	✓	✓	✓	✓	—
+Contracts	✓	—	✓	—	✓	✓	—	✓	—
+Approvals	✓	—	✓	—	✓	✓	—	✓	—
+Vendor Payments	✓	—	✓	—	✓	✓	—	✓	—
+Payments	✓	✓	✓	✓	✓	✓	✓	✓	—
+Credit Notes	✓	✓	✓	✓	✓	✓	✓	✓	—
+Debit Notes	✓	✓	✓	✓	✓	✓	✓	✓	—
+Tax Management	✓	✓	✓	—	✓	✓	✓	✓	✓
+Budgets	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Cost Centres	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Financial Reports	✓	—	—	—	✓	✓	—	✓	✓
+Reconciliation	✓	✓	✓	—	✓	✓	✓	✓	—
+
+The Finance Head is the primary owner of the eight Finance modules, including Budgets, Cost Centres, Financial Reports, Tax Management and Reconciliation.
+
+6. Finance Manager
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+Sales	✓	—	✓	—	✓	✓	—	✓	—
+Purchases	✓	—	✓	—	✓	✓	—	✓	—
+Expenses	✓	✓	✓	✓	✓	✓	✓	✓	—
+Purchase Orders	✓	—	✓	—	✓	✓	—	✓	—
+Bills	✓	✓	✓	—	✓	✓	✓	✓	—
+Invoices	✓	✓	✓	—	✓	✓	✓	✓	—
+Contracts	✓	—	✓	—	✓	✓	—	✓	—
+Approvals	✓	—	✓	—	✓	✓	—	✓	—
+Vendor Payments	✓	—	✓	—	✓	✓	—	✓	—
+Payments	✓	✓	✓	—	✓	✓	✓	✓	—
+Credit Notes	✓	✓	✓	—	✓	✓	✓	✓	—
+Debit Notes	✓	✓	✓	—	✓	✓	✓	✓	—
+Tax Management	✓	✓	✓	—	✓	✓	✓	✓	—
+Budgets	✓	✓	✓	—	✓	✓	✓	✓	—
+Cost Centres	✓	✓	✓	—	✓	✓	✓	✓	—
+Financial Reports	✓	—	—	—	—	✓	—	✓	—
+Reconciliation	✓	✓	✓	—	✓	✓	✓	✓	—
+7. Finance Executive
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	—	—	✓	—
+Reports	✓	—	—	—	—	✓	—	—	—
+Sales	✓	—	✓	—	—	✓	—	—	—
+Purchases	✓	—	✓	—	—	✓	—	—	—
+Expenses	✓	✓	✓	—	—	✓	—	✓	—
+Purchase Orders	✓	—	—	—	—	✓	—	—	—
+Bills	✓	✓	✓	—	—	✓	—	✓	—
+Invoices	✓	✓	✓	—	—	✓	—	✓	—
+Vendor Payments	✓	✓	✓	—	—	✓	—	✓	—
+Payments	✓	✓	✓	—	—	✓	—	✓	—
+Credit Notes	✓	✓	✓	—	—	✓	—	✓	—
+Debit Notes	✓	✓	✓	—	—	✓	—	✓	—
+Tax Management	✓	✓	✓	—	—	✓	—	✓	—
+Reconciliation	✓	✓	✓	—	—	✓	—	✓	—
+Financial Reports	✓	—	—	—	—	✓	—	—	—
+
+This keeps the Finance Executive at operational preparation/entry level rather than configuration or high-value approval, consistent with the original role definition.
+
+8. Procurement Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+Vendors	✓	✓	✓	—	—	✓	✓	✓	—
+Purchases	✓	✓	✓	—	✓	✓	✓	✓	—
+Purchase Orders	✓	✓	✓	—	✓	✓	✓	✓	—
+Approvals	✓	—	—	—	✓	✓	—	✓	—
+Vendor Quotations	✓	✓	✓	—	✓	✓	✓	✓	—
+Vendor Payments	✓	—	✓	—	—	✓	—	✓	—
+Goods Receipt Notes	✓	✓	✓	—	✓	✓	✓	✓	—
+Purchase Requisitions	✓	✓	✓	—	✓	✓	✓	✓	—
+Stock Transfers	✓	✓	✓	—	✓	✓	✓	✓	—
+Procurement Analytics	✓	—	—	—	—	✓	—	✓	—
+Vendor Performance	✓	—	✓	—	✓	✓	—	✓	—
+Vendor Compliance	✓	✓	✓	—	✓	✓	✓	✓	—
+Warehouses	✓	—	✓	—	—	✓	—	✓	—
+Locations	✓	—	✓	—	—	✓	—	✓	—
+Deliveries	✓	—	✓	—	—	✓	—	✓	—
+Shipments	✓	—	✓	—	—	✓	—	✓	—
+Quality Checks	✓	✓	✓	—	✓	✓	—	✓	—
+
+The Procurement Head is intended to have broad procurement access and approval authority.
+
+9. Procurement Lead
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Vendors	✓	✓	✓	—	—	✓	✓	✓	—
+Purchases	✓	✓	✓	—	✓	✓	✓	✓	—
+Purchase Orders	✓	✓	✓	—	✓	✓	✓	✓	—
+Vendor Quotations	✓	✓	✓	—	✓	✓	✓	✓	—
+Goods Receipt Notes	✓	✓	✓	—	—	✓	✓	✓	—
+Purchase Requisitions	✓	✓	✓	—	✓	✓	✓	✓	—
+Stock Transfers	✓	✓	✓	—	✓	✓	✓	✓	—
+Procurement Analytics	✓	—	—	—	—	✓	—	—	—
+Vendor Performance	✓	—	✓	—	—	✓	—	✓	—
+Vendor Compliance	✓	—	✓	—	—	✓	—	✓	—
+Warehouses	✓	—	✓	—	—	✓	—	✓	—
+Locations	✓	—	✓	—	—	✓	—	✓	—
+Deliveries	✓	—	✓	—	—	✓	—	✓	—
+Shipments	✓	—	✓	—	—	✓	—	✓	—
+Quality Checks	✓	✓	✓	—	—	✓	—	✓	—
+10. Procurement Analyst
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	—	—
+Vendors	✓	✓	✓	—	—	✓	—	—	—
+Purchases	✓	✓	✓	—	—	✓	✓	—	—
+Purchase Orders	✓	✓	✓	—	—	✓	✓	—	—
+Vendor Quotations	✓	✓	✓	—	—	✓	✓	✓	—
+Goods Receipt Notes	✓	✓	✓	—	—	✓	—	✓	—
+Purchase Requisitions	✓	✓	✓	—	—	✓	✓	✓	—
+Stock Transfers	✓	✓	✓	—	—	✓	—	—	—
+Procurement Analytics	✓	—	—	—	—	✓	—	—	—
+Vendor Performance	✓	—	—	—	—	✓	—	—	—
+Vendor Compliance	✓	✓	✓	—	—	✓	—	—	—
+Warehouses	✓	—	—	—	—	✓	—	—	—
+Deliveries	✓	—	—	—	—	✓	—	—	—
+11. Vendor Management Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Vendors	✓	✓	✓	—	✓	✓	✓	✓	—
+Vendor Quotations	✓	—	✓	—	✓	✓	—	✓	—
+Vendor Payments	✓	—	✓	—	—	✓	—	—	—
+Vendor Performance	✓	✓	✓	—	✓	✓	✓	✓	—
+Vendor Compliance	✓	✓	✓	—	✓	✓	✓	✓	—
+Procurement Analytics	✓	—	—	—	—	✓	—	✓	—
+Contracts	✓	✓	✓	—	✓	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+12. Vendor Manager
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	—	—
+Vendors	✓	✓	✓	—	—	✓	—	✓	—
+Vendor Quotations	✓	—	✓	—	—	✓	—	✓	—
+Vendor Payments	✓	—	—	—	—	✓	—	—	—
+Vendor Performance	✓	✓	✓	—	—	✓	—	✓	—
+Vendor Compliance	✓	✓	✓	—	—	✓	✓	✓	—
+Contracts	✓	—	✓	—	—	✓	—	—	—
+Procurement Analytics	✓	—	—	—	—	✓	—	—	—
+13. Vendor Coordinator
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	—	—	—	—
+Vendors	✓	✓	✓	—	—	✓	—	✓	—
+Vendor Quotations	✓	✓	✓	—	—	✓	—	✓	—
+Vendor Compliance	✓	✓	✓	—	—	✓	✓	✓	—
+Vendor Performance	✓	—	✓	—	—	✓	—	—	—
+Contracts	✓	✓	✓	—	—	✓	—	—	—
+Procurement Analytics	✓	—	—	—	—	✓	—	—	—
+14. Service Operation Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Services	✓	✓	✓	—	✓	✓	✓	✓	—
+Support	✓	—	✓	—	✓	✓	—	✓	—
+Orders	✓	—	✓	—	✓	✓	—	✓	—
+Deliveries	✓	✓	✓	—	✓	✓	✓	✓	—
+Shipments	✓	✓	✓	—	✓	✓	✓	✓	—
+Warehouses	✓	✓	✓	—	✓	✓	✓	✓	—
+Locations	✓	✓	✓	—	✓	✓	✓	✓	—
+Returns	✓	✓	✓	—	✓	✓	✓	✓	—
+Quality Checks	✓	✓	✓	—	✓	✓	✓	✓	—
+Service Requests	✓	✓	✓	—	✓	✓	✓	✓	—
+Maintenance	✓	✓	✓	—	✓	✓	✓	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+15. Service Manager
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Services	✓	✓	✓	—	✓	✓	—	✓	—
+Support	✓	✓	✓	—	✓	✓	—	✓	—
+Orders	✓	—	✓	—	✓	✓	—	✓	—
+Deliveries	✓	✓	✓	—	✓	✓	—	✓	—
+Shipments	✓	✓	✓	—	✓	✓	—	✓	—
+Returns	✓	✓	✓	—	✓	✓	—	✓	—
+Quality Checks	✓	✓	✓	—	✓	✓	—	✓	—
+Service Requests	✓	✓	✓	—	✓	✓	—	✓	—
+Maintenance	✓	✓	✓	—	✓	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+16. Service Coordinator
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	—	—	—	—
+Services	✓	✓	✓	—	—	✓	—	✓	—
+Support	✓	✓	✓	—	—	✓	—	✓	—
+Orders	✓	—	✓	—	—	✓	—	—	—
+Deliveries	✓	✓	✓	—	—	✓	—	✓	—
+Shipments	✓	✓	✓	—	—	✓	—	✓	—
+Service Requests	✓	✓	✓	—	—	✓	—	✓	—
+Maintenance	✓	✓	✓	—	—	✓	—	✓	—
+Returns	✓	✓	✓	—	—	✓	—	—	—
+17. Support Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Support	✓	✓	✓	✓	✓	✓	✓	✓	—
+Clients	✓	—	✓	—	—	✓	—	✓	—
+Orders	✓	—	✓	—	—	✓	—	✓	—
+Returns	✓	✓	✓	—	✓	✓	—	✓	—
+Quality Checks	✓	✓	✓	—	✓	✓	—	✓	—
+Service Requests	✓	✓	✓	—	✓	✓	—	✓	—
+Maintenance	✓	✓	✓	—	✓	✓	—	✓	—
+Client Support Tickets	✓	✓	✓	—	✓	✓	—	✓	—
+Client Orders	✓	—	✓	—	—	✓	—	✓	—
+Client Documents	✓	—	—	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+18. Support Lead
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	—	—
+Support	✓	✓	✓	—	✓	✓	—	✓	—
+Clients	✓	—	✓	—	—	✓	—	—	—
+Orders	✓	—	✓	—	—	✓	—	—	—
+Returns	✓	✓	✓	—	—	✓	—	✓	—
+Quality Checks	✓	✓	✓	—	—	✓	—	✓	—
+Service Requests	✓	✓	✓	—	✓	✓	—	✓	—
+Maintenance	✓	✓	✓	—	—	✓	—	✓	—
+Client Support Tickets	✓	✓	✓	—	✓	✓	—	✓	—
+Client Orders	✓	—	✓	—	—	✓	—	—	—
+Client Documents	✓	—	—	—	—	✓	—	—	—
+19. Client Department Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Clients	✓	✓	✓	—	✓	✓	✓	✓	—
+Orders	✓	✓	✓	—	✓	✓	✓	✓	—
+Sales	✓	✓	✓	—	✓	✓	✓	✓	—
+Invoices	✓	—	✓	—	✓	✓	—	✓	—
+Contracts	✓	✓	✓	—	✓	✓	—	✓	—
+Approvals	✓	—	✓	—	✓	✓	—	✓	—
+Client Dashboard	✓	—	✓	—	—	✓	—	✓	—
+Client Catalogue	✓	✓	✓	—	✓	✓	✓	✓	—
+Client Cart	✓	✓	✓	—	—	✓	—	✓	—
+Client Checkout	✓	✓	✓	—	✓	✓	—	✓	—
+Client Orders	✓	✓	✓	—	✓	✓	✓	✓	—
+Client Documents	✓	✓	✓	—	✓	✓	✓	✓	—
+Client Support Tickets	✓	✓	✓	—	✓	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+
+The Client Department Head is specifically defined to manage and monitor the Client Dashboard, Client Catalogue, Client Orders, Client Documents and Client Support Tickets.
+
+20. Client Relationship Manager
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	—	—
+Clients	✓	✓	✓	—	—	✓	—	✓	—
+Orders	✓	✓	✓	—	—	✓	—	✓	—
+Sales	✓	✓	✓	—	—	✓	—	✓	—
+Contracts	✓	✓	✓	—	—	✓	—	✓	—
+Invoices	✓	—	✓	—	—	✓	—	✓	—
+Client Dashboard	✓	—	✓	—	—	✓	—	✓	—
+Client Catalogue	✓	✓	✓	—	—	✓	—	✓	—
+Client Cart	✓	✓	✓	—	—	✓	—	✓	—
+Client Checkout	✓	✓	✓	—	—	✓	—	✓	—
+Client Orders	✓	✓	✓	—	—	✓	—	✓	—
+Client Documents	✓	✓	✓	—	—	✓	—	✓	—
+Client Support Tickets	✓	✓	✓	—	—	✓	—	✓	—
+
+The original definition gives this role responsibility for client dashboard information, catalogue access, orders, documents and support tickets.
+
+21. Client Team Lead
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Clients	✓	✓	✓	—	—	✓	—	✓	—
+Orders	✓	✓	✓	—	—	✓	—	✓	—
+Sales	✓	✓	✓	—	—	✓	—	✓	—
+Contracts	✓	—	✓	—	—	✓	—	✓	—
+Client Dashboard	✓	—	✓	—	—	✓	—	✓	—
+Client Catalogue	✓	—	✓	—	—	✓	—	✓	—
+Client Orders	✓	✓	✓	—	—	✓	—	✓	—
+Client Documents	✓	✓	✓	—	—	✓	—	✓	—
+Client Support Tickets	✓	✓	✓	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+22. Client Analyst
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	—	—
+Clients	✓	✓	✓	—	—	✓	—	✓	—
+Orders	✓	—	✓	—	—	✓	—	—	—
+Sales	✓	—	✓	—	—	✓	—	—	—
+Client Dashboard	✓	—	—	—	—	✓	—	—	—
+Client Catalogue	✓	✓	✓	—	—	✓	—	✓	—
+Client Orders	✓	✓	✓	—	—	✓	—	✓	—
+Client Documents	✓	✓	✓	—	—	✓	—	✓	—
+Client Support Tickets	✓	✓	✓	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	—	—
+
+The Client Analyst's core portal responsibilities are Client Catalogue, Orders, Documents and Support Tickets.
+
+23. Catalog Head
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	✓	—
+Shop	✓	✓	✓	—	✓	✓	✓	✓	—
+Services	✓	✓	✓	—	✓	✓	✓	✓	—
+Master Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Products/Catalogue-related Orders	✓	—	✓	—	✓	✓	—	✓	—
+Client Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	✓
+Client Dashboard	✓	—	✓	—	—	✓	—	✓	—
+Client Orders	✓	—	✓	—	—	✓	—	✓	—
+Client Documents	✓	—	✓	—	—	✓	—	✓	—
+Reports	✓	—	—	—	—	✓	—	✓	—
+
+Catalog roles are intended to have strong access to Client Catalogue and client-specific product visibility.
+
+24. Catalog Manager
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	✓	—	—	—
+Shop	✓	✓	✓	—	—	✓	✓	✓	—
+Services	✓	✓	✓	—	—	✓	✓	✓	—
+Master Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	—
+Client Catalogue	✓	✓	✓	✓	✓	✓	✓	✓	—
+Client Dashboard	✓	—	✓	—	—	✓	—	—	—
+Client Orders	✓	—	✓	—	—	✓	—	—	—
+Reports	✓	—	—	—	—	✓	—	—	—
+25. Catalog Coordinator
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	—	—	—	—
+Shop	✓	✓	✓	—	—	✓	—	✓	—
+Services	✓	✓	✓	—	—	✓	—	✓	—
+Master Catalogue	✓	✓	✓	—	—	✓	✓	✓	—
+Client Catalogue	✓	✓	✓	—	—	✓	✓	✓	—
+Client Dashboard	✓	—	✓	—	—	—	—	—	—
+Client Orders	✓	—	✓	—	—	✓	—	—	—
+Client Documents	✓	✓	✓	—	—	✓	—	—	—
+26. Catalog Analyst
+Module	View	Create	Edit	Delete	Approve	Export	Import	Manage	Configure
+Dashboard	✓	—	—	—	—	—	—	—	—
+Shop	✓	—	✓	—	—	✓	—	—	—
+Services	✓	—	✓	—	—	✓	—	—	—
+Master Catalogue	✓	—	✓	—	—	✓	—	—	—
+Client Catalogue	✓	—	✓	—	—	✓	—	—	—
+Client Dashboard	✓	—	—	—	—	✓	—	—	—
+Client Orders	✓	—	—	—	—	✓	—	—	—
+Client Documents	✓	—	—	—	—	✓	—	—	—
+Reports	✓	—	—	—	—	✓	—	—	—

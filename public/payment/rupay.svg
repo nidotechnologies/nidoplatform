@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="56" viewBox="0 0 160 56" fill="none">
+  <rect x="1" y="1" width="158" height="54" rx="12" fill="#ffffff" stroke="#D8E2F0"/>
+  <path d="M44 18H116L103 38H31L44 18Z" fill="url(#g)"/>
+  <text x="73" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">RuPay</text>
+  <defs>
+    <linearGradient id="g" x1="31" y1="18" x2="116" y2="38" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1C65B7"/>
+      <stop offset="0.5" stop-color="#2B9BDA"/>
+      <stop offset="1" stop-color="#31A54A"/>
+    </linearGradient>
+  </defs>
+</svg>

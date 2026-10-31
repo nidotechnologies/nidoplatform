@@ -1,0 +1,70 @@
+Fix the following runtime error in my existing NIDO application:
+
+Error:
+"useNavigate() may be used only in the context of a <Router> component."
+
+The stack trace points to:
+src/pages/LoginPage.tsx
+LoginPage.tsx:87
+
+IMPORTANT:
+This is an existing application. Do not rebuild the app and do not change unrelated functionality.
+
+First inspect the existing routing architecture and determine why LoginPage is being rendered outside the React Router context.
+
+Check:
+
+* main.tsx
+* App.tsx
+* routing configuration
+* LoginPage.tsx
+* AuthContext
+* ProtectedRoute
+* any lazy-loaded route configuration
+
+Then implement the smallest correct fix.
+
+Requirements:
+
+1. LoginPage must be rendered inside the application's existing Router.
+2. If the project already uses BrowserRouter + Routes + Route, preserve that architecture.
+3. If the project uses createBrowserRouter + RouterProvider, preserve that architecture.
+4. Do NOT add a second BrowserRouter.
+5. Do NOT wrap LoginPage itself with another BrowserRouter.
+6. Do NOT create nested routers.
+7. Preserve the existing authentication and protected-route logic.
+8. Preserve the existing NIDO UI and styling.
+9. Preserve all existing navigation paths.
+10. Do not modify database, Supabase/Appwrite, procurement, client portal, vendor, order, PO, or other business logic.
+
+Verify this flow:
+
+/login
+→ LoginPage
+→ login/authentication
+→ successful authentication
+→ existing dashboard redirect
+
+Also verify:
+
+* LoginPage can safely use useNavigate()
+* unauthenticated users are still redirected to /login
+* authenticated users can access protected routes
+* logout still works
+* browser refresh works
+* direct navigation to /login works
+* lazy-loaded routes remain inside the Router context
+
+Dependency requirements:
+
+* Do not upgrade React Router unnecessarily.
+* Do not install another react-router-dom package.
+* Do not modify package versions unless required for the existing routing setup.
+
+After making the fix:
+
+* run the existing build/typecheck
+* verify there are no remaining "useNavigate() may be used only in the context of a <Router>" errors
+* report the root cause and files changed
+
+Make only the minimum changes necessary to fix the routing problem.

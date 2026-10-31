@@ -1,0 +1,758 @@
+You are working on the existing NIDO B2B procurement platform.
+
+NIDO is a multi-tenant B2B procurement management platform with two user worlds:
+
+1. INTERNAL NIDO USERS
+
+   * Super Admin
+   * Admin
+   * Managers
+   * Procurement users
+   * Other internal roles
+
+2. CLIENT PORTAL USERS
+
+   * External users belonging to a specific client/company
+   * They can access only their assigned client/company data
+   * They use the NIDO Client Portal
+
+I want you to IMPLEMENT A SECURE CLIENT-USER IMPERSONATION FEATURE in the EXISTING NIDO CODEBASE.
+
+IMPORTANT:
+Do NOT rebuild the authentication system.
+Do NOT create a second authentication system.
+Do NOT duplicate the client portal.
+Do NOT break the existing login, client isolation, permissions, Supabase/Appwrite integration, routes, database, or existing workflows.
+
+FIRST AUDIT THE EXISTING CODEBASE.
+
+Before making changes:
+
+1. Identify the current authentication provider.
+2. Identify the current user/session structure.
+3. Identify internal-user roles and permissions.
+4. Identify client-user roles and permissions.
+5. Identify how client/company/tenant IDs are stored and enforced.
+6. Identify the existing protected-route implementation.
+7. Identify AuthContext/session/context providers.
+8. Identify the Client Portal routes.
+9. Identify the Client Users management page.
+10. Identify the database tables related to:
+
+* users
+* client users
+* clients
+* roles
+* permissions
+* sessions
+* audit logs
+
+11. Identify whether Supabase RLS or another tenant-isolation mechanism is being used.
+12. Identify the existing audit logging system.
+13. Identify whether there is already any "switch user", "act as user", "impersonation", or admin-preview functionality.
+
+After the audit, implement only the missing pieces.
+
+==================================================
+
+1. IMPERSONATION BUSINESS RULE
+   ==================================================
+
+Only authorized INTERNAL NIDO users can impersonate CLIENT PORTAL USERS.
+
+Client users must NEVER be able to impersonate another user.
+
+Do not allow an internal user to impersonate another internal NIDO user.
+
+The initial allowed role should be:
+
+* Super Admin: ALLOWED
+* Admin: ALLOWED
+* Manager: configurable/optional
+* Procurement Officer: NOT ALLOWED by default
+* Other internal users: NOT ALLOWED by default
+* Client User: NEVER ALLOWED
+
+Create/use a dedicated permission such as:
+
+client_user_impersonation
+
+Do not hard-code the permission throughout the application.
+
+==================================================
+2. CLIENT USER MANAGEMENT UI
+============================
+
+Find the existing NIDO Client Users management page.
+
+Add an action:
+
+"Impersonate"
+
+For example:
+
+## Client Users
+
+John Doe
+[john@abc.com](mailto:john@abc.com)
+ABC Industries
+Active
+[View] [Edit] [Impersonate] [Deactivate]
+
+Only show the Impersonate action when the currently authenticated internal user has the required permission.
+
+Do not expose this action to client users.
+
+==================================================
+3. IMPERSONATION CONFIRMATION
+=============================
+
+Before starting impersonation, display a confirmation dialog.
+
+Example:
+
+"Impersonate Client User?"
+
+You are about to enter the NIDO Client Portal as:
+
+John Doe
+[john@abc.com](mailto:john@abc.com)
+ABC Industries
+
+You will see the portal exactly as this client user sees it.
+
+[Cancel] [Start Impersonation]
+
+For higher-risk actions, clearly communicate whether the session is view-only or full-access.
+
+==================================================
+4. DO NOT REPLACE THE ORIGINAL ADMIN IDENTITY
+=============================================
+
+This is extremely important.
+
+When impersonation begins:
+
+Original authenticated identity:
+NIDO Admin
+
+Impersonated identity:
+Client User
+
+Do NOT overwrite the original admin identity.
+
+Maintain both identities separately.
+
+Use a secure impersonation/session representation similar to:
+
+original_user_id
+impersonated_user_id
+impersonated_client_id
+impersonation_session_id
+started_at
+expires_at
+permissions/mode
+
+The exact implementation must follow the existing authentication architecture.
+
+The original internal user's identity must always remain recoverable.
+
+==================================================
+5. IMPERSONATION SESSION
+========================
+
+Create a secure temporary impersonation session.
+
+Recommended fields if the existing database architecture supports a dedicated table:
+
+impersonation_sessions
+
+Fields:
+
+id
+original_user_id
+impersonated_user_id
+client_id
+started_at
+expires_at
+ended_at
+status
+mode
+ip_address if already supported
+user_agent if already supported
+created_at
+
+Use appropriate foreign keys and indexes.
+
+Do not create duplicate user records.
+
+The impersonation session should expire automatically.
+
+Recommended default expiry:
+
+1 hour.
+
+Make the duration configurable if the existing configuration architecture supports it.
+
+==================================================
+6. CLIENT TENANT ISOLATION
+==========================
+
+This is a CRITICAL SECURITY REQUIREMENT.
+
+When an NIDO admin impersonates a client user:
+
+The admin must see ONLY what that client user is authorized to see.
+
+Example:
+
+Client A user must never see:
+
+* Client B catalogue
+* Client B prices
+* Client B orders
+* Client B users
+* Client B reports
+* Client B settings
+* Client B documents
+* Client B stock information
+* Any other tenant's data
+
+The impersonated session must pass through the SAME authorization and tenant-isolation logic as a normal client login.
+
+Do NOT bypass client authorization simply because the original user is an admin.
+
+==================================================
+7. CLIENT PORTAL EXPERIENCE
+===========================
+
+After starting impersonation, redirect the admin to the existing Client Portal dashboard.
+
+Do NOT create a duplicate portal.
+
+The admin should experience the existing client portal using the impersonated client's permissions.
+
+They should see:
+
+* Client Dashboard
+* Shop
+* Client Catalogue
+* Client-specific pricing
+* Cart
+* Orders
+* Order Details
+* Notifications
+* Client profile
+* Reports
+* Other existing client portal pages
+
+Only display features already allowed for that client user.
+
+==================================================
+8. IMPERSONATION BANNER
+=======================
+
+While impersonation is active, show a persistent banner at the top of every client portal page.
+
+Example:
+
+---
+
+⚠ IMPERSONATION MODE
+
+Viewing NIDO as:
+John Doe
+ABC Industries
+
+Original account:
+NIDO Admin
+
+## [EXIT IMPERSONATION]
+
+The banner must remain visible during navigation.
+
+Use the existing NIDO UI design system.
+
+Do not create a visually inconsistent component.
+
+The Exit Impersonation button should be obvious and easy to access.
+
+==================================================
+9. EXIT IMPERSONATION
+=====================
+
+When the admin clicks:
+
+EXIT IMPERSONATION
+
+End the impersonation session.
+
+Restore the original authenticated internal-user context.
+
+Redirect the admin back to an appropriate NIDO internal page, preferably:
+
+Client Users
+
+or the page from which impersonation was started.
+
+Do not require the admin to log in again.
+
+Do not destroy the original admin authentication session.
+
+==================================================
+10. BROWSER REFRESH / DIRECT URL
+================================
+
+Impersonation must survive normal browser refreshes.
+
+However, it must NOT survive beyond the configured expiration.
+
+If the admin closes/reopens the browser, follow the security behavior supported by the existing authentication architecture.
+
+Do not store sensitive authentication credentials in localStorage.
+
+Do not store passwords.
+
+Do not expose impersonation tokens in URLs.
+
+==================================================
+11. ACTION MODE
+===============
+
+Implement two conceptual modes:
+
+VIEW_ONLY
+FULL_ACCESS
+
+Initially configure client-user impersonation as:
+
+VIEW_ONLY
+
+unless the existing NIDO business logic clearly requires full access.
+
+In VIEW_ONLY mode:
+
+Allow:
+
+* dashboard viewing
+* catalogue viewing
+* price viewing
+* order viewing
+* reports viewing
+* client portal navigation
+
+Prevent or clearly restrict high-risk mutations such as:
+
+* placing orders
+* cancelling orders
+* changing client users
+* changing client configuration
+* changing security settings
+* changing payment information
+
+If an action is blocked, display a clear message:
+
+"This action is disabled while using client-user impersonation."
+
+Do not silently fail.
+
+Structure the implementation so FULL_ACCESS can be enabled later without rewriting the system.
+
+==================================================
+12. AUDIT LOGGING
+=================
+
+Every impersonation event must be audited.
+
+At minimum log:
+
+IMPERSONATION_STARTED
+
+Fields:
+
+event_type
+original_user_id
+impersonated_user_id
+client_id
+impersonation_session_id
+timestamp
+
+When ending:
+
+IMPERSONATION_ENDED
+
+Also record:
+
+* who started it
+* who was impersonated
+* client/company
+* start time
+* end time
+* duration
+* mode
+* status
+
+If NIDO already has an audit-log table, reuse it.
+
+Do NOT create a duplicate audit system unnecessarily.
+
+==================================================
+13. HIGH-RISK ACTION AUDITING
+=============================
+
+If FULL_ACCESS is ever enabled, every important action performed during impersonation must clearly identify:
+
+Performed by:
+Original NIDO Admin
+
+Acting as:
+Client User
+
+Example:
+
+Admin A
+acting as
+John Doe - ABC Industries
+
+placed Order #ORD-00125
+
+The audit trail must never make it appear that the client user personally performed the action when an admin actually performed it.
+
+==================================================
+14. SECURITY REQUIREMENTS
+=========================
+
+Follow secure authentication practices.
+
+Never:
+
+* expose passwords
+* copy client passwords
+* modify client passwords
+* create fake client credentials
+* bypass authorization
+* bypass RLS
+* bypass tenant restrictions
+* place impersonation data in insecure URL parameters
+* trust client-supplied client_id
+* trust client-supplied user_id
+* allow a client user to manipulate impersonation state
+* allow impersonation of unauthorized clients
+* allow cross-tenant impersonation
+
+All authorization decisions must be made server-side where applicable.
+
+Do not rely only on frontend hiding of buttons.
+
+==================================================
+15. DATABASE / RLS
+==================
+
+If NIDO uses Supabase:
+
+Review the existing RLS policies carefully.
+
+Do NOT disable RLS to make impersonation work.
+
+Implement impersonation in a way compatible with the existing tenant isolation architecture.
+
+If database functions/RPCs are required, make them secure and validate:
+
+original_user_id
+impersonated_user_id
+client_id
+permission
+session status
+session expiration
+
+Use SECURITY DEFINER only when genuinely necessary and lock it down appropriately.
+
+Never trust IDs received directly from the browser.
+
+==================================================
+16. ROUTING
+===========
+
+Use the existing routing system.
+
+Do not create a duplicate client portal.
+
+The routing should effectively behave like:
+
+Internal Admin
+↓
+Client Users
+↓
+Impersonate
+↓
+Impersonation Session
+↓
+Existing Client Portal
+↓
+Client Dashboard
+
+When impersonation ends:
+
+Client Portal
+↓
+Exit Impersonation
+↓
+Original Internal Admin
+↓
+Client Users
+
+Protect every client route so that the impersonated user context is respected.
+
+==================================================
+17. USER CONTEXT
+================
+
+Modify the existing AuthContext/UserContext/session architecture only as necessary.
+
+The application should be able to distinguish:
+
+currentAuthenticatedUser
+originalAuthenticatedUser
+effectiveUser
+isImpersonating
+impersonationSession
+impersonatedClient
+
+For normal login:
+
+isImpersonating = false
+effectiveUser = authenticated user
+
+During impersonation:
+
+isImpersonating = true
+originalAuthenticatedUser = internal admin
+effectiveUser = client user
+
+All client portal permission checks should use:
+
+effectiveUser
+
+while security/audit checks must retain:
+
+originalAuthenticatedUser
+
+Do not break existing components that depend on the current user object.
+
+==================================================
+18. API / BACKEND
+=================
+
+Audit all API endpoints used by the Client Portal.
+
+Ensure that an impersonated request cannot simply modify:
+
+user_id
+client_id
+tenant_id
+
+from the frontend to access another client's data.
+
+The backend must derive authorization from the authenticated/impersonated session.
+
+Pay special attention to:
+
+* catalogue APIs
+* product APIs
+* pricing APIs
+* cart APIs
+* order APIs
+* order detail APIs
+* reports
+* client profile
+* client users
+* notifications
+* documents
+* any procurement APIs
+
+==================================================
+19. ERROR HANDLING
+==================
+
+Handle:
+
+* expired impersonation
+* revoked client user
+* deactivated client user
+* deleted client
+* invalid impersonation session
+* unauthorized impersonation attempt
+* permission removed while impersonating
+* network failure
+* session expiration
+
+Example:
+
+"Your impersonation session has expired. You have been returned to your NIDO account."
+
+Never expose internal stack traces to users.
+
+==================================================
+20. UI/UX
+=========
+
+Follow the existing NIDO design language.
+
+Use the existing:
+
+* buttons
+* dialogs
+* cards
+* badges
+* typography
+* spacing
+* icons
+* toast/notification system
+
+Do not introduce a new UI framework.
+
+The impersonation feature should look like a native part of NIDO.
+
+==================================================
+21. TESTING
+===========
+
+After implementation, test all of the following.
+
+AUTHENTICATION
+
+1. Internal admin login works.
+2. Client login works.
+3. Client logout works.
+4. Existing sessions work.
+
+PERMISSIONS
+
+5. Authorized admin can impersonate.
+6. Unauthorized internal user cannot impersonate.
+7. Client user cannot impersonate.
+8. Admin cannot impersonate another internal user.
+9. Admin cannot impersonate a user belonging to an unauthorized client.
+
+TENANT ISOLATION
+
+10. Client A cannot see Client B data.
+11. Client A pricing remains isolated.
+12. Client A orders remain isolated.
+13. Client A users remain isolated.
+14. Client A reports remain isolated.
+
+IMPERSONATION
+
+15. Admin starts impersonation.
+16. Confirmation dialog appears.
+17. Client portal opens.
+18. Correct client user is displayed.
+19. Impersonation banner appears.
+20. Banner remains during navigation.
+21. Browser refresh maintains valid impersonation state.
+22. Expired session ends correctly.
+23. Exit impersonation works.
+24. Original admin session is restored.
+
+AUDITING
+
+25. IMPERSONATION_STARTED is recorded.
+26. IMPERSONATION_ENDED is recorded.
+27. Original admin identity is recorded.
+28. Client user identity is recorded.
+29. Client ID is recorded.
+30. Session ID is recorded.
+
+SECURITY
+
+31. No password is exposed.
+32. No credentials are copied.
+33. No sensitive tokens are placed in URLs.
+34. Frontend cannot manipulate client_id to bypass authorization.
+35. RLS/authorization remains enforced.
+36. No existing security control is weakened.
+
+==================================================
+22. DO NOT BREAK EXISTING NIDO FEATURES
+=======================================
+
+Before completing the task, verify that these existing areas still work:
+
+* Internal login
+* Client login
+* Client management
+* Client user management
+* Vendor management
+* Master catalogue
+* Client catalogue
+* Client-specific pricing
+* Price engine
+* Stock management
+* Shop
+* Cart
+* Orders
+* Vendor allocation
+* Purchase Orders
+* Reports
+* Configuration Hub
+* Notifications
+* Existing permissions
+* Existing protected routes
+
+Do not refactor unrelated modules.
+
+Do not change business rules unrelated to impersonation.
+
+Do not remove existing functionality.
+
+==================================================
+23. CODE QUALITY
+================
+
+Use the existing project architecture and conventions.
+
+Avoid unnecessary dependencies.
+
+Do not install a new authentication library unless absolutely required.
+
+Reuse existing components and utilities.
+
+Keep the implementation modular.
+
+Prefer reusable components such as:
+
+ImpersonationContext
+ImpersonationBanner
+ImpersonationConfirmDialog
+ImpersonationGuard
+ImpersonationService
+
+Only create these if they fit the existing architecture.
+
+==================================================
+24. FINAL AUDIT REPORT
+======================
+
+After implementation, provide a concise implementation report containing:
+
+1. Existing authentication architecture discovered
+2. Existing client-user architecture discovered
+3. Files changed
+4. Database changes
+5. API/backend changes
+6. Permission changes
+7. Routing changes
+8. UI components added
+9. Security measures implemented
+10. Audit logging implemented
+11. Tests performed
+12. Any remaining limitations
+
+IMPORTANT:
+
+Do not claim something is implemented unless you actually verified it in the existing codebase.
+
+If an existing NIDO feature already supports part of this functionality, reuse it instead of duplicating it.
+
+The final result must be production-oriented, secure, multi-tenant safe, and fully integrated with the existing NIDO Client Portal.

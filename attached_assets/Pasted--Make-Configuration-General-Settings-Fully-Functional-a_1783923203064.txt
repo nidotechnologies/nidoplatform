@@ -1,0 +1,277 @@
+# Make Configuration → General Settings Fully Functional and Drive the Entire Platform
+
+## Objective
+
+Convert all pages under **Configuration → General Settings** from static UI pages into fully functional system configuration modules.
+
+The settings configured here must become the single source of truth for the entire NIDO Procurement Platform.
+
+Every change made in these configuration pages must automatically reflect throughout the application in real time without requiring manual code changes.
+
+There must never be duplicate configuration values stored in multiple places.
+
+---
+
+# General Principle
+
+Treat the Configuration module as the platform's **Global Configuration Engine**.
+
+Whenever a setting is updated, every page, component, layout, API, dialog, report, and workflow that depends on that setting should automatically use the updated value.
+
+Do not hardcode configuration values anywhere in the application.
+
+Always read them from the configuration service or database.
+
+---
+
+# Configuration Sections
+
+## 1. Organization
+
+This section should control the organization's information across the entire application.
+
+Fields may include:
+
+* Organization Name
+* Display Name
+* Logo
+* Favicon
+* Website
+* Email
+* Phone
+* GST Number
+* PAN
+* CIN
+* Address
+* Registered Address
+* Billing Address
+* Support Email
+* Support Phone
+* Social Links
+
+Whenever any of these values are updated:
+
+Automatically update throughout the application, including but not limited to:
+
+* Header
+* Sidebar
+* Login Page
+* Footer
+* Dashboard
+* Reports
+* Invoices
+* Purchase Orders
+* Quotations
+* Contracts
+* Email Templates
+* PDF Documents
+* Printable Documents
+* Notifications
+* Support Pages
+* Company Information Cards
+* Profile Pages
+
+No page should require manual updates.
+
+---
+
+## 2. Theme & Appearance
+
+This section becomes the global UI configuration.
+
+Allow configuration of:
+
+* Primary Color
+* Secondary Color
+* Accent Color
+* Success Color
+* Warning Color
+* Error Color
+* Font Family
+* Font Size
+* Border Radius
+* Button Style
+* Card Style
+* Table Style
+* Icon Style
+* Sidebar Width
+* Header Style
+* Dark Mode
+* Light Mode
+* Compact Mode
+* Logo
+* Login Background
+* Dashboard Background
+
+Whenever these settings change:
+
+The UI should immediately refresh and apply the new theme throughout the application.
+
+Do not require rebuilding or redeploying the application.
+
+All pages must automatically inherit the new appearance.
+
+---
+
+## 3. Localization
+
+Centralize all localization settings.
+
+Allow configuration of:
+
+* Language
+* Date Format
+* Time Format
+* Time Zone
+* Currency
+* Currency Symbol
+* Number Format
+* Measurement Units
+* Financial Year
+* Week Start Day
+
+Whenever updated:
+
+Every page should immediately use the new localization values.
+
+Examples:
+
+* Dates
+* Time
+* Currency
+* Reports
+* Dashboards
+* Invoices
+* Orders
+* Contracts
+* Exported Files
+* PDFs
+
+---
+
+## 4. Procurement Defaults
+
+This section should control all procurement defaults used by the platform.
+
+Examples:
+
+* Default Payment Terms
+* Default Delivery Terms
+* Default Tax
+* Default Currency
+* Default Warehouse
+* Default Shipping Method
+* Default Approval Workflow
+* Default Vendor Rating
+* Default Order Priority
+* Default Lead Time
+* Default MOQ
+* Default Quote Validity
+* Default SLA
+
+Whenever these settings are changed:
+
+Every newly created procurement document should automatically use these default values.
+
+Existing records should not be modified unless explicitly requested.
+
+---
+
+## 5. Notifications & Alerts
+
+This section should become the central notification engine.
+
+Allow configuration of:
+
+* Email Notifications
+* SMS Notifications
+* Push Notifications
+* Browser Notifications
+* Reminder Frequency
+* Escalation Rules
+* Approval Notifications
+* Service Notifications
+* Order Notifications
+* Invoice Notifications
+* Contract Renewal Alerts
+* SLA Alerts
+
+Whenever updated:
+
+The notification system should immediately begin using the new settings.
+
+No restart required.
+
+---
+
+## 6. Security
+
+This section controls global platform security.
+
+Allow configuration of:
+
+* Password Policy
+* Password Expiry
+* Login Attempts
+* Account Lock Duration
+* Session Timeout
+* MFA Settings
+* Allowed IP Addresses
+* Device Restrictions
+* Browser Session Limits
+* Audit Logging
+* API Access Rules
+* File Upload Limits
+* Allowed File Types
+
+Whenever modified:
+
+The authentication and authorization system should immediately enforce the updated policies.
+
+---
+
+# Live Configuration Engine
+
+Create a centralized Configuration Service.
+
+Every module must obtain its configuration values from this service.
+
+Do not allow modules to maintain their own copies of configuration values.
+
+There must be only one source of truth.
+
+Whenever configuration changes:
+
+* Refresh application state automatically.
+* Update all dependent components.
+* Apply changes immediately.
+* Avoid requiring users to refresh the browser whenever possible.
+* Ensure all future pages automatically consume configuration from this service.
+
+---
+
+# Owner Platform
+
+Only the NIDO Owner (Super Admin) can access and modify these General Settings.
+
+These settings are global and affect the entire platform.
+
+No Client Portal user should be able to access or modify them.
+
+---
+
+# Future Scalability
+
+Design the configuration system so additional configuration sections can be added without changing the overall architecture.
+
+Every new configuration module should automatically integrate with the centralized Configuration Service.
+
+---
+
+# Expected Result
+
+The Configuration → General Settings module should become the platform-wide configuration engine.
+
+Every setting changed by the NIDO Owner should immediately and consistently affect the relevant parts of the application in real time.
+
+The application should no longer rely on hardcoded values for organization details, branding, localization, procurement defaults, notifications, or security. Instead, all modules should dynamically read from the centralized configuration system, ensuring a single source of truth, real-time updates, and a scalable architecture.

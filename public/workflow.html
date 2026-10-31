@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shop → PO Detailed Process Flow | Nido Tech</title>
+<style>
+  :root {
+    --bg: #09111f;
+    --surface: #111827;
+    --surface2: #172033;
+    --surface3: #1e2d45;
+    --border: #1e2d4a;
+    --border2: #243552;
+    --accent:  #3b6ff5;
+    --accent2: #7c3aed;
+    --accent3: #059669;
+    --accent4: #d97706;
+    --accent5: #dc2626;
+    --text:    #e2e8f0;
+    --muted:   #64748b;
+    --sub:     #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 40px 24px 80px;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e2e8f0 30%, #7ca8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  header p {
+    color: var(--sub);
+    font-size: 15px;
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ─── SECTION HEADING ─── */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 52px 0 24px;
+    max-width: 1160px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section-title h2 {
+    font-size: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--text);
+  }
+  .section-title .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section-title .pill {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 20px;
+    background: var(--surface3);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ─── LEGEND ─── */
+  .legend {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--sub);
+  }
+  .leg-dot {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ─── SWIMLANE ─── */
+  .swimlane-wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .swimlane {
+    display: grid;
+    grid-template-columns: 110px 1fr 1fr 1fr;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* lane headers */
+  .lh {
+    padding: 14px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .lh.ph  { background: var(--surface2); border-right: 1px solid var(--border); color: var(--muted); }
+  .lh.cli { background: rgba(59,111,245,0.1); color: #7ca8ff; border-right: 1px solid var(--border); }
+  .lh.sys { background: rgba(124,58,237,0.1); color: #b48bff; border-right: 1px solid var(--border); }
+  .lh.adm { background: rgba(5,150,105,0.1);  color: #34d399; }
+
+  /* phase labels (vertical) */
+  .pl {
+    background: var(--surface2);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-height: 80px;
+  }
+
+  /* cells */
+  .cell {
+    padding: 14px 12px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .cell:last-child, .cell.last { border-right: none; }
+  .cell.cli-bg { background: rgba(59,111,245,0.03); }
+  .cell.sys-bg { background: rgba(124,58,237,0.03); }
+  .cell.adm-bg { background: rgba(5,150,105,0.03); }
+  .cell.empty  { background: transparent; }
+
+  /* step cards */
+  .step {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 13px 15px;
+    width: 100%;
+  }
+  .step.cli { border-left: 3px solid var(--accent); }
+  .step.sys { border-left: 3px solid var(--accent2); }
+  .step.adm { border-left: 3px solid var(--accent3); }
+
+  .step-num   { font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; letter-spacing: 0.5px; }
+  .step-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+  .step-body  { font-size: 11.5px; color: var(--sub); line-height: 1.6; }
+  .step-tags  { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; font-family: monospace; }
+  .tag.blue   { background: rgba(59,111,245,0.18);  color: #7ca8ff; }
+  .tag.purple { background: rgba(124,58,237,0.18);  color: #b48bff; }
+  .tag.green  { background: rgba(5,150,105,0.18);   color: #34d399; }
+  .tag.amber  { background: rgba(217,119,6,0.18);   color: #fcd34d; }
+  .tag.red    { background: rgba(220,38,38,0.18);   color: #f87171; }
+  .tag.slate  { background: rgba(100,116,139,0.2);  color: #94a3b8; }
+
+  /* sub-bullets inside step */
+  .step-list {
+    list-style: none;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .step-list li {
+    font-size: 11px;
+    color: var(--sub);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.5;
+  }
+  .step-list li::before { content: "▸"; font-size: 9px; color: var(--muted); flex-shrink: 0; margin-top: 2px; }
+  .step-list li strong { color: var(--text); }
+
+  /* ─── STATUS TRACK ─── */
+  .status-track-wrap {
+    max-width: 1160px;
+    margin: 0 auto 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 26px 28px;
+  }
+  .status-track-wrap h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+  .status-track {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0;
+    padding-bottom: 4px;
+  }
+  .snode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-width: 110px;
+  }
+  .sbadge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .sbadge.s0 { background: rgba(100,116,139,0.22); color: #94a3b8; }
+  .sbadge.s1 { background: rgba(59,111,245,0.22);  color: #7ca8ff; }
+  .sbadge.s2 { background: rgba(217,119,6,0.22);   color: #fcd34d; }
+  .sbadge.s3 { background: rgba(124,58,237,0.22);  color: #c4b5fd; }
+  .sbadge.s4 { background: rgba(5,150,105,0.22);   color: #34d399; }
+  .sbadge.s5 { background: rgba(220,38,38,0.22);   color: #f87171; }
+  .slabel { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.4; }
+  .sarrow {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--border2), var(--border));
+    min-width: 20px;
+    position: relative;
+  }
+  .sarrow::after {
+    content: "▶";
+    position: absolute;
+    right: -5px;
+    top: -6px;
+    font-size: 8px;
+    color: var(--muted);
+  }
+
+  /* ─── VENDOR SECTION ─── */
+  .vendor-section {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  /* scoring formula box */
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .formula-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .formula-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .formula-card.fc-price::before  { background: linear-gradient(90deg, #3b6ff5, #60a5fa); }
+  .formula-card.fc-rating::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .formula-card.fc-lead::before   { background: linear-gradient(90deg, #d97706, #fcd34d); }
+  .formula-card.fc-stock::before  { background: linear-gradient(90deg, #059669, #34d399); }
+  .fc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .fc-label { font-size: 13px; font-weight: 700; }
+  .fc-weight {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .fc-weight.blue   { color: #3b6ff5; }
+  .fc-weight.purple { color: #7c3aed; }
+  .fc-weight.amber  { color: #d97706; }
+  .fc-weight.green  { color: #059669; }
+  .fc-formula {
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #7ca8ff;
+    margin-bottom: 8px;
+    line-height: 1.6;
+    word-break: break-all;
+  }
+  .fc-desc { font-size: 11.5px; color: var(--sub); line-height: 1.6; }
+
+  /* score bar */
+  .score-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 28px;
+  }
+  .score-bar-wrap h4 { font-size: 13px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .score-name  { font-size: 11px; color: var(--sub); width: 60px; flex-shrink: 0; text-align: right; }
+  .score-track { flex: 1; height: 8px; background: var(--surface3); border-radius: 4px; overflow: hidden; }
+  .score-fill  { height: 100%; border-radius: 4px; }
+  .score-pct   { font-size: 11px; font-weight: 700; width: 36px; flex-shrink: 0; }
+  .score-pct.blue   { color: #3b6ff5; }
+  .score-pct.purple { color: #7c3aed; }
+  .score-pct.amber  { color: #d97706; }
+  .score-pct.green  { color: #059669; }
+
+  /* conditions table */
+  .cond-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .cond-table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .cond-table-wrap th {
+    background: var(--surface2);
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .cond-table-wrap td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+    color: var(--sub);
+  }
+  .cond-table-wrap tr:last-child td { border-bottom: none; }
+  .cond-table-wrap td:first-child { font-weight: 600; color: var(--text); }
+  .cond-table-wrap .mono { font-family: monospace; font-size: 11px; color: #7ca8ff; }
+  .cond-table-wrap .result { font-weight: 700; }
+  .cond-table-wrap .result.ok  { color: #34d399; }
+  .cond-table-wrap .result.no  { color: #f87171; }
+  .cond-table-wrap .result.warn{ color: #fcd34d; }
+
+  /* allocation flow */
+  .alloc-flow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .alloc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .alloc-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alloc-card h4 .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .alloc-step {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .alloc-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .alloc-text { font-size: 12px; color: var(--sub); line-height: 1.6; }
+  .alloc-text strong { color: var(--text); }
+  .code-block {
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #7ca8ff;
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+  .code-block .cmt { color: var(--muted); }
+  .code-block .kw  { color: #b48bff; }
+  .code-block .str { color: #34d399; }
+  .code-block .num { color: #fcd34d; }
+
+  /* detail cards grid */
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .dc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .dc-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .dc-icon {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .dc-icon.blue   { background: rgba(59,111,245,0.18); }
+  .dc-icon.purple { background: rgba(124,58,237,0.18); }
+  .dc-icon.green  { background: rgba(5,150,105,0.18);  }
+  .dc-icon.amber  { background: rgba(217,119,6,0.18);  }
+  .dc-title { font-size: 14px; font-weight: 700; }
+  .dc-sub   { font-size: 11px; color: var(--muted); }
+  .dc ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .dc li {
+    font-size: 12px;
+    color: var(--sub);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.6;
+  }
+  .dc li::before { content: "▸"; font-size: 9px; color: var(--muted); flex-shrink: 0; margin-top: 3px; }
+  .dc li strong { color: var(--text); font-weight: 600; }
+
+  /* file table */
+  .file-table-wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .file-table-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .file-table-wrap th {
+    background: var(--surface2);
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .file-table-wrap td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+    color: var(--sub);
+  }
+  .file-table-wrap tr:last-child td { border-bottom: none; }
+  .fp { font-family: monospace; font-size: 11px; color: #7ca8ff; }
+  .role-pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .swimlane { grid-template-columns: 60px 1fr; }
+    .lh.sys, .lh.adm, .cell.sys-bg:not(.adm-bg), .cell.adm-bg { display: none; }
+    .alloc-flow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="badge">Nido Procurement Platform</div>
+  <h1>Shop → Purchase Order<br>Detailed Process Flow</h1>
+  <p>Every step from a client browsing the catalog to a PO being raised — including all vendor scoring conditions, stock allocation rules, and admin override logic.</p>
+</header>
+
+<!-- Legend -->
+<div class="legend">
+  <div class="legend-item"><div class="leg-dot" style="background:#3b6ff5"></div> Client Action</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#7c3aed"></div> System / Automated</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#059669"></div> Admin / Procurement</div>
+</div>
+
+<!-- ══════════════ SWIMLANE ══════════════ -->
+<div class="swimlane-wrap">
+<div class="swimlane">
+
+  <!-- Header row -->
+  <div class="lh ph">Phase</div>
+  <div class="lh cli">🛒 Client</div>
+  <div class="lh sys">⚙️ System</div>
+  <div class="lh adm">👔 Admin / Procurement</div>
+
+  <!-- ─ PHASE 1: Browse ─ -->
+  <div class="pl" style="grid-row: span 2;">1 · Shop</div>
+
+  <div class="cell cli-bg">
+    <div class="step cli">
+      <div class="step-num">STEP 1</div>
+      <div class="step-title">Browse Product Catalog</div>
+      <div class="step-body">Client opens the Shop page. Products are filtered to only show items in their client-specific catalog. Each card shows name, category, specs, image, and live stock.</div>
+      <div class="step-tags"><span class="tag blue">ShopPage.tsx</span><span class="tag blue">clientCatalogStore</span></div>
+    </div>
+  </div>
+  <div class="cell sys-bg">
+    <div class="step sys">
+      <div class="step-num">STEP 1 — SYSTEM</div>
+      <div class="step-title">Load Client-Scoped Catalog</div>
+      <div class="step-body"><code>getClientCatalog(clientId)</code> returns only products assigned to this client. For each product, live stock is calculated:</div>
+      <ul class="step-list">
+        <li><strong>Available Stock</strong> = Physical Stock − Reserved Stock</li>
+        <li>Stock is summed across all vendors carrying that product</li>
+        <li>Items with 0 available stock show as out-of-stock</li>
+      </ul>
+      <div class="step-tags"><span class="tag purple">clientCatalogStore.ts</span><span class="tag purple">vendorStore.ts</span></div>
+    </div>
+  </div>
+  <div class="cell adm-bg empty"></div>
+
+  <div class="cell cli-bg">
+    <div class="step cli">
+      <div class="step-num">STEP 2</div>
+      <div class="step-title">Add Product to Cart</div>
+      <div class="step-body">Client clicks "Add to Cart" from the product card or opens a ProductDetailDialog to choose quantity, then confirms. CartContext.addItem() is called.</div>
+      <div class="step-tags"><span class="tag blue">CartContext.addItem()</span><span class="tag blue">ProductDetailDialog</span></div>
+    </div>
+  </div>
+  <div class="cell sys-bg">
+    <div class="step sys">
+      <div class="step-num">STEP 2 — SYSTEM</div>
+      <div class="step-title">Immediate Stock Reservation + Vendor Pre-Selection</div>
+      <div class="step-body">The moment addItem() is called, two things happen in parallel:</div>
+      <ul class="step-list">
+        <li><strong>stockEngine.reserveExtra()</strong> locks the requested qty against one or more vendor allocations — preventing overselling before checkout completes</li>
+        <li><strong>priceEngineStore</strong> pre-selects the optimal vendor using the scoring model (detailed in Section 2 below)</li>
+        <li>Reservation ID stored on the cart line item for traceability</li>
+      </ul>
+      <div class="step-tags"><span class="tag purple">stockEngine.ts</span><span class="tag amber">vendorAllocations</span></div>
+    </div>
+  </div>
+  <div class="cell adm-bg empty"></div>
+
+  <!-- ─ PHASE 2: Cart ─ -->
+  <div class="pl" style="grid-row: span 1;">2 · Cart</div>
+
+  <div class="cell cli-bg">
+    <div class="step cli">
+      <div class="step-num">STEP 3</div>
+      <div class="step-title">Review & Adjust Cart</div>
+      <div class="step-body">Client reviews CartPage. Each line shows enriched pricing. Increasing qty triggers another reserveExtra(); decreasing releases stock. Removing an item releases all reserved stock.</div>
+      <div class="step-tags"><span class="tag blue">CartPage.tsx</span></div>
+    </div>
+  </div>
+  <div class="cell sys-bg">
+    <div class="step sys">
+      <div class="step-num">STEP 3 — SYSTEM</div>
+      <div class="step-title">Tax Engine + Price Enrichment</div>
+      <div class="step-body">CartPage enriches every line item automatically:</div>
+      <ul class="step-list">
+        <li><strong>HSN Code</strong> — resolved by product category via taxEngine.ts</li>
+        <li><strong>GST Rate</strong> — split into SGST + CGST based on supply type (intra/inter-state)</li>
+        <li><strong>Slab Discount</strong> — volume-based; category-specific slabs override "All Products" slabs</li>
+        <li><strong>Profit Margin</strong> — resolved in priority order: product-specific → category-specific (per client) → global client default</li>
+        <li><strong>Line Total</strong> = (qty × unit price) − discount + GST</li>
+      </ul>
+      <div class="step-tags"><span class="tag purple">taxEngine.ts</span><span class="tag purple">priceEngineStore.ts</span></div>
+    </div>
+  </div>
+  <div class="cell adm-bg empty"></div>
+
+  <!-- ─ PHASE 3: Checkout ─ -->
+  <div class="pl" style="grid-row: span 2;">3 · Checkout</div>
+
+  <div class="cell cli-bg">
+    <div class="step cli">
+      <div class="step-num">STEP 4</div>
+      <div class="step-title">Enter Delivery Address</div>
+      <div class="step-body">Client selects a saved address or enters a new one on CheckoutPage. Addresses are persisted per client in localStorage for future reuse.</div>
+      <div class="step-tags"><span class="tag blue">CheckoutPage.tsx</span></div>
+    </div>
+  </div>
+  <div class="cell sys-bg empty"></div>
+  <div class="cell adm-bg empty"></div>
+
+  <div class="cell cli-bg">
+    <div class="step cli">
+      <div class="step-num">STEP 5</div>
+      <div class="step-title">Select Payment Terms</div>
+      <div class="step-body">Client chooses payment terms (e.g. Net-30, Advance, COD) on PaymentPage. Saved as <code>nido_payment_selection</code> in localStorage and carried through to the PO.</div>
+      <div class="step-tags"><span class="tag blue">PaymentPage.tsx</span></div>
+    </div>
+  </div>
+  <div class="cell sys-bg empty"></div>
+  <div class="cell adm-bg empty"></div>
+
+  <!-- ─ PHASE 4: Order ─ -->
+  <div class="pl" style="grid-row: span 2;">4 · Order</div>
+
+  <div class="cell cli-bg">
+    <div class="step cli">
+      <div class="step-num">STEP 6</div>
+      <div class="step-title">Review Summary & Place Order</div>
+      <div class="step-body">ReviewPage shows the complete order — items, delivery address, payment terms, grand total. Client clicks "Place Order" to confirm.</div>
+      <div class="step-tags"><span class="tag blue">ReviewPage.tsx</span></div>
+    </div>
+  </div>
+  <div class="cell sys-bg">
+    <div class="step sys">
+      <div class="step-num">STEP 6 — SYSTEM</div>
+      <div class="step-title">Master Order Created</div>
+      <div class="step-body"><code>MyOrdersContext.addOrder()</code> fires and:</div>
+      <ul class="step-list">
+        <li>Generates a unique order ID — e.g. <strong>ORD-000001</strong> (auto-incremented)</li>
+        <li>Stores order with status = <strong>"Processing"</strong></li>
+        <li>Attaches all enriched line items, delivery address, payment terms</li>
+        <li>Calls <strong>consumeCart()</strong> to clear the cart state</li>
+      </ul>
+      <div class="step-tags"><span class="tag purple">MyOrdersContext.tsx</span><span class="tag amber">status: Processing</span></div>
+    </div>
+  </div>
+  <div class="cell adm-bg empty"></div>
+
+  <div class="cell cli-bg empty"></div>
+  <div class="cell sys-bg">
+    <div class="step sys">
+      <div class="step-num">STEP 7 — SYSTEM</div>
+      <div class="step-title">Vendor Auto-Assignment (Price Engine)</div>
+      <div class="step-body">For each line item, the price engine runs <code>computeVendorComparisons()</code> to score and rank all eligible vendors. The top-ranked vendor is auto-assigned. Full scoring logic is detailed in Section 2 below.</div>
+      <div class="step-tags"><span class="tag purple">priceEngineStore.ts</span><span class="tag purple">vendorStore.ts</span></div>
+    </div>
+  </div>
+  <div class="cell adm-bg">
+    <div class="step adm">
+      <div class="step-num">STEP 7 — ADMIN</div>
+      <div class="step-title">Order Appears in Admin Queue</div>
+      <div class="step-body">New order with status "Processing" appears in the admin Orders list. Admin opens OrderDetailsPage → Vendor Selection Tab to review system assignments before raising POs.</div>
+      <div class="step-tags"><span class="tag green">OrderDetailsPage.tsx</span></div>
+    </div>
+  </div>
+
+  <!-- ─ PHASE 5: PO ─ -->
+  <div class="pl" style="grid-row: span 3;">5 · PO Raise</div>
+
+  <div class="cell cli-bg empty"></div>
+  <div class="cell sys-bg empty"></div>
+  <div class="cell adm-bg">
+    <div class="step adm">
+      <div class="step-num">STEP 8</div>
+      <div class="step-title">Review Vendor Assignment</div>
+      <div class="step-body">Admin sees the Vendor Selection Tab showing each line item with its auto-assigned vendor. Vendor card shows: name, landed cost, composite score, available stock, lead time, rating.</div>
+      <div class="step-tags"><span class="tag green">Vendor Selection Tab</span></div>
+    </div>
+  </div>
+
+  <div class="cell cli-bg empty"></div>
+  <div class="cell sys-bg empty"></div>
+  <div class="cell adm-bg">
+    <div class="step adm">
+      <div class="step-num">STEP 9 — Optional</div>
+      <div class="step-title">Manual Vendor Override</div>
+      <div class="step-body">Admin can open the Vendor Selection Modal to override the auto-assignment:</div>
+      <ul class="step-list">
+        <li>See all eligible vendors ranked by score</li>
+        <li>Check/uncheck vendors and manually set qty per vendor (split-sourcing)</li>
+        <li><strong>Validation rule:</strong> total allocated qty across all selected vendors MUST equal the sub-order qty exactly — "Confirm" button is disabled until this is satisfied</li>
+        <li>System re-runs stock reservation for the overridden vendor</li>
+      </ul>
+      <div class="step-tags"><span class="tag green">Vendor Modal</span><span class="tag amber">rowQtys validation</span></div>
+    </div>
+  </div>
+
+  <div class="cell cli-bg empty"></div>
+  <div class="cell sys-bg">
+    <div class="step sys">
+      <div class="step-num">STEP 10 — SYSTEM</div>
+      <div class="step-title">PO Generated, PDF Created, Stock Deducted</div>
+      <div class="step-body">On "Raise POs" click, for each vendor involved:</div>
+      <ul class="step-list">
+        <li><strong>generatePoNumber()</strong> creates a unique PO ID — e.g. <strong>PO-00009</strong></li>
+        <li>PO record saved to <strong>purchaseOrderStore</strong> with all fields</li>
+        <li><strong>generatePO.ts</strong> builds the PDF via jsPDF — ready to download/email</li>
+        <li><strong>deductPhysicalStock()</strong> subtracts from the selected vendor's physical stock</li>
+        <li><strong>Reserved stock released "greedily"</strong> — most-reserved vendor first — across ALL vendors (even if admin switched to a different one)</li>
+      </ul>
+      <div class="step-tags"><span class="tag purple">purchaseOrderStore.ts</span><span class="tag purple">generatePO.ts</span><span class="tag red">stock deducted</span></div>
+    </div>
+  </div>
+  <div class="cell adm-bg">
+    <div class="step adm">
+      <div class="step-num">STEP 10</div>
+      <div class="step-title">Click "Raise Purchase Orders"</div>
+      <div class="step-body">Admin clicks the button. One PO is generated per vendor. Admin can download each PO PDF and send to the respective vendor. PO status = <strong>"Confirmed"</strong>.</div>
+      <div class="step-tags"><span class="tag green">Raise Purchase Orders</span><span class="tag green">status: Confirmed</span></div>
+    </div>
+  </div>
+
+</div><!-- /swimlane -->
+</div><!-- /swimlane-wrap -->
+
+
+<!-- ══════════════ STATUS TRACK ══════════════ -->
+<div class="section-title">
+  <h2>📦 Inventory & Order Status Track</h2>
+  <div class="rule"></div>
+</div>
+<div class="status-track-wrap">
+  <h3>State transitions from product discovery to fulfilled PO</h3>
+  <div class="status-track">
+    <div class="snode">
+      <div class="sbadge s0">In Catalog</div>
+      <div class="slabel">Visible in Shop<br>stock available</div>
+    </div>
+    <div class="sarrow"></div>
+    <div class="snode">
+      <div class="sbadge s1">Reserved</div>
+      <div class="slabel">Added to Cart<br>stock locked</div>
+    </div>
+    <div class="sarrow"></div>
+    <div class="snode">
+      <div class="sbadge s2">Enriched</div>
+      <div class="slabel">CartPage applied<br>tax + discount</div>
+    </div>
+    <div class="sarrow"></div>
+    <div class="snode">
+      <div class="sbadge s2">Checkout</div>
+      <div class="slabel">Address &amp;<br>payment set</div>
+    </div>
+    <div class="sarrow"></div>
+    <div class="snode">
+      <div class="sbadge s3">Processing</div>
+      <div class="slabel">Order placed<br>ORD-XXXXXX</div>
+    </div>
+    <div class="sarrow"></div>
+    <div class="snode">
+      <div class="sbadge s4">PO Confirmed</div>
+      <div class="slabel">PO raised<br>PO-XXXXX</div>
+    </div>
+    <div class="sarrow"></div>
+    <div class="snode">
+      <div class="sbadge s5">Stock Deducted</div>
+      <div class="slabel">Physical stock<br>reduced at vendor</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ SECTION 2: VENDOR SELECTION ══════════════ -->
+<div class="section-title" style="margin-top:60px;">
+  <h2>⚡ Section 2 — Vendor Selection: Full Logic</h2>
+  <div class="rule"></div>
+  <div class="pill">computeVendorComparisons()</div>
+</div>
+
+<div class="vendor-section">
+
+  <!-- Scoring weights -->
+  <p style="color:var(--sub); font-size:13px; margin-bottom:20px; max-width:780px; line-height:1.7;">
+    Every eligible vendor for a product is scored on a <strong style="color:var(--text)">composite 0–100 scale</strong> across four weighted dimensions. The vendor with the <strong style="color:var(--text)">lowest landed cost</strong> wins first; composite score is the tie-breaker.
+  </p>
+
+  <div class="formula-grid">
+    <div class="formula-card fc-price">
+      <div class="fc-header">
+        <div class="fc-label">💰 Price Score</div>
+        <div class="fc-weight blue">40%</div>
+      </div>
+      <div class="fc-formula">(1 − (landedCost − minLandedCost)<br>÷ minLandedCost) × 40</div>
+      <div class="fc-desc">The cheapest vendor gets the full 40 pts. Every other vendor is penalised proportionally to how much more expensive they are. A vendor 2× the min price scores 0 on this dimension.</div>
+    </div>
+    <div class="formula-card fc-rating">
+      <div class="fc-header">
+        <div class="fc-label">⭐ Rating Score</div>
+        <div class="fc-weight purple">30%</div>
+      </div>
+      <div class="fc-formula">(vendor.rating ÷ maxRating) × 30</div>
+      <div class="fc-desc">Vendor rating (e.g. 1–5 stars or 1–100). The highest-rated vendor in the comparison pool gets the full 30 pts. All others are scaled proportionally.</div>
+    </div>
+    <div class="formula-card fc-lead">
+      <div class="fc-header">
+        <div class="fc-label">⏱ Lead Time Score</div>
+        <div class="fc-weight amber">15%</div>
+      </div>
+      <div class="fc-formula">(1 − (leadTime − minLeadTime)<br>÷ (maxLeadTime − minLeadTime)) × 15</div>
+      <div class="fc-desc">Shorter delivery lead time = more points. The fastest vendor scores 15 pts; the slowest scores 0. Range-normalised so it adapts to the actual spread in the comparison pool.</div>
+    </div>
+    <div class="formula-card fc-stock">
+      <div class="fc-header">
+        <div class="fc-label">📦 Stock Score</div>
+        <div class="fc-weight green">15%</div>
+      </div>
+      <div class="fc-formula">(vendor.availableStock ÷ maxStock) × 15</div>
+      <div class="fc-desc">The vendor with the most available stock gets 15 pts. Ensures the system favours vendors who can fulfil the full order without risk of a short-ship.</div>
+    </div>
+  </div>
+
+  <!-- Visual weight bar -->
+  <div class="score-bar-wrap">
+    <h4>Composite Score Weight Distribution (total = 100 pts)</h4>
+    <div class="score-row">
+      <div class="score-name">Price</div>
+      <div class="score-track"><div class="score-fill" style="width:40%;background:linear-gradient(90deg,#3b6ff5,#60a5fa)"></div></div>
+      <div class="score-pct blue">40 pts</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">Rating</div>
+      <div class="score-track"><div class="score-fill" style="width:30%;background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
+      <div class="score-pct purple">30 pts</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">Lead Time</div>
+      <div class="score-track"><div class="score-fill" style="width:15%;background:linear-gradient(90deg,#d97706,#fcd34d)"></div></div>
+      <div class="score-pct amber">15 pts</div>
+    </div>
+    <div class="score-row">
+      <div class="score-name">Stock</div>
+      <div class="score-track"><div class="score-fill" style="width:15%;background:linear-gradient(90deg,#059669,#34d399)"></div></div>
+      <div class="score-pct green">15 pts</div>
+    </div>
+  </div>
+
+  <!-- Landed cost breakdown -->
+  <div class="section-title" style="margin-top:0; margin-bottom:16px;">
+    <h2 style="font-size:16px;">Landed Cost Formula</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="cond-table-wrap" style="margin-bottom:28px;">
+    <table>
+      <thead>
+        <tr><th>Component</th><th>Formula / Source</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Base Price</td>
+          <td class="mono">vendor.price per unit</td>
+          <td>Raw unit price as listed by the vendor in their catalog</td>
+        </tr>
+        <tr>
+          <td>Logistics %</td>
+          <td class="mono">vendor.logisticsPct</td>
+          <td>Percentage added for freight/transport costs</td>
+        </tr>
+        <tr>
+          <td>Handling %</td>
+          <td class="mono">vendor.handlingPct</td>
+          <td>Packaging, warehousing, and last-mile handling charges</td>
+        </tr>
+        <tr>
+          <td>Extra Charges %</td>
+          <td class="mono">vendor.extraChargesPct</td>
+          <td>Any other surcharges declared by the vendor</td>
+        </tr>
+        <tr>
+          <td>Tax %</td>
+          <td class="mono">taxEngine.getRate(category)</td>
+          <td>GST rate resolved from product category — <em>included in landed cost for scoring, but shown separately in the PO</em></td>
+        </tr>
+        <tr>
+          <td><strong>Landed Cost / Unit</strong></td>
+          <td class="mono">BasePrice × (1 + logistics% + handling% + extra%) × (1 + Tax%)</td>
+          <td class="result ok">This is the primary sort key — lowest wins</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Selection conditions -->
+  <div class="section-title" style="margin-top:0; margin-bottom:16px;">
+    <h2 style="font-size:16px;">All Conditions Checked During Vendor Selection</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="cond-table-wrap">
+    <table>
+      <thead>
+        <tr><th>Condition</th><th>Check</th><th>Outcome if FAILS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Has the product</td>
+          <td class="mono">vendor.products.includes(productId)</td>
+          <td class="result no">Vendor excluded entirely from comparison</td>
+        </tr>
+        <tr>
+          <td>Has available stock</td>
+          <td class="mono">availableStock = physicalStock − reservedStock &gt; 0</td>
+          <td class="result no">Vendor excluded (cannot fulfil any qty)</td>
+        </tr>
+        <tr>
+          <td>Sufficient stock for qty</td>
+          <td class="mono">availableStock &gt;= requestedQty</td>
+          <td class="result warn">Vendor stays in pool but gets lower Stock Score (15%) — may still win on price; admin sees the shortfall</td>
+        </tr>
+        <tr>
+          <td>Price data present</td>
+          <td class="mono">vendor.price &gt; 0</td>
+          <td class="result no">Vendor excluded (cannot compute landed cost)</td>
+        </tr>
+        <tr>
+          <td>Rating data present</td>
+          <td class="mono">vendor.rating &gt;= 0</td>
+          <td class="result warn">Rating defaults to 0 — vendor scores 0 on the 30% dimension</td>
+        </tr>
+        <tr>
+          <td>Lead time data present</td>
+          <td class="mono">vendor.leadTimeDays &gt;= 0</td>
+          <td class="result warn">Lead time defaults to max in pool — vendor scores 0 on the 15% dimension</td>
+        </tr>
+        <tr>
+          <td>Minimum 2 vendors</td>
+          <td class="mono">eligibleVendors.length &gt;= 2</td>
+          <td class="result warn">Scoring still runs with 1 vendor; that vendor auto-wins with full score</td>
+        </tr>
+        <tr>
+          <td>Min landed cost &gt; 0</td>
+          <td class="mono">minLandedCost &gt; 0</td>
+          <td class="result warn">Price score normalisation is skipped to avoid division by zero; all vendors score 0 on price</td>
+        </tr>
+        <tr>
+          <td>Lead time range &gt; 0</td>
+          <td class="mono">maxLeadTime − minLeadTime &gt; 0</td>
+          <td class="result warn">All vendors tied on lead time — all score 15/15 on that dimension</td>
+        </tr>
+        <tr>
+          <td>Global category markup</td>
+          <td class="mono">categoryRules[category].markup exists</td>
+          <td class="result warn">Extra markup (margin + buffer) added to landed cost for scoring only — does NOT change vendor's base score directly</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Ranking & winner -->
+  <div class="section-title" style="margin-top:32px; margin-bottom:16px;">
+    <h2 style="font-size:16px;">Ranking Logic — How the Winner is Picked</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="alloc-flow">
+    <div class="alloc-card">
+      <h4><div class="dot" style="background:#3b6ff5"></div>Automatic (Price Engine Default)</h4>
+      <div class="alloc-step">
+        <div class="alloc-num">1</div>
+        <div class="alloc-text"><strong>Exclude</strong> any vendor that fails a hard condition (no product, no stock, no price)</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">2</div>
+        <div class="alloc-text"><strong>Calculate</strong> Landed Cost per unit for each remaining vendor</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">3</div>
+        <div class="alloc-text"><strong>Score</strong> each vendor across all four dimensions (Price 40, Rating 30, Lead 15, Stock 15)</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">4</div>
+        <div class="alloc-text"><strong>Sort primary:</strong> lowest landedCostPerUnit first</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">5</div>
+        <div class="alloc-text"><strong>Sort secondary (tie-break):</strong> highest composite score first</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">6</div>
+        <div class="alloc-text"><strong>Winner = index [0]</strong> of the sorted list — auto-assigned to this line item</div>
+      </div>
+      <div class="code-block">
+        <span class="cmt">// Simplified sort logic</span><br>
+        vendors.sort((a, b) =&gt; {<br>
+        &nbsp;&nbsp;<span class="kw">if</span> (a.landedCost !== b.landedCost)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> a.landedCost - b.landedCost; <span class="cmt">// cheapest first</span><br>
+        &nbsp;&nbsp;<span class="kw">return</span> b.score - a.score; <span class="cmt">// highest score wins tie</span><br>
+        });
+      </div>
+    </div>
+
+    <div class="alloc-card">
+      <h4><div class="dot" style="background:#059669"></div>Stock Allocation — Cheapest-First Fill</h4>
+      <div class="alloc-step">
+        <div class="alloc-num">1</div>
+        <div class="alloc-text"><strong>allocateQtyAcrossVendors()</strong> runs if a single vendor can't supply the full quantity</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">2</div>
+        <div class="alloc-text">Vendors sorted cheapest-first (same order as winner selection)</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">3</div>
+        <div class="alloc-text"><strong>Drain cheapest vendor</strong> first — take as much as their available stock allows</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">4</div>
+        <div class="alloc-text"><strong>Spill</strong> remaining qty into the next cheapest vendor, then the next, until fulfilled</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">5</div>
+        <div class="alloc-text">Each vendor's allocation stored in <strong>vendorAllocations[]</strong> on the order</div>
+      </div>
+      <div class="alloc-step">
+        <div class="alloc-num">6</div>
+        <div class="alloc-text">If total available stock across all vendors &lt; requested qty — order is flagged as partially fulfillable</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profit margin hierarchy -->
+  <div class="section-title" style="margin-top:0; margin-bottom:16px;">
+    <h2 style="font-size:16px;">Selling Price Margin — Resolution Hierarchy</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="cond-table-wrap" style="margin-bottom:28px;">
+    <table>
+      <thead>
+        <tr><th>Priority</th><th>Rule</th><th>Scope</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1st (highest)</td>
+          <td>Product-specific profit %</td>
+          <td>Set per individual product — overrides everything</td>
+        </tr>
+        <tr>
+          <td>2nd</td>
+          <td>Category-specific profit % per client</td>
+          <td>Set at category level for a specific client — overrides global default</td>
+        </tr>
+        <tr>
+          <td>3rd (fallback)</td>
+          <td>Global client default profit %</td>
+          <td>Applied when no product or category rule matches for this client</td>
+        </tr>
+        <tr>
+          <td>Global overlay</td>
+          <td>Category markup (margin + buffer)</td>
+          <td>Applied on top of landed cost for scoring calculations only — does not change vendor base score</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Stock lifecycle -->
+  <div class="section-title" style="margin-top:0; margin-bottom:16px;">
+    <h2 style="font-size:16px;">Stock Lifecycle — What Happens at Each Event</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="cond-table-wrap" style="margin-bottom:28px;">
+    <table>
+      <thead>
+        <tr><th>Event</th><th>Physical Stock</th><th>Reserved Stock</th><th>Available Stock</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Item added to cart</td>
+          <td>No change</td>
+          <td class="result warn">+qty (reserved)</td>
+          <td class="result no">−qty (locked)</td>
+        </tr>
+        <tr>
+          <td>Qty increased in cart</td>
+          <td>No change</td>
+          <td class="result warn">+diff qty</td>
+          <td class="result no">−diff qty</td>
+        </tr>
+        <tr>
+          <td>Qty decreased in cart</td>
+          <td>No change</td>
+          <td class="result ok">−diff qty (released)</td>
+          <td class="result ok">+diff qty</td>
+        </tr>
+        <tr>
+          <td>Item removed from cart</td>
+          <td>No change</td>
+          <td class="result ok">−qty (fully released)</td>
+          <td class="result ok">+qty restored</td>
+        </tr>
+        <tr>
+          <td>Order placed (Place Order)</td>
+          <td>No change</td>
+          <td>Stays reserved</td>
+          <td>No change</td>
+        </tr>
+        <tr>
+          <td>PO raised (Raise POs)</td>
+          <td class="result no">−qty (deducted at selected vendor)</td>
+          <td class="result ok">−qty released across all vendors (greedy, most-reserved first)</td>
+          <td>Net zero change (deduct = release)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Admin override rules -->
+  <div class="section-title" style="margin-top:0; margin-bottom:16px;">
+    <h2 style="font-size:16px;">Admin Override — Vendor Selection Modal Rules</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="detail-grid">
+    <div class="dc">
+      <div class="dc-head">
+        <div class="dc-icon green">🔧</div>
+        <div>
+          <div class="dc-title">What Admin Can Do</div>
+          <div class="dc-sub">Vendor Selection Modal — OrderDetailsPage</div>
+        </div>
+      </div>
+      <ul>
+        <li>View <strong>all eligible vendors</strong> with their ranked scores, landed cost, stock, lead time, and rating</li>
+        <li><strong>Check/uncheck</strong> any vendor to include or exclude them from the PO</li>
+        <li>Manually <strong>edit the qty</strong> allocated to each vendor (split-sourcing across multiple vendors)</li>
+        <li>See real-time <strong>total allocated</strong> vs required qty — must match exactly</li>
+        <li>Override the system default to prefer a vendor based on relationship or quality reasons</li>
+      </ul>
+    </div>
+    <div class="dc">
+      <div class="dc-head">
+        <div class="dc-icon amber">⚠️</div>
+        <div>
+          <div class="dc-title">Validation Rules (Cannot Proceed Until Met)</div>
+          <div class="dc-sub">Hard gates before Confirm button enables</div>
+        </div>
+      </div>
+      <ul>
+        <li><strong>At least 1 vendor</strong> must be selected</li>
+        <li><strong>Total allocated qty</strong> across all selected vendors must exactly equal the sub-order qty<br><code style="font-size:10px;color:#7ca8ff">totalAllocated === sub.qty</code></li>
+        <li>Each selected vendor must have a <strong>qty &gt; 0</strong> assigned</li>
+        <li>Any vendor with <strong>insufficient stock</strong> for their allocated qty shows a warning — admin must acknowledge</li>
+      </ul>
+    </div>
+    <div class="dc">
+      <div class="dc-head">
+        <div class="dc-icon purple">🔄</div>
+        <div>
+          <div class="dc-title">What Happens After Override</div>
+          <div class="dc-sub">System reconciliation on confirm</div>
+        </div>
+      </div>
+      <ul>
+        <li>Stock reservations are <strong>re-run</strong> for the new vendor allocation</li>
+        <li>Old reservations from the auto-assigned vendor are released</li>
+        <li>New vendorAllocations[] written to the order record</li>
+        <li>On PO raise, physical deduction hits the <strong>overridden vendor</strong>, not the original auto-assigned one</li>
+        <li>Reserved stock release remains greedy (most-reserved first) across all vendors regardless of which vendor was chosen</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /vendor-section -->
+
+
+<!-- ══════════════ DATA FIELDS ══════════════ -->
+<div class="section-title">
+  <h2>📋 Key Data Fields at Each Stage</h2>
+  <div class="rule"></div>
+</div>
+<div class="detail-grid" style="max-width:1160px; margin:0 auto 40px;">
+  <div class="dc">
+    <div class="dc-head">
+      <div class="dc-icon blue">🛍️</div>
+      <div><div class="dc-title">Cart Line Item</div><div class="dc-sub">Created at Step 2 (Add to Cart)</div></div>
+    </div>
+    <ul>
+      <li><strong>productId, productName</strong> — catalog reference</li>
+      <li><strong>vendorId</strong> — auto-assigned by price engine</li>
+      <li><strong>qty</strong> — quantity requested</li>
+      <li><strong>unitPrice</strong> — vendor's base price</li>
+      <li><strong>reservationId</strong> — stockEngine lock reference</li>
+      <li><strong>hsnCode, gstRate</strong> — from taxEngine (added at CartPage)</li>
+      <li><strong>slabDiscount</strong> — from priceEngine (added at CartPage)</li>
+      <li><strong>lineTotal</strong> — fully calculated amount</li>
+    </ul>
+  </div>
+  <div class="dc">
+    <div class="dc-head">
+      <div class="dc-icon purple">📋</div>
+      <div><div class="dc-title">Master Order (ORD-XXXXXX)</div><div class="dc-sub">Created at Step 6 (Place Order)</div></div>
+    </div>
+    <ul>
+      <li><strong>orderId</strong> — e.g. ORD-000001</li>
+      <li><strong>clientId, clientName</strong></li>
+      <li><strong>deliveryAddress</strong> — from CheckoutPage</li>
+      <li><strong>paymentTerms</strong> — from PaymentPage</li>
+      <li><strong>lineItems[]</strong> — all enriched cart lines</li>
+      <li><strong>vendorAllocations[]</strong> — vendor + qty per line</li>
+      <li><strong>status</strong> — "Processing"</li>
+      <li><strong>createdAt</strong> — timestamp</li>
+    </ul>
+  </div>
+  <div class="dc">
+    <div class="dc-head">
+      <div class="dc-icon green">📄</div>
+      <div><div class="dc-title">Purchase Order (PO-XXXXX)</div><div class="dc-sub">Created at Step 10 (Raise POs)</div></div>
+    </div>
+    <ul>
+      <li><strong>poNumber</strong> — e.g. PO-00009</li>
+      <li><strong>orderId</strong> — links to master order</li>
+      <li><strong>vendorId, vendorName, GSTIN</strong></li>
+      <li><strong>vendorAddress, vendorContact</strong></li>
+      <li><strong>lineItems[]</strong> — sku, productCode, hsnCode, qty, unitPrice</li>
+      <li><strong>subtotal, sgstAmt, cgstAmt, grandTotal</strong></li>
+      <li><strong>requestedDelivery, paymentTerms</strong></li>
+      <li><strong>status</strong> — "Confirmed"</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ══════════════ FILE REFERENCE ══════════════ -->
+<div class="section-title">
+  <h2>🗂 File Reference</h2>
+  <div class="rule"></div>
+</div>
+<div class="file-table-wrap" style="max-width:1160px; margin:0 auto;">
+  <table>
+    <thead>
+      <tr><th>File Path</th><th>Type</th><th>Role in This Flow</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="fp">src/pages/ShopPage.tsx</td><td><span class="role-pill" style="background:rgba(59,111,245,0.18);color:#7ca8ff">Client UI</span></td><td>Renders catalog; triggers addItem() on cart add</td></tr>
+      <tr><td class="fp">src/lib/clientCatalogStore.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Store</span></td><td>Returns product list scoped to the logged-in client</td></tr>
+      <tr><td class="fp">src/contexts/CartContext.tsx</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">State</span></td><td>Holds cart items; exposes addItem, consumeCart, reserveExtra</td></tr>
+      <tr><td class="fp">src/lib/stockEngine.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Engine</span></td><td>reserveExtra() on cart add/increase; release on decrease/remove; allocateQtyAcrossVendors() for split-source</td></tr>
+      <tr><td class="fp">src/lib/taxEngine.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Engine</span></td><td>Resolves HSN codes and GST rates by product category</td></tr>
+      <tr><td class="fp">src/lib/priceEngineStore.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Engine</span></td><td>computeVendorComparisons() — all scoring, landed cost, slab discounts, margin resolution</td></tr>
+      <tr><td class="fp">src/pages/CartPage.tsx</td><td><span class="role-pill" style="background:rgba(59,111,245,0.18);color:#7ca8ff">Client UI</span></td><td>Enriches cart with tax + discount; shows adjusted totals</td></tr>
+      <tr><td class="fp">src/pages/CheckoutPage.tsx</td><td><span class="role-pill" style="background:rgba(59,111,245,0.18);color:#7ca8ff">Client UI</span></td><td>Delivery address capture and selection</td></tr>
+      <tr><td class="fp">src/pages/PaymentPage.tsx</td><td><span class="role-pill" style="background:rgba(59,111,245,0.18);color:#7ca8ff">Client UI</span></td><td>Payment terms selection; saved as nido_payment_selection</td></tr>
+      <tr><td class="fp">src/pages/ReviewPage.tsx</td><td><span class="role-pill" style="background:rgba(59,111,245,0.18);color:#7ca8ff">Client UI</span></td><td>Final summary before Place Order confirmation</td></tr>
+      <tr><td class="fp">src/contexts/MyOrdersContext.tsx</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">State</span></td><td>addOrder() creates master order; consumeCart() clears cart</td></tr>
+      <tr><td class="fp">src/pages/OrderDetailsPage.tsx</td><td><span class="role-pill" style="background:rgba(5,150,105,0.18);color:#34d399">Admin UI</span></td><td>Vendor Selection Tab; override modal; Raise Purchase Orders button</td></tr>
+      <tr><td class="fp">src/lib/purchaseOrderStore.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Store</span></td><td>Persists PO records; generatePoNumber() auto-increments PO IDs</td></tr>
+      <tr><td class="fp">src/lib/generatePO.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Engine</span></td><td>Builds PO PDF via jsPDF with all line items, tax, vendor details</td></tr>
+      <tr><td class="fp">src/lib/vendorStore.ts</td><td><span class="role-pill" style="background:rgba(124,58,237,0.18);color:#b48bff">Store</span></td><td>reserveVendorStock() and deductPhysicalStock(); cross-vendor greedy release on PO raise</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

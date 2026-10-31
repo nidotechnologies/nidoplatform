@@ -1,0 +1,67 @@
+# Logs
+logs/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies and build outputs
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
+test-results/
+playwright-report/
+.next/
+.vite/
+vite.config.ts.timestamp-*.mjs
+stats.html
+/generated-artifacts/
+
+# Python caches and virtual environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Credentials and local secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local
+*.pem
+*.p12
+*.pfx
+*.key
+*.token
+/credentials/
+/secrets/
+**/credentials/
+**/secrets/
+**/credentials.*
+**/secret.*
+**/secrets.*
+**/credentials.json
+**/access_token*
+**/access-token*
+**/token.*
+**/tokens.*
+**/token.json
+/attached_assets/0_nido-phase-4-main_1785131158680.zip
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,240 @@
+# NIDO — Auto Assignment Configuration with Tier-Based Round Robin
+
+## Objective
+Implement a configurable Auto Assignment Configuration page in the existing NIDO platform. When a client places an order, NIDO must automatically assign it to an eligible employee using a configurable serial Round Robin sequence based on the client's tier.
+
+**Important:** First inspect the existing project structure, database schema, authentication, RBAC, client tier fields, employee records and Order Management workflow. Reuse existing components, services, tables and conventions wherever possible. Do not rebuild existing modules or change unrelated functionality. Implement the minimum complete working solution with minimal code changes.
+
+## 1. Create the Configuration Page
+
+Add a page under:
+
+Administration → Order Assignment → Auto Assignment Configuration
+
+Follow NIDO's existing UI design system, navigation, page layouts, forms, tables, dialogs, notifications and responsive behavior.
+
+The page must allow authorized administrators to:
+
+- Enable or disable automatic order assignment.
+- Configure separate assignment rules for Premium, Medium and Standard clients.
+- Select eligible employees for each client tier.
+- Define the employee assignment sequence using drag-and-drop or editable sequence numbers.
+- Activate, deactivate, edit and save assignment rules.
+- Preview the next employee assignments before activating a rule.
+- View assignment history and the current rotation position.
+- Configure fallback behavior when no eligible employee is available.
+
+Do not create a separate employee management system. Use the existing NIDO employee and role records.
+
+## 2. Tier-Based Employee Configuration
+
+Create independent assignment configurations for:
+
+1. Premium
+2. Medium
+3. Standard
+
+Each tier must have its own:
+
+- Enable/disable setting.
+- Ordered list of eligible employees.
+- Independent Round Robin rotation position.
+- Fallback behavior.
+- Assignment history.
+
+Allow the same employee to participate in multiple tiers. Employee eligibility and sequence must be configurable separately for each tier.
+
+Retrieve active employees from the existing database. Prevent inactive employees from receiving new assignments. Respect existing department, role and permission restrictions wherever applicable.
+
+Use the client's existing tier field if available. If client tiers do not exist, add the smallest necessary database change to support Premium, Medium and Standard, and allow authorized administrators to configure the tier for each client.
+
+Do not infer a client's tier from its name, order amount or other unrelated fields.
+
+## 3. Round Robin Assignment Logic
+
+Implement persistent, tier-specific serial Round Robin assignment.
+
+Example Premium sequence:
+
+Employee A → Employee B → Employee C → Employee D → Employee A → Repeat.
+
+If four eligible employees are configured, consecutive Premium orders must follow this exact sequence.
+
+Example:
+
+- Premium Order 1 → Employee A
+- Premium Order 2 → Employee B
+- Premium Order 3 → Employee C
+- Premium Order 4 → Employee D
+- Premium Order 5 → Employee A
+
+Medium and Standard clients must follow their own independently configured sequences. Orders in one tier must not advance another tier's rotation position.
+
+Maintain the rotation position in the database. Do not store it only in frontend state, browser storage or memory.
+
+The assignment engine must:
+
+- Select the next eligible employee in the configured sequence.
+- Advance the rotation only when an assignment is successfully committed.
+- Persist the order assignment and rotation update transactionally.
+- Prevent duplicate or conflicting assignments when multiple orders arrive simultaneously.
+- Avoid advancing the rotation when an assignment fails.
+- Handle retries without creating duplicate assignments.
+- Preserve the current rotation position when the page is refreshed or the application restarts.
+
+Use the existing database and ORM conventions. Implement suitable transaction and locking or atomic-update mechanisms for the actual database technology already used by NIDO.
+
+## 4. Employee Availability and Fallback
+
+Use existing employee availability information if it exists.
+
+If an employee is inactive, explicitly unavailable or no longer eligible, skip that employee for the current assignment and select the next eligible employee, without corrupting the sequence.
+
+Do not introduce a complex attendance or scheduling system if NIDO does not already have one.
+
+If no eligible employee is available, place the order in the existing Unassigned Orders queue, or implement a minimal compatible queue if none exists. Notify the authorized team lead or administrator using the existing notification mechanism.
+
+Never silently discard an order or assign it to an unauthorized or inactive employee.
+
+Make the fallback behavior configurable where practical. The default must be to leave the order unassigned and notify the responsible team.
+
+## 5. Integrate with Existing Order Management
+
+Trigger automatic assignment when a new client order is successfully created through the existing order creation workflow.
+
+Preserve the current physical and digital product ordering and fulfillment processes. Do not change checkout, cart, payment, purchase order generation, digital license handling or existing order status transitions.
+
+For every successful assignment, record:
+
+- Order ID
+- Client ID
+- Client tier at assignment time
+- Assigned employee ID
+- Assignment rule and tier configuration used
+- Assignment sequence position
+- Assignment method: Automatic or Manual
+- Assignment timestamp
+- Assignment status
+- Relevant reassignment reason, if applicable
+
+Use existing order and employee relationships wherever possible. Avoid duplicate tables or redundant fields if equivalent data already exists.
+
+If an order is created before the assignment process finishes, ensure it is not lost. Use a reliable transaction or retry mechanism appropriate to the current architecture.
+
+## 6. Manual Assignment and Reassignment
+
+Allow authorized administrators and team leads to manually assign or reassign an order when permitted by existing NIDO RBAC.
+
+Manual reassignment must:
+
+- Validate that the selected employee is active and eligible, unless an explicitly authorized exception policy exists.
+- Record the previous employee and the new employee.
+- Require a reason for reassignment.
+- Record who performed the action and when.
+- Preserve the audit history.
+
+A manual assignment must not accidentally corrupt or reset the automatic rotation pointer. Keep the automatic sequence and manual override behavior consistent and documented.
+
+## 7. Assignment History
+
+Provide an assignment history section showing:
+
+- Order ID
+- Client
+- Client tier
+- Assigned employee
+- Assignment method
+- Assignment date and time
+- Previous and new assignee when reassigned
+- Reassignment reason
+- Assignment status
+
+Provide practical filters for client tier, employee, assignment method, status and date range. Reuse existing data-table and pagination components.
+
+Only display data permitted by the logged-in user's existing permissions.
+
+## 8. Preview and Validation
+
+Before activation, show a preview of the next 5–10 assignments for each configured tier.
+
+Example:
+
+Premium:
+Order 1 → Employee A
+Order 2 → Employee B
+Order 3 → Employee C
+Order 4 → Employee D
+Order 5 → Employee A
+
+The preview must not consume or advance the actual rotation position.
+
+Validate that:
+
+- Each enabled tier has at least one eligible employee.
+- An employee is not duplicated within the same tier sequence.
+- Sequence numbers are valid and unique.
+- Only supported client tiers can be selected.
+- Inactive employees cannot be newly assigned.
+- Changes are saved successfully before activation.
+
+Handle empty states, loading states, API errors and failed saves gracefully.
+
+## 9. Security and Permissions
+
+Use NIDO's existing authentication and RBAC framework.
+
+- Only authorized administrators can create, edit, activate or disable assignment rules.
+- Team leads may manually assign or reassign orders within their permitted scope.
+- Employees can view and process orders assigned to them, according to existing permissions.
+- Enforce authorization on the backend, not only by hiding UI controls.
+- Prevent unauthorized access to other clients' order data.
+- Validate all request payloads server-side.
+- Record important configuration and assignment changes in the audit trail.
+
+Do not introduce hardcoded passwords, credentials or unrestricted administrative endpoints.
+
+## 10. Database and Implementation Constraints
+
+Inspect the existing schema before creating migrations.
+
+Reuse existing client, user, employee, order, notification and audit tables wherever possible. Add only the minimum necessary tables or fields for:
+
+- Tier-specific assignment rules and employee sequence.
+- Persistent rotation state.
+- Assignment history, if not already supported.
+
+Use stable employee IDs and order IDs, proper foreign keys where supported, appropriate indexes and database constraints. Ensure migrations are compatible with the project's current database and deployment setup.
+
+Do not hardcode employee names, client tiers in the assignment algorithm, or employee sequences. Tier definitions may use the three supported values, but all employee lists and ordering must be managed from the configuration page.
+
+Do not replace the existing tech stack, create duplicate APIs, refactor unrelated modules or install unnecessary packages.
+
+## 11. Acceptance Criteria
+
+The implementation is complete only when all of the following work:
+
+1. An authorized administrator can configure separate employee sequences for Premium, Medium and Standard clients.
+2. New orders are assigned automatically using the correct client tier.
+3. Four employees receive consecutive orders in the configured serial sequence.
+4. Each tier maintains its own independent, persistent rotation position.
+5. Concurrent orders do not cause conflicting rotation updates or duplicate assignments.
+6. Inactive or ineligible employees are skipped.
+7. When no eligible employee exists, the order remains safely unassigned and the responsible team is notified.
+8. The preview shows future assignments without advancing the real rotation.
+9. Manual assignment and reassignment work with permission checks and audit history.
+10. Configuration and assignment data persist across refreshes and application restarts.
+11. Existing physical and digital order workflows continue working without regression.
+12. All changes are implemented in the existing project and are fully connected to the real database and backend, not just mock UI data.
+
+## 12. Development Instructions
+
+Work in this order:
+
+1. Inspect the existing architecture and identify the exact files and modules that need changes.
+2. Briefly summarize the implementation plan and reuse existing components.
+3. Implement the configuration UI, database changes, backend assignment service and order creation integration.
+4. Add authorization, concurrency protection, validation and audit history.
+5. Test the acceptance criteria using the project's existing testing conventions.
+6. Fix any regressions and report the files changed, migrations added, tests performed and any remaining limitations.
+
+Keep the implementation focused, efficient and production-conscious. Do not stop after creating the UI. Complete the backend, database integration and working automatic assignment process.

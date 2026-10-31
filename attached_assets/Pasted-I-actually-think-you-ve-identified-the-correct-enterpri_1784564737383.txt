@@ -1,0 +1,561 @@
+I actually think you've identified the correct enterprise workflow. The key is to distinguish between physical stock, reserved stock, and purchased stock. Most procurement systems get this wrong by simply deducting stock when an order is placed.
+
+For Nido, where you're a procurement service provider between clients and vendors, I'd recommend this inventory allocation model.
+
+Enterprise Procurement Stock Flow
+Vendor Catalog
+       │
+       │ Vendor updates stock
+       ▼
+Available Stock
+       │
+       ▼
+Client Shop
+(Shows Available Qty)
+       │
+Client Places Order
+       │
+       ▼
+Reserve Inventory
+(Client order created)
+       │
+       ▼
+Vendor Allocation
+(Auto / Manual)
+       │
+       ▼
+Purchase Order Raised
+       │
+       ▼
+Vendor Stock Reduced
+       │
+Vendor Ships
+       │
+       ▼
+Delivered
+Vendor Catalog should contain
+
+Every Vendor Product should maintain
+
+Current Stock
+Reserved Stock
+Available Stock
+Incoming Stock
+Last Updated
+
+Example
+
+Dell
+
+Samsung S25
+
+Current Stock
+500
+
+Reserved Stock
+120
+
+Available Stock
+380
+
+Incoming Stock
+200
+
+HP
+
+Current Stock
+250
+
+Reserved
+50
+
+Available
+200
+
+
+Formula
+
+Available Stock
+Current Stock
+
+Reserved Stock
+
+
+---
+
+# What Client Shop should display
+
+Client should NEVER see Current Stock.
+
+They should only see
+
+
+Available Qty
+
+380 Available
+
+
+Because
+
+
+500 Current
+
+120 already reserved
+
+380 left
+
+
+---
+
+# When Client places Order
+
+Suppose
+
+Available
+
+
+380
+
+
+Client orders
+
+
+100
+
+
+DO NOT reduce Current Stock.
+
+Instead
+
+
+Current Stock
+
+500
+
+Reserved
+
+220
+
+Available
+
+280
+
+
+So immediately
+
+Every other client now sees
+
+
+280 Available
+
+
+Exactly like Amazon.
+
+---
+
+# Vendor Selection Screen
+
+This is where your idea becomes powerful.
+
+Here
+
+DO NOT use Available Stock.
+
+Instead use
+
+
+Reserved Qty
+
+Current Qty
+
+PO Raised Qty
+
+
+Example
+
+Dell
+
+
+Current
+
+500
+
+Reserved
+
+220
+
+PO Raised
+
+120
+
+Available
+
+280
+
+
+Until PO is created
+
+Vendor still physically has
+
+
+500
+
+
+Because Nido hasn't officially purchased yet.
+
+So Vendor Selection page should display
+
+
+Vendor
+
+Current Stock
+
+500
+
+Already Reserved
+
+220
+
+Pending PO
+
+120
+
+Remaining Before PO
+
+380
+
+
+This helps procurement team.
+
+---
+
+# When Purchase Order is Raised
+
+Now inventory actually gets consumed.
+
+Suppose
+
+Reserved
+
+100
+
+PO Created
+
+100
+
+Now
+
+
+Current
+
+400
+
+Reserved
+
+120
+
+Available
+
+280
+
+
+Notice
+
+Current stock reduced ONLY after PO.
+
+Not during client checkout.
+
+---
+
+# If Client Cancels
+
+Example
+
+Reserved
+
+100
+
+No PO yet
+
+Cancel Order
+
+
+Reserved
+
+100 → 0
+
+Available
+
+280 → 380
+
+Current
+
+500
+
+
+Stock automatically comes back.
+
+---
+
+# If Vendor updates Stock
+
+Suppose Vendor increases
+
+
+500
+
+to
+
+650
+
+
+System becomes
+
+
+Current
+
+650
+
+Reserved
+
+120
+
+Available
+
+530
+
+
+Immediately visible in Shop.
+
+---
+
+# Auto Allocation Engine
+
+This is where Nido becomes enterprise grade.
+
+Instead of simply choosing vendors manually
+
+System should automatically allocate.
+
+Priority
+
+
+1 Lowest Price
+
+2 Enough Stock
+
+3 Shortest Lead Time
+
+4 Highest Rating
+
+5 Best SLA
+
+6 Preferred Vendor
+
+7 MOQ Match
+
+8 Location
+
+9 Historical Performance
+
+10 Payment Terms
+
+
+Each gets a weighted score.
+
+---
+
+# Example
+
+Client orders
+
+
+150 Samsung S25
+
+
+Vendor Data
+
+| Vendor | Price | Available | Lead Time |
+|----------|---------|-------------|---------------|
+| Dell | ₹60 | 70 | 2 Days |
+| HP | ₹61 | 40 | 1 Day |
+| Lenovo | ₹62 | 100 | 3 Days |
+| Ingram | ₹59 | 25 | 5 Days |
+
+Auto Allocation
+
+
+Dell
+
+70
+
+HP
+
+40
+
+Lenovo
+
+40
+
+Total
+
+150
+
+
+Automatically.
+
+---
+
+# Better Allocation Algorithm
+
+Instead of lowest price only
+
+Calculate
+
+
+Vendor Score
+
+=
+
+40%
+
+Lowest Price
+
+25%
+
+Available Stock
+
+15%
+
+Lead Time
+
+10%
+
+Vendor Rating
+
+5%
+
+MOQ
+
+5%
+
+Past Delivery
+
+
+Highest score wins.
+
+---
+
+# Vendor Selection Popup
+
+Instead of only showing
+
+
+Available
+
+
+Show
+
+| Vendor | Price | Current | Reserved | Available | Lead Time | Score | Suggested Qty |
+|----------|---------|------------|-------------|---------------|--------------|------------|----------------|
+| Dell | ₹60 | 500 | 220 | 280 | 2 Days | 96 | 100 |
+| HP | ₹61 | 250 | 50 | 200 | 1 Day | 92 | 50 |
+| Lenovo | ₹62 | 300 | 40 | 260 | 89 | 0 |
+
+Button
+
+
+✓ Auto Allocate
+
+
+One click.
+
+System fills quantities.
+
+User can still edit.
+
+---
+
+# Stock Lifecycle
+
+
+Vendor Adds Stock
+│
+▼
+Current Stock
+
+    │
+    ▼
+
+Available Stock
+
+    │
+
+Client Orders
+
+    │
+    ▼
+
+Reserved Stock
+
+    │
+    ▼
+
+PO Raised
+
+    │
+    ▼
+
+Current Stock Reduced
+
+    │
+
+Vendor Ships
+
+    │
+
+Delivered
+
+    │
+
+Invoice
+
+    │
+
+Closed
+
+
+## Database fields to support this
+
+For each vendor-product combination, store:
+
+```text
+current_stock
+reserved_stock
+available_stock (computed = current_stock - reserved_stock)
+incoming_stock
+
+allocated_qty
+po_pending_qty
+po_created_qty
+
+last_stock_update
+
+auto_allocate_enabled
+preferred_vendor
+
+unit_price
+moq
+lead_time_days
+
+vendor_score
+
+This design gives you:
+
+Accurate stock visibility for all clients.
+No overselling, because reserved stock immediately reduces shop availability.
+Vendor inventory is only physically consumed when a PO is raised.
+Automatic restoration of stock on cancellation before PO.
+Intelligent, weighted auto-allocation that still allows procurement users to override quantities manually.
+
+This is the same architectural pattern used by large procurement and order orchestration platforms because it separates customer reservation from supplier commitment, making inventory tracking far more reliable.

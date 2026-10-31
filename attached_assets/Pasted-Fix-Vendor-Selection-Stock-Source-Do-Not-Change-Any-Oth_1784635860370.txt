@@ -1,0 +1,186 @@
+Fix Vendor Selection Stock Source (Do Not Change Any Other Functionality)
+
+The Vendor Selection popup is currently showing the wrong stock values. It is displaying the same stock that is shown on the Shop page (client-facing available stock), which is incorrect.
+
+This task is only to fix the stock source used in the Vendor Selection popup. Do not modify any UI, workflow, database relationships, pricing logic, order flow, PO generation, or any other functionality.
+
+Current Business Workflow
+1. Master Catalogue
+
+Products are created in the Master Catalogue.
+
+2. Vendor Products
+
+From the Master Catalogue, products are assigned to multiple vendors.
+
+Each vendor has its own independent record containing:
+
+Product
+Vendor Price
+MOQ
+Lead Time
+Available Stock (entered manually while assigning the product)
+
+Example:
+
+HP Laptop
+
+Vendor A
+Stock = 500
+
+Vendor B
+Stock = 700
+
+Vendor C
+Stock = 300
+
+Each vendor's stock is independent and must remain stored separately.
+
+3. Client Catalogue
+
+Products are assigned to clients using Role and Position Preference only.
+
+4. Shop Page
+
+The Shop page correctly displays the combined available stock from all vendors.
+
+Example:
+
+Vendor A = 500
+
+Vendor B = 700
+
+Vendor C = 300
+
+Total Available Stock = 1500
+
+When a client places an order for 200 units:
+
+Available Stock shown in Shop
+
+1500 - 200
+
+= 1300
+
+This behaviour is correct and must NOT be changed.
+
+Problem
+
+When NIDO receives an order and opens:
+
+Orders
+→ Order Details
+→ Sub Order Details
+→ Select Vendor
+
+The Vendor Selection popup currently displays:
+
+Vendor A
+
+Available Stock = 1300
+
+or another value matching the Shop page stock.
+
+This is completely incorrect.
+
+The Vendor Selection popup must never use the Shop page stock or the aggregated stock value.
+
+Correct Behaviour
+
+The Vendor Selection popup must fetch the stock directly from the Vendor Product Assignment records.
+
+It should display exactly what was entered while assigning the product to each vendor.
+
+Example:
+
+Vendor A
+
+Assigned Stock = 500
+
+Vendor B
+
+Assigned Stock = 700
+
+Vendor C
+
+Assigned Stock = 300
+
+These values must remain independent of the Shop page stock.
+
+Vendor Allocation
+
+The procurement team will allocate quantities from each vendor based on that vendor's available stock.
+
+Example:
+
+Client Ordered = 600
+
+Vendor A Available = 500
+
+Allocate = 500
+
+Vendor B Available = 700
+
+Allocate = 100
+
+Vendor C = 0
+
+The allocation process should continue to work exactly as it does today.
+
+Stock Source Rules
+Shop Page
+
+Display:
+
+Combined Available Stock
+
+=
+
+Sum of all vendor stocks
+
+minus
+
+Reserved quantities from client orders
+
+This is the client-facing stock.
+
+Vendor Selection Popup
+
+Display:
+
+The individual Available Stock stored against each vendor's product assignment.
+
+Do NOT use:
+
+Shop page stock
+Client-visible stock
+Aggregated stock
+Reserved stock
+Calculated sellable stock
+
+Only use the vendor's own assigned stock value.
+
+Do Not Change
+
+Do not modify:
+
+UI or layout
+Vendor allocation workflow
+Purchase Order generation
+Order flow
+Client catalogue
+Vendor catalogue
+Pricing logic
+Profit calculations
+Stock display on the Shop page
+Database relationships
+Existing APIs
+Any functionality outside the Vendor Selection popup
+Expected Result
+
+After this fix:
+
+The Shop page continues showing the aggregated available stock for clients.
+The Vendor Selection popup always displays the exact stock entered for each vendor during product assignment.
+Procurement users can correctly allocate purchase quantities based on each vendor's actual stock.
+The Vendor Selection popup and the Shop page use completely separate stock sources, ensuring correct procurement decisions.

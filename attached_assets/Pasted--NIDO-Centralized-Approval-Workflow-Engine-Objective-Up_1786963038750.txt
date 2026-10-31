@@ -1,0 +1,1178 @@
+# NIDO – Centralized Approval Workflow Engine
+
+## Objective
+
+Upgrade the **existing Configuration Hub → Approval Workflow** tab into the single centralized approval workflow management system for the entire NIDO platform.
+
+Do NOT create a separate Approval Workflow module.
+
+Do NOT create duplicate approval settings inside Clients, Vendors, Orders, Procurement, Finance, Catalogue, Stock, Contracts, or other modules.
+
+The existing:
+
+**Configuration Hub → Approval Workflow**
+
+must become the single source of truth for defining, maintaining, executing, tracking, and auditing approval workflows across NIDO.
+
+The approval engine must work LIVE with the existing application, database, authentication, RBAC, notifications, and platform workflows.
+
+---
+
+# 1. First Audit Existing NIDO Code
+
+Before implementing anything:
+
+1. Inspect the existing Configuration Hub.
+2. Locate the existing Approval Workflow tab.
+3. Inspect existing database tables and relationships.
+4. Inspect existing user/RBAC/roles/permissions implementation.
+5. Inspect existing notification/email system.
+6. Inspect existing audit/activity logging.
+7. Inspect existing workflows for:
+
+   * Clients
+   * Vendors
+   * Catalogue
+   * Products
+   * Pricing
+   * Orders
+   * Procurement
+   * Purchase Orders
+   * Stock
+   * Contracts
+   * Finance
+   * Users
+8. Identify any existing approval-related logic.
+
+IMPORTANT:
+
+Reuse existing infrastructure wherever possible.
+
+Do not create duplicate:
+
+* Users
+* Roles
+* Permissions
+* Authentication
+* Notification systems
+* Audit systems
+* Approval tables
+* Workflow engines
+
+Extend the existing architecture instead.
+
+---
+
+# 2. Approval Workflow Page
+
+Inside:
+
+Configuration Hub → Approval Workflow
+
+create a professional NIDO administration interface.
+
+The page should contain:
+
+## Header
+
+Title:
+
+Approval Workflow
+
+Subtitle:
+
+Configure and manage approval rules used across the NIDO platform.
+
+Actions:
+
+[ + Create Workflow ]
+
+[ Enable All / Disable All ]
+
+---
+
+# 3. Workflow Dashboard
+
+At the top show summary cards:
+
+* Total Workflows
+* Active Workflows
+* Draft Workflows
+* Pending Approvals
+* Completed Approvals
+* Rejected Approvals
+
+Example:
+
+Total Workflows: 12
+Active: 9
+Draft: 3
+Pending: 18
+Completed: 142
+Rejected: 7
+
+These values must come from the real database.
+
+Do NOT use hardcoded demo numbers.
+
+---
+
+# 4. Workflow List
+
+Display all configured workflows in a table.
+
+Columns:
+
+* Workflow Name
+* Module
+* Trigger
+* Approval Type
+* Approval Levels
+* Current Version
+* Status
+* Last Updated
+* Updated By
+* Actions
+
+Example:
+
+| Workflow                  | Module      | Trigger           | Levels | Status |
+| ------------------------- | ----------- | ----------------- | ------ | ------ |
+| Client Creation Approval  | Clients     | New Client        | 2      | Active |
+| Purchase Order Approval   | Procurement | PO Created        | 2      | Active |
+| Discount Approval         | Pricing     | Discount > Limit  | 1      | Active |
+| Stock Adjustment Approval | Stock       | Manual Adjustment | 1      | Active |
+
+Actions:
+
+* View
+* Edit
+* Duplicate
+* Activate
+* Deactivate
+* Version History
+* Delete
+
+Deletion should only be allowed where there are no active dependencies.
+
+---
+
+# 5. Create / Edit Workflow
+
+Create a proper multi-step workflow builder.
+
+## Step 1 – Basic Information
+
+Fields:
+
+* Workflow Name
+* Description
+* Module
+* Workflow Type
+* Status
+
+Module dropdown should support the actual NIDO modules.
+
+Include:
+
+* Client
+* Vendor
+* Catalogue
+* Product
+* Pricing
+* Shop
+* Order
+* Procurement
+* Purchase Order
+* Stock
+* Contract
+* Finance
+* User Management
+* Other existing modules discovered in the codebase
+
+Do not add modules that do not exist.
+
+---
+
+# 6. Trigger Configuration
+
+Allow the administrator to define when approval is required.
+
+Examples:
+
+Client:
+
+* New client created
+* Client profile changed
+* Credit limit changed
+
+Vendor:
+
+* New vendor created
+* Vendor profile changed
+* Vendor activated
+
+Catalogue:
+
+* New product
+* Product modification
+* Product activation
+* Product price change
+
+Pricing:
+
+* Client price change
+* Margin below minimum
+* Discount above permitted limit
+* Manual price override
+
+Order:
+
+* Order created
+* Order value exceeds threshold
+* Order modified
+* Order cancellation
+
+Procurement:
+
+* Purchase requisition created
+* Purchase requisition value exceeds threshold
+
+Purchase Order:
+
+* PO created
+* PO value exceeds threshold
+* Vendor changed
+* PO modification
+
+Stock:
+
+* Manual stock adjustment
+* Stock transfer
+* Stock correction
+* Negative stock exception
+
+Contract:
+
+* New contract
+* Contract modification
+* Contract renewal
+
+Finance:
+
+* Payment approval
+* Credit limit change
+* Refund
+* Financial adjustment
+
+Only show triggers that correspond to functionality actually available in the NIDO codebase.
+
+---
+
+# 7. Conditional Approval Rules
+
+This is extremely important.
+
+Allow administrators to define conditions.
+
+Example:
+
+IF
+
+Order Amount > ₹1,00,000
+
+THEN
+
+Approval Required.
+
+Other conditions:
+
+* Amount
+* Quantity
+* Percentage
+* Profit %
+* Discount %
+* Margin %
+* Client
+* Client category if already supported
+* Vendor
+* Product category
+* Department
+* User role
+* Stock quantity
+* Contract value
+* Payment amount
+* Credit limit
+
+Support operators:
+
+* Equals
+* Not Equals
+* Greater Than
+* Greater Than or Equal
+* Less Than
+* Less Than or Equal
+* Between
+* Contains
+
+Allow multiple conditions using:
+
+AND / OR
+
+Example:
+
+Order Amount > ₹1,00,000
+AND
+Profit % < 10%
+
+→ Approval Required.
+
+---
+
+# 8. Approval Levels
+
+Allow multiple approval levels.
+
+Example:
+
+Level 1
+Procurement Manager
+
+↓
+
+Level 2
+Finance Manager
+
+↓
+
+Level 3
+Admin
+
+Each level should contain:
+
+* Level Number
+* Approver Type
+* Approver Role
+* Specific User (only if required)
+* Minimum Approvers
+* Approval Mode
+* SLA / Due Time
+* Escalation Rule
+
+Approver types:
+
+* Role
+* Specific User
+* Department
+* Manager
+* Reporting Manager
+
+Reuse the existing NIDO RBAC system.
+
+Do not create another role system.
+
+---
+
+# 9. Approval Mode
+
+Support:
+
+### Sequential
+
+Level 2 starts only after Level 1 approves.
+
+### Parallel
+
+All configured approvers receive the request simultaneously.
+
+### Any One
+
+Any one eligible approver can approve.
+
+### All Required
+
+Every assigned approver must approve.
+
+### Majority
+
+Approval succeeds when the configured majority approves.
+
+Implement only modes that are technically compatible with the existing architecture, but structure the database so additional modes can be added later.
+
+---
+
+# 10. Approval Actions
+
+Every approval request must support:
+
+* Approve
+* Reject
+* Send Back
+* Request Changes
+* Delegate
+* Reassign
+
+When rejecting or sending back, require a reason.
+
+Store:
+
+* Action
+* User
+* Date/time
+* Comment
+* Previous status
+* New status
+
+---
+
+# 11. SLA & Escalation
+
+Allow administrators to configure:
+
+* Approval SLA
+* Due time
+* Reminder interval
+* Escalation enabled
+* Escalation approver
+* Escalation after X hours/days
+
+Example:
+
+Approval SLA: 24 hours
+
+Reminder: after 12 hours
+
+Escalation: after 24 hours
+
+Escalate to:
+Procurement Head
+
+Do not build a separate notification system.
+
+Use the existing NIDO notification/email infrastructure.
+
+Approval notifications should integrate with existing notification events such as:
+
+* Approval Request
+* Approval Assigned
+* Approval Pending
+* Approval Completed
+* Approval Rejected
+* Approval Escalated
+
+---
+
+# 12. Approval Request Tracking
+
+Create a section in the existing workflow page called:
+
+Approval Requests
+
+Show live approval requests generated by workflows.
+
+Columns:
+
+* Request ID
+* Workflow
+* Module
+* Reference
+* Requested By
+* Current Approver
+* Current Level
+* Amount / Value
+* Status
+* Created Date
+* Due Date
+* Actions
+
+Statuses:
+
+* Pending
+* In Progress
+* Approved
+* Rejected
+* Sent Back
+* Cancelled
+* Escalated
+
+Clicking a request should open the complete approval timeline.
+
+---
+
+# 13. Approval Timeline
+
+Example:
+
+PO-000145
+
+Created
+↓
+Submitted for Approval
+↓
+Procurement Manager Approved
+↓
+Finance Manager Pending
+↓
+Finance Manager Approved
+↓
+PO Approved
+
+Show:
+
+User
+Role
+Action
+Comment
+Timestamp
+
+This must use real database records.
+
+---
+
+# 14. Approval History
+
+Every workflow must have version history.
+
+Example:
+
+Version 1
+Created: 10 Aug 2026
+
+Version 2
+Modified: 12 Aug 2026
+
+Version 3
+Modified: 16 Aug 2026
+
+Show:
+
+* Version
+* Changed By
+* Date
+* Changes
+* Status
+
+Do not silently modify historical approval decisions.
+
+Existing approval requests must retain the workflow version under which they were created.
+
+---
+
+# 15. Workflow Activation
+
+Each workflow must have:
+
+Draft
+Active
+Inactive
+
+A Draft workflow must never execute.
+
+An Active workflow must execute automatically when its configured trigger occurs.
+
+An Inactive workflow must not generate new approval requests.
+
+Add confirmation before activating/deactivating a workflow.
+
+---
+
+# 16. Platform-Wide Integration
+
+The centralized engine must be integrated wherever approval is required.
+
+At minimum audit the following:
+
+### Clients
+
+Client creation / changes where configured.
+
+### Vendors
+
+Vendor creation / changes where configured.
+
+### Catalogue
+
+Product creation and catalogue changes where configured.
+
+### Pricing
+
+Client price changes, manual overrides, discounts, margin exceptions, and other configured pricing actions.
+
+### Orders
+
+Order approval based on configured conditions.
+
+### Procurement
+
+Purchase requisition / procurement requests.
+
+### Purchase Orders
+
+PO approval based on configured workflow and value.
+
+### Stock
+
+Manual stock adjustments and other configured stock actions.
+
+### Contracts
+
+Contract creation/modification/renewal where configured.
+
+### Finance
+
+Financial actions requiring approval.
+
+### User Management
+
+Only where the existing NIDO business process requires approval.
+
+IMPORTANT:
+
+Do not force approval on every action.
+
+Approval must occur only when an active workflow exists and its conditions match.
+
+---
+
+# 17. Example Purchase Order Workflow
+
+Create a sample configuration during development/testing:
+
+Workflow:
+
+Purchase Order Approval
+
+Module:
+
+Procurement
+
+Trigger:
+
+PO Created
+
+Conditions:
+
+PO Amount > ₹1,00,000
+
+Approval:
+
+Level 1 → Procurement Manager
+
+Level 2 → Finance Manager
+
+Mode:
+
+Sequential
+
+SLA:
+
+24 Hours
+
+Result:
+
+When a user creates a PO above ₹1,00,000:
+
+PO status:
+
+Pending Approval
+
+The PO must NOT proceed as fully approved.
+
+Level 1 receives notification.
+
+After Level 1 approval:
+
+Level 2 receives notification.
+
+After final approval:
+
+PO status becomes:
+
+Approved
+
+If rejected:
+
+PO status becomes:
+
+Rejected
+
+All actions appear in the approval timeline.
+
+Use real database data.
+
+---
+
+# 18. Example Pricing Approval
+
+Workflow:
+
+Client Price Override Approval
+
+Trigger:
+
+Manual Client Price Override
+
+Conditions:
+
+Profit % < configured minimum profit %
+
+OR
+
+Discount % > configured maximum discount
+
+Approval:
+
+Pricing Manager
+
+Result:
+
+User can submit the price override, but the price should remain Pending Approval until approved.
+
+After approval:
+
+The client price becomes active.
+
+After rejection:
+
+The override must not become active.
+
+This must integrate with the existing NIDO Client Price Engine.
+
+---
+
+# 19. Backend / Database
+
+Implement proper persistent database structures.
+
+Before creating tables, inspect the existing database.
+
+If no suitable approval tables exist, create normalized structures such as:
+
+* approval_workflows
+* approval_workflow_versions
+* approval_workflow_conditions
+* approval_workflow_levels
+* approval_workflow_approvers
+* approval_requests
+* approval_request_steps
+* approval_actions
+* approval_delegations
+* approval_escalations
+
+Use the existing database technology and conventions already used by NIDO.
+
+Do not create unnecessary duplicate tables.
+
+---
+
+# 20. Central Approval Service
+
+Create one reusable approval engine/service.
+
+Conceptually:
+
+ApprovalEngine
+
+Responsibilities:
+
+* Find matching workflow
+* Evaluate conditions
+* Create approval request
+* Assign approvers
+* Move between approval levels
+* Process approve
+* Process reject
+* Process send-back
+* Handle escalation
+* Handle delegation
+* Complete workflow
+* Update originating transaction
+* Create audit records
+* Trigger notifications
+
+All modules must call this centralized service.
+
+Do NOT implement separate approval logic inside every module.
+
+---
+
+# 21. Transaction Integration
+
+The originating transaction must know its approval status.
+
+Example:
+
+Purchase Order:
+
+Draft
+→ Pending Approval
+→ Approved
+→ Sent to Vendor
+
+Rejected:
+
+Draft
+→ Pending Approval
+→ Rejected
+
+The exact statuses should reuse existing NIDO order/PO status architecture wherever possible.
+
+Do not create conflicting status systems.
+
+---
+
+# 22. Permission & Security
+
+Use the existing NIDO centralized RBAC system.
+
+Only users with appropriate permissions should be able to:
+
+* Create workflow
+* Edit workflow
+* Activate workflow
+* Deactivate workflow
+* Delete workflow
+* Approve
+* Reject
+* Delegate
+* View approval history
+
+Approval permissions must be enforced on the backend AND frontend.
+
+Do not rely only on hiding buttons in the UI.
+
+---
+
+# 23. Configuration Hub UI
+
+Keep the page consistent with the existing NIDO Configuration Hub design.
+
+Recommended structure:
+
+Configuration Hub
+→ Approval Workflow
+
+Tabs/sections inside the existing page:
+
+1. Workflows
+2. Approval Requests
+3. Pending Approvals
+4. History
+5. Settings
+
+Do not create a new top-level navigation item.
+
+---
+
+# 24. Pending Approvals
+
+Provide a clear view for administrators:
+
+Pending Approvals
+
+Cards:
+
+* My Pending Approvals
+* Total Pending
+* Overdue
+* Escalated
+
+Table:
+
+Request
+Module
+Requested By
+Amount
+Current Level
+Due Date
+Status
+Action
+
+Actions:
+
+[Review]
+
+Inside Review:
+
+* Request details
+* Original transaction
+* Conditions matched
+* Approval levels
+* Current approver
+* Previous actions
+* Comments
+* Approve
+* Reject
+* Send Back
+
+---
+
+# 25. Audit Trail
+
+Every workflow configuration change must be recorded.
+
+Track:
+
+* Created
+* Edited
+* Activated
+* Deactivated
+* Deleted
+* Version Created
+* Approval Assigned
+* Approval Approved
+* Approval Rejected
+* Approval Sent Back
+* Approval Delegated
+* Approval Escalated
+* Workflow Completed
+
+Include:
+
+User
+Role
+Timestamp
+IP/device information if existing NIDO audit infrastructure already supports it
+Action
+Old value
+New value
+
+Reuse the existing audit system.
+
+---
+
+# 26. Live Behaviour Requirement
+
+This must NOT be a UI-only implementation.
+
+Do not use:
+
+* Mock data
+* Hardcoded approval statuses
+* Fake workflow execution
+* Local-only state
+* Static demo tables
+
+The complete flow must work with the actual NIDO database.
+
+Example:
+
+Admin creates workflow in:
+
+Configuration Hub → Approval Workflow
+
+↓
+
+Workflow is saved to database.
+
+↓
+
+Admin activates workflow.
+
+↓
+
+User performs matching action elsewhere in NIDO.
+
+↓
+
+Approval engine automatically detects the active workflow.
+
+↓
+
+Approval request is created.
+
+↓
+
+Correct approver receives notification.
+
+↓
+
+Approver opens request.
+
+↓
+
+Approves/rejects.
+
+↓
+
+Approval engine updates request.
+
+↓
+
+Originating transaction updates automatically.
+
+↓
+
+Audit trail is recorded.
+
+This must work without manually editing database records.
+
+---
+
+# 27. No Duplicate Configuration
+
+Very important:
+
+There must be ONLY ONE source of truth for approval configuration:
+
+Configuration Hub → Approval Workflow
+
+Do not add separate approval configuration screens to:
+
+* Client page
+* Vendor page
+* Order page
+* PO page
+* Pricing page
+* Stock page
+* Finance page
+* Contract page
+
+Those modules should only display the approval status and relevant approval information.
+
+Example:
+
+Purchase Order page:
+
+Status: Pending Approval
+
+[View Approval]
+
+Clicking View Approval opens the approval request/timeline.
+
+The actual workflow configuration remains in:
+
+Configuration Hub → Approval Workflow.
+
+---
+
+# 28. Testing Requirements
+
+Test the complete end-to-end process.
+
+### Test 1
+
+Create workflow.
+
+Save.
+
+Refresh page.
+
+Workflow must remain.
+
+### Test 2
+
+Activate workflow.
+
+Create matching transaction.
+
+Approval request must automatically appear.
+
+### Test 3
+
+Approve Level 1.
+
+Level 2 must automatically become active.
+
+### Test 4
+
+Reject.
+
+Transaction must reflect rejection.
+
+### Test 5
+
+Condition does not match.
+
+Transaction should proceed without approval.
+
+### Test 6
+
+Deactivate workflow.
+
+Create matching transaction.
+
+No approval request should be generated.
+
+### Test 7
+
+Modify workflow.
+
+Create new version.
+
+Existing approval requests must continue using their original version.
+
+### Test 8
+
+Verify notifications.
+
+### Test 9
+
+Verify audit trail.
+
+### Test 10
+
+Verify permissions using different NIDO roles/users.
+
+---
+
+# 29. Important Implementation Rules
+
+1. Preserve the existing NIDO UI and architecture.
+2. Do not rebuild the application.
+3. Do not remove existing functionality.
+4. Do not create duplicate modules.
+5. Do not create duplicate RBAC.
+6. Do not create duplicate notification services.
+7. Do not create mock approval data.
+8. Do not hardcode workflows.
+9. Use real database persistence.
+10. Use the existing authentication system.
+11. Use the existing NIDO Users and Roles system.
+12. Use existing notification infrastructure.
+13. Use existing audit infrastructure.
+14. Use backend enforcement.
+15. Use frontend permission enforcement.
+16. Make the system reusable by every NIDO module.
+17. Keep Configuration Hub → Approval Workflow as the single source of truth.
+18. Make the implementation production-ready.
+
+---
+
+# 30. Final Acceptance Criteria
+
+The implementation is complete only when:
+
+* Configuration Hub → Approval Workflow is fully functional.
+* Admin can create workflows.
+* Admin can edit workflows.
+* Admin can configure conditions.
+* Admin can configure multiple approval levels.
+* Admin can assign existing NIDO roles/users.
+* Admin can activate/deactivate workflows.
+* Workflow versions are maintained.
+* Approval requests are generated automatically.
+* Approvers can approve/reject/send back.
+* Notifications are triggered.
+* SLA/escalation works where configured.
+* Approval history is maintained.
+* Audit trail is maintained.
+* Originating transactions update automatically.
+* Existing NIDO RBAC controls access.
+* All data persists in the real database.
+* Existing modules use the centralized approval engine.
+* No duplicate approval configuration is introduced.
+* Existing NIDO functionality continues to work.
+
+After implementation, run a complete audit of the repository and report:
+
+1. Files changed
+2. Database changes
+3. Existing functionality reused
+4. New approval functionality
+5. Modules integrated
+6. Any remaining approval-related hardcoded logic
+7. Any errors
+8. Test results
+
+Do not consider the task complete until the approval workflow has been tested end-to-end using an actual NIDO transaction.

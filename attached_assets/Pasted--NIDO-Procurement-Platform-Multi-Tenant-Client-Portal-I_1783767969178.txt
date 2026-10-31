@@ -1,0 +1,391 @@
+# NIDO Procurement Platform - Multi-Tenant Client Portal Implementation
+
+## Objective
+
+Enhance the existing NIDO Procurement Platform by implementing a secure multi-tenant Client Portal.
+
+Do NOT create a separate application.
+
+Do NOT duplicate the existing platform.
+
+Use the existing application, database, routing, components, layouts, and UI.
+
+The platform must support unlimited clients while maintaining complete data isolation using **Client ID**.
+
+---
+
+# Existing Platform
+
+The current Admin Platform already contains the following modules:
+
+* Dashboard
+* Shop
+* Orders
+* Vendors
+* Clients
+* Contracts
+* Services
+* Users
+* Roles
+* Departments
+* Master Catalogue
+* Finance
+* Configuration
+* Reports
+* Settings
+* Audit Logs
+* SLA
+* Notifications
+* Locations
+* Payment Configuration
+* Tax Configuration
+* Approval Workflow
+
+These modules must continue working exactly as they do today.
+
+Do not modify or remove existing functionality.
+
+---
+
+# Login System
+
+Keep the existing login page.
+
+After successful authentication determine:
+
+* User Type
+* Client ID
+* User Role
+* Permissions
+
+If the logged-in user is:
+
+### NIDO Admin
+
+Redirect to the existing Admin Platform with access to every client and all platform modules.
+
+### Client Admin
+
+Redirect to the Client Portal.
+
+### Client User
+
+Redirect to the Client Portal with role-based permissions.
+
+---
+
+# Client Portal
+
+The Client Portal must use the same design, theme, components, navigation style, responsiveness, colors, cards, tables, dialogs, and layouts as the Admin Platform.
+
+The Client Portal is simply a filtered version of the existing application.
+
+Display only:
+
+* Dashboard
+* Overview
+* Catalog
+* Orders
+* Services
+* Users
+* Roles
+* Addresses
+* Contracts
+* Invoices
+* Reports
+* Notifications
+* Profile
+* Support
+
+Hide:
+
+* Clients
+* Vendors
+* Master Catalogue
+* Global Configuration
+* Tax Configuration
+* Payment Configuration
+* SLA Configuration
+* Departments
+* Audit Logs
+* Platform Settings
+* Global Reports
+* User Management (Global)
+* Vendor Management
+* Purchase Orders (Global)
+* Bills
+* Expenses
+
+---
+
+# Client Isolation
+
+Every table in the database must contain a **client_id** column.
+
+Every query must automatically filter by:
+
+client_id = loggedInUser.client_id
+
+No client should ever be able to access another client's information.
+
+This filtering must apply to:
+
+* Orders
+* Catalog
+* Contracts
+* Services
+* Users
+* Roles
+* Addresses
+* Notifications
+* Reports
+* Invoices
+* Documents
+* Approval Workflow
+
+Never trust the frontend alone.
+
+All backend APIs must also validate the client_id.
+
+---
+
+# Client Provisioning
+
+Inside the existing Clients module, add a new action:
+
+Provision Client Portal
+
+When this action is executed:
+
+Automatically create a dedicated client workspace.
+
+Generate:
+
+* Default Client Admin account
+* Default roles
+* Default permissions
+* Empty users list
+* Empty catalog
+* Empty orders
+* Empty services
+* Empty reports
+* Empty notifications
+* Default settings
+
+Generate secure login credentials.
+
+Store them against the client record.
+
+The portal must be immediately accessible.
+
+---
+
+# Users
+
+Client Admin can:
+
+* Add Users
+* Edit Users
+* Disable Users
+* Reset Password
+* Assign Roles
+* Delete Users
+
+Whenever a new user is created:
+
+Automatically assign
+
+client_id = current client's client_id
+
+The client cannot edit another client's users.
+
+---
+
+# Roles
+
+Support unlimited custom roles.
+
+Example:
+
+* Procurement Manager
+* Purchase Executive
+* Finance
+* Store Manager
+* Employee
+* Approver
+* Viewer
+
+Each role should have configurable permissions.
+
+---
+
+# Dashboard
+
+Each client dashboard must display only that client's information.
+
+Example cards:
+
+* Total Orders
+* Pending Orders
+* Completed Orders
+* Active Services
+* Outstanding Invoices
+* Recent Activity
+* Notifications
+* Quick Actions
+
+Initially all cards may show zero if no data exists.
+
+Do not populate demo data.
+
+---
+
+# Owner Dashboard
+
+The existing Admin Platform remains the platform owner.
+
+Admin can:
+
+* View all clients
+* View all orders
+* View all invoices
+* View all users
+* View all services
+* View all reports
+* View all vendors
+* View all contracts
+* View analytics across every client
+
+Admin queries should not apply client filtering.
+
+---
+
+# Database Structure
+
+Use client_id as the tenant identifier.
+
+Example:
+
+Clients
+
+* client_id
+* client_name
+* status
+* subscription_plan
+* portal_enabled
+* logo
+
+Users
+
+* user_id
+* client_id
+* role_id
+* email
+* password_hash
+* status
+
+Orders
+
+* order_id
+* client_id
+* vendor_id
+* created_by
+* amount
+* status
+
+Catalog
+
+* product_id
+* client_id
+
+Invoices
+
+* invoice_id
+* client_id
+
+Services
+
+* service_id
+* client_id
+
+Contracts
+
+* contract_id
+* client_id
+
+Addresses
+
+* address_id
+* client_id
+
+Every business entity must be linked to client_id.
+
+---
+
+# Data Flow
+
+Client Login
+
+→ Authenticate User
+
+→ Read client_id
+
+→ Load Client Portal
+
+→ Automatically filter all data using client_id
+
+Owner Login
+
+→ Authenticate
+
+→ Load Admin Platform
+
+→ No client filter
+
+→ Full platform visibility
+
+---
+
+# Security
+
+Implement Role-Based Access Control (RBAC).
+
+Implement tenant isolation using client_id.
+
+Protect every route.
+
+Protect every backend API.
+
+Never expose another client's data.
+
+Never allow client_id manipulation from the frontend.
+
+Always derive client_id from the authenticated session.
+
+---
+
+# Scalability
+
+The architecture must support:
+
+* 10 clients
+* 100 clients
+* 1,000 clients
+* 10,000 clients
+
+without creating additional applications or databases.
+
+Each client should feel like they have their own dedicated procurement platform while sharing the same codebase and infrastructure.
+
+---
+
+# Development Requirements
+
+* Reuse existing React components wherever possible.
+* Reuse existing layouts and navigation.
+* Do not duplicate code unnecessarily.
+* Keep the Admin Platform unchanged.
+* Create the Client Portal by applying role-based visibility and automatic client_id filtering.
+* Follow clean architecture and modular design to make future maintenance easy.
+
+The final implementation should behave like a professional SaaS procurement platform where each client has an isolated workspace and the NIDO Admin retains complete visibility across all clients.

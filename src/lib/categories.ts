@@ -1,0 +1,138 @@
+/**
+ * Canonical product/vendor/client category list for the NIDO platform.
+ * All pages that show a category dropdown should import from here.
+ * Aligned with HSN/SAC codes in taxEngine.ts.
+ */
+
+export const PRODUCT_CATEGORIES = [
+  // Computers & IT Hardware
+  'Computers & Laptops',
+  'Computer Peripherals',
+  'Printers & Scanners',
+  'Storage Devices',
+  'Networking',
+  'Telecommunication',
+  'Audio & Video Equipment',
+  'Projectors & Displays',
+  'CCTV & Security',
+  'Access Control',
+  // Power & Electrical
+  'Electrical Equipment',
+  'Electrical Appliances',
+  'Lighting',
+  'UPS & Batteries',
+  'Power Backup',
+  // Software & Cloud
+  'Software',
+  'Cloud Services',
+  // Office
+  'Office Supplies',
+  'Stationery',
+  'Paper Products',
+  'Furniture',
+  'Office Chairs',
+  // Pantry & Cleaning
+  'Pantry Supplies',
+  'Beverages',
+  'Cleaning Supplies',
+  'Housekeeping Materials',
+  // Medical & Safety
+  'Medical Supplies',
+  'Medical Equipment',
+  'Safety Equipment',
+  'Fire Safety',
+  // Industrial & Construction
+  'Industrial Tools',
+  'Hardware & Fasteners',
+  'Building Materials',
+  'Plumbing Materials',
+  'Paints & Chemicals',
+  'Packaging Materials',
+  // Services
+  'Printing & Branding',
+  'Logistics & Transportation',
+  'Courier Services',
+  'Installation Services',
+  'Repair & Maintenance',
+  'AMC (Annual Maintenance Contract)',
+  'Consulting Services',
+  'Recruitment Services',
+  'Training Services',
+  'Security Services',
+  'Facility Management',
+  'Housekeeping Services',
+  'Internet Services',
+  'Telecom Services',
+  'Digital Marketing',
+  'Website Development',
+  'Mobile App Development',
+  'Data Center Services',
+  // Catch-all
+  'Miscellaneous Products',
+  'Miscellaneous Services',
+] as const;
+
+export type ProductCategory = typeof PRODUCT_CATEGORIES[number];
+
+/** Default subcategories keyed by category name. */
+export const CATEGORY_SUBCATEGORIES: Record<string, string[]> = {
+  'Computers & Laptops':            ['Laptops', 'Desktops', 'Workstations', 'Servers', 'Tablets'],
+  'Computer Peripherals':           ['Keyboards', 'Mouse', 'Monitors', 'Webcams', 'Headsets', 'Printers'],
+  'Printers & Scanners':            ['Laser Printers', 'Inkjet Printers', 'Scanners', 'MFD / All-in-One'],
+  'Storage Devices':                ['HDD', 'SSD', 'USB Drives', 'Memory Cards', 'NAS'],
+  'Networking':                     ['Routers', 'Switches', 'Access Points', 'Cables', 'Firewalls', 'Modems'],
+  'Telecommunication':              ['IP Phones', 'EPABX', 'Intercoms', 'Communication Devices'],
+  'Audio & Video Equipment':        ['Speakers', 'Microphones', 'Amplifiers', 'Cameras'],
+  'Projectors & Displays':          ['Projectors', 'LED TVs', 'Display Panels', 'Digital Signage'],
+  'CCTV & Security':                ['IP Cameras', 'DVR / NVR', 'Cables & Connectors', 'Accessories'],
+  'Access Control':                 ['Biometric Devices', 'Attendance Systems', 'Door Controllers', 'Cards & Tags'],
+  'Electrical Equipment':           ['Switches', 'Sockets', 'MCBs', 'Wiring', 'Distribution Boards'],
+  'Electrical Appliances':          ['Fans', 'Air Coolers', 'Kettles', 'Office Appliances'],
+  'Lighting':                       ['LED Bulbs', 'Tube Lights', 'Flood Lights', 'Emergency Lights'],
+  'UPS & Batteries':                ['UPS Batteries', 'VRLA Batteries', 'Lithium Batteries'],
+  'Power Backup':                   ['UPS Systems', 'Inverters', 'Generators', 'Stabilizers'],
+  'Software':                       ['Operating Systems', 'Productivity', 'Security', 'ERP / CRM', 'Development Tools'],
+  'Cloud Services':                 ['Cloud Hosting', 'SaaS', 'Storage', 'Backup', 'CDN'],
+  'Office Supplies':                ['Paper', 'Desk Accessories', 'Filing', 'Adhesives', 'Labels'],
+  'Stationery':                     ['Pens & Pencils', 'Notebooks', 'Diaries', 'Envelopes', 'Stamps'],
+  'Paper Products':                 ['Copier Paper', 'Printing Paper', 'Letterheads', 'Cardboard'],
+  'Furniture':                      ['Desks', 'Workstations', 'Cabinets', 'Shelving', 'Conference Tables'],
+  'Office Chairs':                  ['Executive Chairs', 'Task Chairs', 'Visitor Chairs', 'Stools'],
+  'Pantry Supplies':                ['Grocery', 'Snacks', 'Condiments', 'Crockery', 'Disposables'],
+  'Beverages':                      ['Tea', 'Coffee', 'Soft Drinks', 'Juices', 'Water'],
+  'Cleaning Supplies':              ['Detergents', 'Disinfectants', 'Trash Bags', 'Gloves', 'Air Fresheners'],
+  'Housekeeping Materials':         ['Brooms', 'Mops', 'Buckets', 'Brushes', 'Dusters'],
+  'Medical Supplies':               ['Medicines', 'Consumables', 'Bandages', 'Sanitizers', 'First Aid'],
+  'Medical Equipment':              ['Diagnostic Equipment', 'Monitoring Devices', 'PPE', 'Instruments'],
+  'Safety Equipment':               ['Helmets', 'Safety Shoes', 'Gloves', 'Goggles', 'Harnesses'],
+  'Fire Safety':                    ['Fire Extinguishers', 'Smoke Detectors', 'Sprinklers', 'Hose Reels'],
+  'Industrial Tools':               ['Hand Tools', 'Power Tools', 'Measuring Instruments'],
+  'Hardware & Fasteners':           ['Nuts & Bolts', 'Screws', 'Anchors', 'Hinges', 'Locks'],
+  'Building Materials':             ['Cement Products', 'Tiles', 'Steel', 'Construction Materials'],
+  'Plumbing Materials':             ['Pipes', 'Fittings', 'Valves', 'Taps', 'Water Tanks'],
+  'Paints & Chemicals':             ['Wall Paints', 'Wood Coatings', 'Varnishes', 'Thinners'],
+  'Packaging Materials':            ['Boxes', 'Bubble Wrap', 'Tapes', 'Shrink Wrap', 'Pallets'],
+  'Printing & Branding':            ['Business Cards', 'Brochures', 'Banners', 'Labels', 'ID Cards'],
+  'Logistics & Transportation':     ['Goods Transport', 'Fleet', 'Freight'],
+  'Courier Services':               ['Local Courier', 'International Courier', 'Parcel Services'],
+  'Installation Services':          ['Electrical', 'Mechanical', 'IT', 'Civil'],
+  'Repair & Maintenance':           ['Equipment Repair', 'Civil Maintenance', 'IT Maintenance'],
+  'AMC (Annual Maintenance Contract)': ['Equipment AMC', 'Software AMC', 'Civil AMC'],
+  'Consulting Services':            ['IT Consulting', 'Management Consulting', 'Legal', 'Financial'],
+  'Recruitment Services':           ['Staffing', 'Executive Search', 'Contract Staffing'],
+  'Training Services':              ['Technical Training', 'Soft Skills', 'Safety Training'],
+  'Security Services':              ['Guards', 'CCTV Monitoring', 'Surveillance'],
+  'Facility Management':            ['Property Management', 'Office Management', 'Operations'],
+  'Housekeeping Services':          ['Cleaning', 'Waste Management', 'Pest Control'],
+  'Internet Services':              ['Broadband', 'Leased Line', 'MPLS', 'Wi-Fi'],
+  'Telecom Services':               ['Mobile Plans', 'Landline', 'PRI / SIP'],
+  'Digital Marketing':              ['SEO', 'Social Media', 'PPC', 'Content Marketing'],
+  'Website Development':            ['Frontend', 'Backend', 'CMS', 'E-commerce'],
+  'Mobile App Development':         ['iOS', 'Android', 'Cross-platform', 'PWA'],
+  'Data Center Services':           ['Colocation', 'Hosting', 'Managed Servers', 'DR'],
+  'Miscellaneous Products':         ['Unclassified Products'],
+  'Miscellaneous Services':         ['Unclassified Services'],
+};
+
+/** Flat list of category strings for Select dropdowns (no duplicates). */
+export const CATEGORY_LIST: string[] = [...PRODUCT_CATEGORIES];

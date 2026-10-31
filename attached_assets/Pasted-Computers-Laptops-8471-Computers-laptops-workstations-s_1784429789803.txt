@@ -1,0 +1,56 @@
+Computers & Laptops	8471	Computers, laptops, workstations, servers
+Networking	8517	Routers, switches, access points, firewalls
+Computer Peripherals	8471	Keyboards, mouse, monitors, webcams, printers
+Printers & Scanners	8443	Printers, scanners, multifunction devices
+Storage Devices	8523	HDD, SSD, USB drives, memory cards
+Software	SAC 998314	Software licensing & implementation
+Cloud Services	SAC 998315	Cloud hosting, SaaS, storage
+Office Supplies	4820	Files, registers, office paper
+Stationery	4820	Pens, notebooks, diaries, envelopes
+Furniture	9403	Office furniture
+Office Chairs	9401	Chairs, stools
+Electrical Equipment	8536	Switches, sockets, electrical fittings
+Electrical Appliances	8509	Small office appliances
+Lighting	9405	LED lights, lamps
+CCTV & Security	8525	CCTV cameras and accessories
+Access Control	8531	Biometric, attendance, access systems
+UPS & Batteries	8507	UPS batteries, rechargeable batteries
+Power Backup	8504	UPS, inverters
+Telecommunication	8517	IP phones, communication devices
+Audio & Video Equipment	8518	Speakers, microphones
+Projectors & Displays	8528	Projectors, TVs, display panels
+Pantry Supplies	2106	General pantry items
+Beverages	2202	Tea, coffee, soft drinks
+Cleaning Supplies	3402	Cleaning chemicals, detergents
+Housekeeping Materials	9603	Brooms, brushes, mops
+Medical Supplies	3004	Medicines and consumables
+Medical Equipment	9018	Medical instruments
+Safety Equipment	6506	Helmets, PPE
+Fire Safety	8424	Fire extinguishers
+Industrial Tools	8205	Hand tools
+Hardware & Fasteners	7318	Nuts, bolts, screws
+Building Materials	6810	Cement products, construction materials
+Plumbing Materials	3917	Pipes, fittings
+Paints & Chemicals	3208	Paints, coatings
+Packaging Materials	3923	Plastic packaging
+Paper Products	4802	Copier paper, printing paper
+Printing & Branding	SAC 998912	Printing services
+Logistics & Transportation	SAC 9965	Goods transport services
+Courier Services	SAC 996812	Courier and parcel services
+Installation Services	SAC 9954	Installation work
+Repair & Maintenance	SAC 998719	Equipment maintenance
+AMC (Annual Maintenance Contract)	SAC 998719	Maintenance contracts
+Consulting Services	SAC 9983	Professional consulting
+Recruitment Services	SAC 998513	Staffing services
+Training Services	SAC 999293	Corporate training
+Security Services	SAC 998529	Security guards and surveillance
+Facility Management	SAC 998599	Facility management
+Housekeeping Services	SAC 998531	Cleaning services
+Internet Services	SAC 998422	ISP services
+Telecom Services	SAC 998412	Telephone and communication services
+Digital Marketing	SAC 998361	SEO, social media, advertising
+Website Development	SAC 998313	Web application development
+Mobile App Development	SAC 998313	Mobile application development
+Data Center Services	SAC 998315	Colocation and hosting
+Miscellaneous Products	9999	Products not yet classified (temporary only)
+Miscellaneous Services	SAC 999799	Services not yet classified (temporary only)

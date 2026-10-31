@@ -1,0 +1,345 @@
+# Modify Procurement Workflow – Client Selects Vendor Before Add to Cart
+
+## Objective
+
+Refactor the procurement workflow so that **vendor selection happens on the Shop page before a product is added to the cart.**
+
+Remove the automatic Vendor Selection Engine from the Order Details page. The selected vendor should travel with the cart item, order item, and purchase order throughout the workflow.
+
+This change should affect the entire application including Shop, Cart, Checkout, Orders, Purchase Orders, Stock Management, Database, APIs, and UI.
+
+---
+
+# New End-to-End Workflow
+
+## Phase 1 – Shop
+
+Client browses the client-specific product catalog.
+
+Each product card must display:
+
+* Product Name
+* Client Selling Price
+* Available Vendors
+* Vendor Price
+* Vendor Rating
+* Vendor Lead Time
+* Available Stock
+* Expected Delivery
+* Vendor Badge (Preferred / Best Price / Fastest)
+
+### Vendor Selection Panel (Updated Requirement)
+
+When selecting a vendor, the UI must show:
+
+* **Recommended Vendor (highlighted at top)**
+* Remaining Vendors listed separately in a **Vendor Selection Tab**
+
+The vendor selection interface must be split into:
+
+### 1. Recommended Vendor Section
+
+* Automatically highlighted based on system logic
+* Displayed first
+* Clearly marked as **Recommended**
+
+### 2. Vendor Selection Tab
+
+* Lists all remaining vendors
+* Allows manual selection of any vendor
+* Shows same vendor attributes:
+
+  * Vendor Name
+  * Vendor Rating
+  * Landed Cost
+  * Base Price
+  * Available Stock
+  * Lead Time
+  * Delivery Days
+  * Preferred Vendor Badge
+
+The client **must select one vendor** before clicking **Add to Cart**.
+
+The Add to Cart button must remain disabled until a vendor is selected.
+
+When Add to Cart is clicked:
+
+* Reserve stock against the selected vendor
+* Save the selected Vendor ID inside the cart item
+* Lock the vendor for that cart line
+* Save vendor price snapshot
+* Save landed cost snapshot
+* Save GST and HSN snapshot
+
+Do NOT execute any automatic vendor selection engine.
+
+---
+
+## Phase 2 – Cart
+
+Each cart item must display:
+
+* Selected Vendor
+* Vendor Rating
+* Lead Time
+* Vendor Stock
+* Vendor Price
+* Landed Cost
+
+The client may:
+
+* Change quantity
+* Remove item
+
+Changing quantity updates reservation only for the selected vendor.
+
+Changing vendor should only be possible from the Shop page (or via an explicit "Change Vendor" action that releases the old reservation and creates a new one).
+
+---
+
+## Phase 3 – Checkout
+
+No vendor selection occurs.
+
+Only collect:
+
+* Delivery Address
+* Payment Terms
+* Delivery Notes
+
+Review order and submit.
+
+---
+
+## Phase 4 – Place Order
+
+When Place Order is clicked:
+
+Create:
+
+* Master Order
+* Order Items
+
+Each Order Item must already contain:
+
+* Vendor ID
+* Vendor Name
+* Vendor Price
+* Landed Cost
+* Reserved Quantity
+
+DO NOT execute:
+
+* Vendor Recommendation
+* Vendor Scoring
+* Cheapest First Fill
+* Vendor Allocation Engine
+
+These are removed from the order creation workflow.
+
+---
+
+## Phase 5 – Automatically Create Draft Purchase Orders
+
+Immediately after the order is successfully created:
+
+Automatically generate Draft Purchase Orders grouped by Vendor.
+
+Example:
+
+Order ORD-000012
+
+Laptop -> Vendor A
+Mouse -> Vendor B
+
+Generate:
+
+PO-00051 (Draft) Vendor A
+PO-00052 (Draft) Vendor B
+
+Each Draft PO contains:
+
+* Vendor
+* Products
+* Quantities
+* Prices
+* Taxes
+* Delivery Address
+* Client Details
+
+Status:
+
+Draft
+
+Do NOT send to vendor.
+Do NOT email vendor.
+Do NOT notify vendor.
+
+---
+
+## Phase 6 – Procurement Review
+
+Add a new Draft Purchase Orders workflow.
+
+Admin opens Draft PO.
+
+Admin can:
+
+* Review products
+* Review quantities
+* Review pricing
+* Review taxes
+* Review stock
+* Edit notes
+* Approve
+* Reject
+* Cancel
+
+The selected vendor cannot be changed here unless the Draft PO is cancelled and recreated through a controlled reallocation process.
+
+---
+
+## Phase 7 – Confirm Purchase Order
+
+When Admin clicks "Confirm Purchase Order":
+
+* Status changes from Draft -> Confirmed
+* Generate Final PDF
+* Send Email to Vendor
+* Send Vendor Notification
+* Create Audit Log
+* Convert Reserved Stock -> Allocated Stock
+* Lock PO for further edits
+
+Only after confirmation should procurement commitment become final.
+
+---
+
+# Remove These Features
+
+Remove Vendor Selection Engine execution after Place Order.
+
+Remove Recommended Vendor Allocation from Order Details.
+
+Remove Vendor Recommendation popup.
+
+Remove Cheapest First Fill from Order workflow.
+
+Remove Composite Vendor Scoring during order creation.
+
+Remove Procurement Vendor Allocation screen from Order Details.
+
+Vendor allocation should already be completed by the client during shopping.
+
+---
+
+# Shop Page Changes
+
+Each product card should include a Vendor Selection panel.
+
+Display vendors in a table showing:
+
+* Vendor Name
+* Vendor Rating
+* Landed Cost
+* Base Price
+* Available Stock
+* Lead Time
+* Delivery Days
+* Preferred Vendor Badge
+
+### Vendor Selection UI Requirement
+
+* Show **Recommended Vendor at the top (highlighted)**
+* Show remaining vendors inside a **Vendor Selection Tab**
+* Allow selecting exactly one vendor per product
+* Highlight the selected vendor
+
+Enable Add to Cart only after a vendor is selected.
+
+---
+
+# Cart Database Changes
+
+Each Cart Item must store:
+
+* Product ID
+* Vendor ID
+* Vendor Name
+* Reserved Quantity
+* Vendor Price Snapshot
+* Landed Cost Snapshot
+* GST Snapshot
+* HSN Snapshot
+
+---
+
+# Order Database Changes
+
+Each Order Item must store:
+
+* Vendor ID
+* Vendor Name
+* Vendor Price
+* Landed Cost
+* Reserved Quantity
+* Stock Reservation ID
+
+No vendor lookup should occur after order creation.
+
+---
+
+# Purchase Order Workflow
+
+Draft
+↓
+Admin Review
+↓
+Confirmed
+↓
+Vendor Notified
+↓
+Accepted
+↓
+Dispatched
+↓
+Delivered
+↓
+Completed
+
+---
+
+# Stock Lifecycle
+
+Available Stock
+↓
+Client selects Vendor
+↓
+Reserve Stock
+↓
+Place Order
+↓
+Draft Purchase Order Created
+↓
+Admin Confirms Purchase Order
+↓
+Reserved -> Allocated
+↓
+Vendor Dispatch
+↓
+Delivered
+
+---
+
+# Validation Rules
+
+* Vendor selection is mandatory before Add to Cart.
+* Add to Cart is disabled until a vendor is selected.
+* Reserved stock belongs only to the selected vendor.
+* Draft Purchase Orders are automatically generated after successful order placement.
+* Draft Purchase Orders must never be sent to vendors automatically.
+* Vendors receive Purchase Orders only after procurement confirmation.
+* All stock reservations must remain consistent from Shop to Delivery.
+* Preserve complete audit history for vendor selection, stock reservations, Draft PO creation, and PO confirmation.
+
+Implement these changes across the UI, backend APIs, database models, business logic, and workflow while preserving all existing functionality that is not explicitly modified.

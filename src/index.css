@@ -1,0 +1,905 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Design System - strict tokens (hex values where appropriate) */
+    --ds-primary: #2563eb;
+    --ds-primary-hover: #1d4ed8;
+    --ds-primary-light: #dbeafe;
+    --background-hex: #f8fafc;
+    --card-hex: #ffffff;
+    --border-hex: #e5e7eb;
+    --divider-hex: #f1f5f9;
+    --text-primary-hex: #111827;
+    --text-secondary-hex: #6b7280;
+    --text-muted-hex: #9ca3af;
+    --success-hex: #16a34a;
+    --success-light-hex: #dcfce7;
+    --warning-hex: #f59e0b;
+    --warning-light-hex: #fef3c7;
+    --error-hex: #dc2626;
+    --error-light-hex: #fee2e2;
+
+    /* HSL tokens mapped 1:1 to the Nido Tech enterprise palette (STYLE_GUIDE.md) */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 221 39% 11%; /* #111827 */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 221 39% 11%; /* #111827 */
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 39% 11%;
+    --primary: 221 83% 53%; /* #2563EB */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 221 39% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
+    --accent: 214 95% 93%; /* #DBEAFE primary light */
+    --accent-foreground: 221 83% 53%;
+    --destructive: 0 72% 51%; /* #DC2626 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%; /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 221 39% 11%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 93%;
+    --sidebar-accent-foreground: 221 39% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 221 83% 53%;
+    --header-background: 0 0% 100%;
+    --header-foreground: 221 39% 11%;
+    --header-border: 220 13% 91%;
+    --header-muted: 220 9% 46%;
+
+    --success: 142 76% 36%; /* #16A34A */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%; /* #F59E0B */
+    --warning-foreground: 0 0% 100%;
+    --info: 199 89% 48%; /* #0EA5E9 */
+    --info-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 215 25% 8%;
+    --foreground: 210 20% 90%;
+    --card: 215 25% 12%;
+    --card-foreground: 210 20% 90%;
+    --popover: 215 25% 12%;
+    --popover-foreground: 210 20% 90%;
+    --primary: 213 55% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 215 25% 18%;
+    --muted-foreground: 210 20% 75%; /* Increased from 60% to 75% for better readability */
+    --accent: 215 25% 18%;
+    --accent-foreground: 210 20% 90%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 25% 22%;
+    --input: 215 25% 22%;
+    --ring: 213 55% 55%;
+    --sidebar-background: 215 30% 10%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 210 60% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 30% 16%;
+    --sidebar-accent-foreground: 210 20% 85%;
+    --sidebar-border: 215 25% 18%;
+    --sidebar-ring: 213 55% 55%;
+    --header-background: 215 30% 14%;
+    --header-foreground: 0 0% 100%;
+    --header-border: 215 20% 24%;
+    --header-muted: 210 20% 86%;
+    --success: 142 60% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 80% 55%;
+    --warning-foreground: 0 0% 100%;
+    --info: 200 70% 55%;
+    --info-foreground: 0 0% 100%;
+  }
+
+  .comfort {
+    --background: 40 30% 96%;
+    --foreground: 30 20% 20%;
+    --card: 40 25% 99%;
+    --card-foreground: 30 20% 20%;
+    --popover: 40 25% 99%;
+    --popover-foreground: 30 20% 20%;
+    --primary: 30 50% 40%;
+    --primary-foreground: 40 30% 98%;
+    --secondary: 40 25% 92%;
+    --secondary-foreground: 30 20% 20%;
+    --muted: 40 20% 93%;
+    --muted-foreground: 30 15% 45%;
+    --accent: 40 25% 90%;
+    --accent-foreground: 30 20% 20%;
+    --destructive: 0 55% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 20% 86%;
+    --input: 35 20% 86%;
+    --ring: 30 50% 40%;
+    --sidebar-background: 30 25% 22%;
+    --sidebar-foreground: 40 20% 88%;
+    --sidebar-primary: 35 50% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 25% 28%;
+    --sidebar-accent-foreground: 40 20% 88%;
+    --sidebar-border: 30 20% 28%;
+    --sidebar-ring: 30 50% 40%;
+    --header-background: 30 30% 24%;
+    --header-foreground: 40 20% 96%;
+    --header-border: 30 24% 32%;
+    --header-muted: 40 18% 88%;
+    --success: 142 55% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 75% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 200 60% 50%;
+    --info-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    color: hsl(var(--foreground));
+  }
+
+  h1 {
+    font-family: "Poppins", "Inter", system-ui, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+  }
+
+  h2 {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  p,
+  .text,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: "Inter", system-ui, sans-serif;
+  }
+}
+
+/*
+  Nido Tech typography scale (source: Font_and_styles_for_Nido_Tech).
+  Use these utility classes instead of ad-hoc text-[Npx] values so the whole
+  app stays on-scale. See replit.md / STYLE_GUIDE.md for the full spec.
+*/
+@layer utilities {
+  .text-h1 {
+    font-family: "Poppins", "Inter", system-ui, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+  }
+  .text-h2 {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .text-h3 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .text-body-lg {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+  .text-body {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+  .text-body-sm {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+  .text-label {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .text-helper {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text-muted-hex);
+  }
+  .text-button {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .text-table {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+}
+
+@layer utilities {
+  /* Minimal gap standard for all pages - consistent 2px (≈2-3mm) */
+  .page-container {
+    @apply w-full min-h-screen bg-background p-2;
+  }
+  
+  .page-header {
+    @apply bg-transparent border-b border-border;
+  }
+  
+  .page-header-content {
+    @apply w-full px-2 py-4 flex justify-between text-foreground;
+  }
+  
+  .page-content {
+    @apply w-full px-2 py-2 text-foreground;
+  }
+  
+  .content-grid {
+    @apply gap-2;
+  }
+  
+  /* Enhanced scrollbar styling for both light and dark modes */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground));
+    background-clip: padding-box;
+  }
+  
+  /* Dark mode specific scrollbar styling */
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(215 25% 30%);
+  }
+  
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(215 25% 40%);
+  }
+
+  .btn-creative-action {
+    position: relative;
+    overflow: hidden;
+    border-color: hsl(var(--primary) / 0.35);
+    background:
+      radial-gradient(
+        130% 120% at 0% 0%,
+        rgba(255, 255, 255, 0.9) 0%,
+        transparent 48%
+      ),
+      linear-gradient(
+        120deg,
+        rgba(16, 185, 129, 0.14),
+        rgba(59, 130, 246, 0.16),
+        rgba(14, 165, 233, 0.12)
+      );
+    box-shadow:
+      0 1px 1px rgba(15, 23, 42, 0.05),
+      0 8px 22px rgba(30, 64, 175, 0.12);
+    transition:
+      transform 180ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .btn-creative-action:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 2px 2px rgba(15, 23, 42, 0.06),
+      0 12px 28px rgba(14, 116, 144, 0.18);
+  }
+
+  .btn-creative-action::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 28%,
+      rgba(255, 255, 255, 0.6) 50%,
+      transparent 72%
+    );
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+
+  .btn-creative-action:hover::after {
+    animation: action-sheen 900ms ease;
+  }
+
+  @keyframes action-sheen {
+    to {
+      transform: translateX(120%);
+    }
+  }
+  
+  /* ═══════════════════════════════════════════════════════════════════════════ */
+  /* Dark Mode Visibility & Contrast Fixes */
+  /* ═══════════════════════════════════════════════════════════════════════════ */
+  
+  /* Table styling for dark mode */
+  .dark table {
+    @apply bg-background text-foreground;
+  }
+  
+  .dark thead {
+    @apply bg-secondary border-border;
+  }
+  
+  .dark thead th {
+    @apply text-foreground font-semibold border-b border-border;
+  }
+  
+  .dark tbody tr {
+    @apply bg-transparent border-b border-border/30 hover:bg-secondary/50;
+  }
+  
+  .dark tbody tr:hover {
+    @apply bg-secondary/50;
+  }
+  
+  .dark tbody tr td {
+    @apply text-foreground bg-transparent;
+  }
+  
+  .dark tbody tr:hover td {
+    @apply text-foreground bg-transparent;
+  }
+  
+  /* Tab/Navigation styling */
+  .dark [role="tab"],
+  .dark [role="tablist"] button {
+    @apply text-muted-foreground hover:text-foreground border-transparent hover:border-muted;
+  }
+  
+  .dark [role="tab"][aria-selected="true"],
+  .dark [role="tablist"] button[aria-selected="true"] {
+    @apply text-foreground border-primary font-semibold;
+  }
+  
+  /* Button & Link styling */
+  .dark button,
+  .dark a {
+    @apply text-foreground;
+  }
+  
+  .dark button:hover,
+  .dark a:hover {
+    @apply text-foreground opacity-80;
+  }
+  
+  .dark button[disabled],
+  .dark a[aria-disabled="true"] {
+    @apply text-muted-foreground opacity-50;
+  }
+  
+  /* Form inputs for dark mode */
+  .dark input, 
+  .dark textarea,
+  .dark select,
+  .dark [type="text"],
+  .dark [type="email"],
+  .dark [type="password"],
+  .dark [type="number"],
+  .dark [type="search"] {
+    @apply bg-secondary text-foreground border border-border;
+  }
+  
+  .dark input:focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    @apply ring-primary ring-2;
+  }
+  
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    @apply text-muted-foreground;
+  }
+  
+  /* Card styling for dark mode */
+  .dark [role="dialog"],
+  .dark [role="alertdialog"],
+  .dark .card,
+  .dark [class*="Card"] {
+    @apply bg-card text-foreground border border-border;
+  }
+  
+  /* Dropdown & Menu styling */
+  .dark [role="menu"],
+  .dark [role="listbox"],
+  .dark [role="combobox"],
+  .dark .dropdown,
+  .dark [class*="Dropdown"],
+  .dark [class*="Menu"] {
+    @apply bg-card text-foreground border border-border;
+  }
+  
+  .dark [role="option"],
+  .dark [role="menuitem"],
+  .dark [role="menuitemcheckbox"],
+  .dark [role="menuitemradio"] {
+    @apply text-foreground hover:bg-secondary hover:text-foreground;
+  }
+  
+  .dark [role="option"][aria-selected="true"],
+  .dark [role="menuitem"][aria-selected="true"],
+  .dark [role="menuitem"].selected {
+    @apply bg-secondary text-foreground font-semibold;
+  }
+  
+  /* Badge & Status styling */
+  .dark .badge,
+  .dark [class*="Badge"] {
+    @apply bg-secondary text-foreground border-border;
+  }
+  
+  /* Tooltip & Popover */
+  .dark [role="tooltip"],
+  .dark [class*="Tooltip"],
+  .dark [class*="Popover"] {
+    @apply bg-card text-foreground border border-border shadow-lg;
+  }
+  
+  /* Lists and navigation */
+  .dark li,
+  .dark li a,
+  .dark li button {
+    @apply text-foreground;
+  }
+  
+  .dark li:hover,
+  .dark li a:hover,
+  .dark li button:hover {
+    @apply bg-secondary/50 text-foreground;
+  }
+  
+  /* Ensure configuration page is readable */
+  .dark .min-h-screen {
+    @apply bg-background text-foreground;
+  }
+  
+  /* Configuration tiles dark mode enhancement */
+  .dark [class*="bg-card"] {
+    @apply bg-card text-foreground;
+  }
+  
+  .dark [class*="bg-card"] h3 {
+    @apply text-foreground font-semibold;
+  }
+  
+  .dark [class*="bg-card"] p {
+    @apply text-muted-foreground opacity-95;
+  }
+  
+  /* Enhanced text visibility in dark mode cards */
+  .dark .rounded-xl {
+    @apply bg-card border-border text-foreground;
+  }
+  
+  .dark .rounded-xl h3 {
+    @apply text-foreground font-semibold text-lg;
+  }
+  
+  .dark .rounded-xl p {
+    @apply text-muted-foreground opacity-100;
+  }
+  
+  /* Specific tile enhancements */
+  .dark div[class*="rounded-xl"][class*="border"] {
+    @apply bg-card border border-border;
+  }
+  
+  .dark div[class*="rounded-xl"][class*="border"] h3,
+  .dark div[class*="rounded-xl"][class*="border"] h2 {
+    @apply text-foreground font-semibold;
+  }
+  
+  .dark div[class*="rounded-xl"][class*="border"] p {
+    @apply text-muted-foreground opacity-100 font-normal;
+  }
+}
+
+@media print {
+  #print-area,
+  #dc-print-area,
+  [id$="print-area"] {
+    position: relative;
+    background:
+      radial-gradient(
+        160% 120% at 0% 0%,
+        rgba(56, 189, 248, 0.08),
+        transparent 45%
+      ),
+      radial-gradient(
+        180% 140% at 100% 0%,
+        rgba(16, 185, 129, 0.08),
+        transparent 50%
+      ),
+      #ffffff !important;
+  }
+
+  #print-area::before,
+  #dc-print-area::before,
+  [id$="print-area"]::before {
+    content: "Nido Tech";
+    position: absolute;
+    right: 16mm;
+    bottom: 12mm;
+    font-size: 18px;
+    letter-spacing: 0.24em;
+    color: rgba(37, 99, 235, 0.16);
+    transform: rotate(-8deg);
+    pointer-events: none;
+  }
+}
+/* ── Dark-mode global overrides ───────────────────────────────────────────────
+   Pages and components that use hardcoded Tailwind gray/white classes are
+   overridden here so every surface respects dark mode without requiring
+   individual file edits across the entire codebase.
+   These rules only fire when the .dark class is on <html>.
+────────────────────────────────────────────────────────────────────────────── */
+.dark .bg-white,
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: hsl(var(--background)) !important;
+}
+
+.dark .bg-gray-200,
+.dark .bg-gray-300 {
+  background-color: hsl(var(--muted)) !important;
+}
+
+/* Same treatment for the Tailwind "slate" palette, used interchangeably with
+   "gray" across pages (Payment Receipts, Services, Shop) — previously
+   unhandled, which is why those surfaces stayed white/light in dark mode. */
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
+  background-color: hsl(var(--background)) !important;
+}
+
+.dark .bg-slate-200,
+.dark .bg-slate-300 {
+  background-color: hsl(var(--muted)) !important;
+}
+
+.dark [class*="border-gray-"],
+.dark [class*="border-slate-"] {
+  border-color: hsl(var(--border)) !important;
+}
+
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-black,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-950 {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: hsl(var(--foreground) / 0.85) !important;
+}
+
+.dark .text-gray-500,
+.dark .text-gray-400,
+.dark .text-slate-500,
+.dark .text-slate-400,
+.dark .text-slate-200 {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-gray-200:hover,
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-100:hover {
+  background-color: hsl(var(--muted)) !important;
+}
+
+.dark .hover\:text-gray-900:hover,
+.dark .hover\:text-gray-800:hover {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Very light accent tints (blue-50, etc.) used for "selected" states —
+   these read as near-white patches on a dark background, so darken them
+   into a translucent primary tint that still communicates "selected". */
+.dark .bg-blue-50,
+.dark .hover\:bg-blue-50:hover {
+  background-color: hsl(var(--primary) / 0.15) !important;
+}
+
+/* Cards / panels that use bg-white explicitly */
+.dark [class~="bg-white"] {
+  background-color: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+}
+
+/* Inputs that use bg-white */
+.dark input.bg-white,
+.dark textarea.bg-white,
+.dark select.bg-white {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Placeholder text */
+.dark ::placeholder {
+  color: hsl(var(--muted-foreground)) !important;
+  opacity: 1;
+}
+
+/* min-h-screen pages */
+.dark .min-h-screen {
+  background-color: hsl(var(--background));
+}
+
+/* Configuration page headings in dark mode */
+.dark h1,
+.dark h2,
+.dark h3 {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Ensure all text in tabs is visible */
+.dark [role="tab"],
+.dark [role="tablist"] button {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.dark [role="tab"][aria-selected="true"],
+.dark [role="tablist"] button[aria-selected="true"] {
+  color: hsl(var(--primary)) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Comprehensive Dark Mode Overrides for Inline Styled Elements */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* All white/light backgrounds in dark mode.
+   NOTE: browsers normalize inline hex/named colors set via the React `style`
+   prop into `rgb(...)` when they serialize the element's style attribute, so
+   the hex-string selectors below never actually match in a live DOM. The
+   rgb()-based selectors are the ones doing the real work here — keep both. */
+.dark [style*="background: #ffffff"],
+.dark [style*="background: #fff"],
+.dark [style*="background: white"],
+.dark [style*="background:#ffffff"],
+.dark [style*="background:#fff"],
+.dark [style*="background: rgb(255, 255, 255)"],
+.dark [style*="background-color: rgb(255, 255, 255)"] {
+  background-color: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Dark heading text colors */
+.dark [style*="color: #111827"],
+.dark [style*="color: #1f2937"],
+.dark [style*="color: #374151"],
+.dark [style*="color: #475569"],
+.dark [style*="color: #000000"],
+.dark [style*="color: #000"],
+.dark [style*="color: rgb(17, 24, 39)"],
+.dark [style*="color: rgb(31, 41, 55)"],
+.dark [style*="color: rgb(55, 65, 81)"],
+.dark [style*="color: rgb(71, 85, 105)"],
+.dark [style*="color: rgb(0, 0, 0)"] {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Muted/secondary text colors */
+.dark [style*="color: #6b7280"],
+.dark [style*="color: #9ca3af"],
+.dark [style*="color: #d1d5db"],
+.dark [style*="color: #e5e7eb"],
+.dark [style*="color: #f3f4f6"],
+.dark [style*="color: #f9fafb"],
+.dark [style*="color: #666666"],
+.dark [style*="color: #999999"],
+.dark [style*="color: #aaaaaa"],
+.dark [style*="color: rgb(107, 114, 128)"],
+.dark [style*="color: rgb(156, 163, 175)"],
+.dark [style*="color: rgb(209, 213, 219)"],
+.dark [style*="color: rgb(229, 231, 235)"],
+.dark [style*="color: rgb(243, 244, 246)"],
+.dark [style*="color: rgb(249, 250, 251)"],
+.dark [style*="color: rgb(102, 102, 102)"],
+.dark [style*="color: rgb(153, 153, 153)"],
+.dark [style*="color: rgb(170, 170, 170)"] {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Light gray backgrounds (convert to secondary) */
+.dark [style*="background: #f9fafb"],
+.dark [style*="background: #f3f4f6"],
+.dark [style*="background: #eeeeee"],
+.dark [style*="background: #f5f5f5"],
+.dark [style*="background: #fafafa"],
+.dark [style*="background: #e5e7eb"],
+.dark [style*="background: #d1d5db"],
+.dark [style*="background: rgb(249, 250, 251)"],
+.dark [style*="background: rgb(243, 244, 246)"],
+.dark [style*="background: rgb(238, 238, 238)"],
+.dark [style*="background: rgb(245, 245, 245)"],
+.dark [style*="background: rgb(250, 250, 250)"],
+.dark [style*="background: rgb(229, 231, 235)"],
+.dark [style*="background: rgb(209, 213, 219)"],
+.dark [style*="background-color: rgb(249, 250, 251)"],
+.dark [style*="background-color: rgb(243, 244, 246)"],
+.dark [style*="background-color: rgb(250, 250, 250)"],
+.dark [style*="background-color: rgb(229, 231, 235)"] {
+  background-color: hsl(var(--secondary)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Light borders (convert to border token) */
+.dark [style*="border:"],
+.dark [style*="border-top:"],
+.dark [style*="border-bottom:"],
+.dark [style*="border-left:"],
+.dark [style*="border-right:"] {
+  border-color: hsl(var(--border)) !important;
+}
+
+.dark [style*="borderColor:"],
+.dark [style*="border-color:"] {
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Blue accent colors - convert to primary */
+.dark [style*="color: #2563eb"],
+.dark [style*="color: #3b82f6"],
+.dark [style*="color: #60a5fa"],
+.dark [style*="color: #1e40af"],
+.dark [style*="color: #0066cc"],
+.dark [style*="color: #0052cc"],
+.dark [style*="color: #0052a3"] {
+  color: hsl(var(--primary)) !important;
+}
+
+.dark [style*="background: #2563eb"],
+.dark [style*="background: #3b82f6"],
+.dark [style*="background: #60a5fa"],
+.dark [style*="background: #dbeafe"],
+.dark [style*="background: #eff6ff"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+/* Modal and overlay backgrounds */
+.dark [class*="modal"] [style*="background"],
+.dark [class*="dialog"] [style*="background"],
+.dark [class*="overlay"] [style*="background"] {
+  background-color: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Global responsive safety net: keep media and tables from forcing
+   horizontal overflow on narrow/odd-sized screens. */
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  max-width: 100%;
+}
+
+body {
+  overscroll-behavior: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.enterprise-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.enterprise-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.35);
+  border-radius: 999px;
+}
+
+.enterprise-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark .enterprise-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(215 25% 30%);
+}
+
+.dark .enterprise-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(215 25% 40%);
+}
+
+/* Any scrollable area without an explicit scrollbar utility class still
+   gets a dark-mode-appropriate scrollbar (Firefox + Chromium/WebKit). */
+.dark {
+  scrollbar-color: hsl(215 25% 30%) transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: hsl(215 25% 30%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(215 25% 40%);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}

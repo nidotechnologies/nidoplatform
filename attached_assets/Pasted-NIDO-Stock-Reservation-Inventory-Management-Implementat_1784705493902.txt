@@ -1,0 +1,306 @@
+NIDO Stock Reservation & Inventory Management Implementation Prompt
+
+Implement an enterprise-grade stock reservation system in the NIDO procurement platform. Do not redesign any UI or change any existing workflows. Only update the backend logic and connect the existing UI to the correct stock calculations.
+
+Objective
+
+Separate Physical Stock from Reserved Stock so that:
+
+Clients always see the correct available quantity.
+Vendor inventory is only deducted after a Purchase Order (PO) is raised.
+Overselling is prevented.
+Existing Vendor Selection and PO Generation modules continue to work.
+Stock Model
+
+Every Vendor Product must maintain the following values:
+
+Physical Stock (actual inventory with vendor)
+Reserved Stock (quantity reserved by pending client orders)
+Available Stock (calculated, never manually edited)
+
+Formula:
+
+Available Stock = Physical Stock - Reserved Stock
+
+Do not store Available Stock separately if it can be calculated dynamically.
+
+Step 1 – Vendor Product (Stock IN)
+
+Location:
+
+Vendors → Vendor Details → Products
+
+No UI changes.
+
+When admin edits stock:
+
+Update only Physical Stock.
+Reserved Stock must remain unchanged.
+Recalculate Available Stock automatically.
+
+Example:
+
+Physical Stock = 1500
+
+Reserved = 300
+
+Available = 1200
+
+Step 2 – Shop Page
+
+Location:
+
+Sidebar → Shop
+
+Do not change the UI.
+
+The "Available Stock" displayed on every product card must always use:
+
+Available Stock = Total Physical Stock - Total Reserved Stock
+
+where totals are calculated across all vendors supplying that product.
+
+Example:
+
+Vendor A = 1500
+
+Vendor B = 700
+
+Vendor C = 800
+
+Physical Total = 3000
+
+Reserved Total = 500
+
+Shop displays:
+
+Available Stock = 2500
+
+Do not display Physical Stock to clients.
+
+Step 3 – Add to Cart
+
+Adding a product to the cart must NOT deduct Physical Stock.
+
+Cart operations should not permanently modify inventory.
+
+Step 4 – Checkout / Order Creation
+
+When the client places an order:
+
+Example:
+
+Order Quantity = 1000
+
+Immediately reserve stock.
+
+Increase Reserved Stock by the ordered quantity.
+
+Physical Stock remains unchanged.
+
+Example:
+
+Before:
+
+Physical = 3000
+
+Reserved = 0
+
+Available = 3000
+
+After Order:
+
+Physical = 3000
+
+Reserved = 1000
+
+Available = 2000
+
+The Shop page must instantly display:
+
+Available Stock = 2000
+
+This prevents other customers from ordering the same quantity.
+
+Step 5 – Pending Orders
+
+Orders waiting for approval must only reserve stock.
+
+Do NOT deduct vendor Physical Stock.
+
+Order Status:
+
+Pending Approval
+
+Reserved stock remains active.
+
+Step 6 – Vendor Selection
+
+Location:
+
+Orders → Vendor Selection
+
+Do not redesign this page.
+
+Continue using the existing allocation workflow.
+
+While selecting vendors:
+
+Display each vendor's current Available Stock using:
+
+Vendor Available = Physical Stock - Reserved Stock
+
+Do not display incorrect order quantities.
+
+The Vendor Selection screen must always use real vendor availability.
+
+Step 7 – Raise Purchase Order (Stock OUT)
+
+This is the ONLY point where Physical Stock is deducted.
+
+When PO is raised:
+
+Deduct allocated quantity from Physical Stock.
+Reduce Reserved Stock by the same quantity.
+Recalculate Available Stock.
+
+Example:
+
+Before PO:
+
+Vendor A
+
+Physical = 1500
+
+Reserved = 1000
+
+Available = 500
+
+Raise PO for 1000
+
+After:
+
+Physical = 500
+
+Reserved = 0
+
+Available = 500
+
+Notice:
+
+The Shop stock does NOT change at this moment because the quantity was already reserved during order creation.
+
+Step 8 – Order Cancelled Before PO
+
+If the order is cancelled before PO generation:
+
+Decrease Reserved Stock.
+
+Restore Shop Available Stock immediately.
+
+Example:
+
+Reserved:
+
+1000 → 0
+
+Physical remains unchanged.
+
+Shop:
+
+2000 → 3000
+
+Step 9 – PO Cancelled
+
+If a generated PO is cancelled:
+
+Restore Physical Stock.
+
+Reduce Purchased Allocation.
+
+Restore Available Stock.
+
+Example:
+
+Before Cancel:
+
+Physical = 500
+
+Reserved = 0
+
+After Cancel:
+
+Physical = 1500
+
+Reserved = 0
+
+Available = 1500
+
+Step 10 – Manual Stock Update
+
+Location:
+
+Vendor → Products
+
+Existing UI remains unchanged.
+
+Editing stock updates only Physical Stock.
+
+Reserved Stock must never be modified manually.
+
+Available Stock must be recalculated automatically.
+
+Shop Behaviour
+
+Example:
+
+Initial:
+
+Physical Total = 3000
+
+Reserved = 0
+
+Shop:
+
+Available = 3000
+
+Client places order:
+
+1000
+
+Shop immediately shows:
+
+Available = 2000
+
+Admin raises PO:
+
+Shop still shows:
+
+Available = 2000
+
+Vendor inventory is now actually deducted.
+
+If order is cancelled before PO:
+
+Shop returns to:
+
+Available = 3000
+
+If PO is cancelled:
+
+Vendor stock is restored.
+
+Shop again shows:
+
+Available = 3000
+
+Important Rules
+Never deduct Physical Stock during Cart or Checkout.
+Only reserve stock when an order is placed.
+Only deduct Physical Stock when the Purchase Order is raised.
+Cancelling an order before PO must release Reserved Stock.
+Cancelling a PO must restore Physical Stock.
+The Shop must always display Available Stock (Physical − Reserved).
+Vendor Selection must always use the vendor's actual Available Stock.
+Do not modify any existing UI, layouts, navigation, forms, or workflows.
+Keep all existing Vendor Selection, Purchase Order Generation, Order Management, and Procurement logic intact. Only enhance the inventory calculations and stock state management to support enterprise-grade stock reservation.

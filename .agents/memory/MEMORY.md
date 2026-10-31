@@ -1,0 +1,20 @@
+- [Config Engine Architecture](config-engine.md) — global config context plus client detail General/Price Settings drafts that commit only on explicit Save Changes.
+- [Vendor Selection at Shop Flow](vendor-selection-flow.md) — client locks vendor on Shop page pre-cart; CartItem carries vendor snapshot; autoCreateDraftPOs() fires in addOrder(); OrderDetailsPage "Draft Purchase Orders" tab for Confirm/Reject.
+- [Live auto-assignment configuration](live-auto-assignment-config.md) — tier rules for real orders persist server-side; mock assignment history and test runs stay isolated in the browser.
+- [Report module output rules](report-workbook-view-availability.md) — keep workbook ordering; item-list columns show product names only and duplicate columns are removed.
+- [Purchase Order Flow Architecture](po-flow-architecture.md) — full PO creation flow: price-engine vendor selection, PDF via jsPDF, shared localStorage store, VendorOrdersPage merge strategy.
+- [Nido Tech design system](nido-design-system.md) — brand spec lives in STYLE_GUIDE.md; avoid duplicate Tailwind color keys, theme via CSS vars instead.
+- [Transaction page shell style](transactions-page-style.md) — canonical Orders-page-matching shell/card pattern for Transactions pages; avoid slate-*/dark: classes.
+- [Multi-tenant Client Portal Architecture](portal-multitenancy.md) — userType in AuthContext, portalUserStore (localStorage), ClientPortalRoute guard, /portal/* routes, provisioning flow.
+- [RBAC single source of truth](rbac-single-source-of-truth.md) — NIDO Users/Roles/Permissions must stay one module at /configuration/nido-users; route-level PermissionGate enforces module permissions per navigation.
+- [Quote PDF reference fidelity](quote-pdf-reference-fidelity.md) — quote downloads must preserve the uploaded estimate’s A4 Helvetica shell while allowing only the requested item-table header/data changes.
+- [Sales order PDF fidelity](sales-order-pdf-fidelity.md) — sales-order downloads reuse the quote renderer so both documents stay visually identical apart from labels and dates.
+- [Prefix configuration behavior](prefix-configuration.md) — new IDs read centralized prefixes; vendor credits remain distinct, while legacy stored identifiers are preserved.
+- [Global currency display](global-currency-display.md) — all UI and generated documents must format amounts from saved General Settings localization currency.
+- [Vendor contract page parity](vendor-contract-parity.md) — keep vendor contract details aligned with client contracts; vendor directory attributes stay read-only here.
+- [Approval engine adapter](approval-engine-local-mode.md) — approval UI/service contracts support local persistence now and a future backend switch via one environment flag.
+- [Dialog select positioning](select-portal.md) — custom Select menus inside centered dialogs must portal to document.body.
+- [Digital fulfillment security boundary](digital-fulfillment-security.md) — production authorization must come from server auth; localStorage identity is development-only and checkout must fail closed.
+- [Digital fulfillment status authority](digital-fulfillment-status-authority.md) — the saved PO line drives Order Details and Vendor Orders/My Orders fulfillment status.
+- [Document activity audit](document-activity-audit.md) — successful document uploads and downloads should appear in the matching order or PO Notes feed.
+- [Client contract archive behavior](client-contract-archive.md) — archived contracts remain viewable from the archive list, but their details are read-only.

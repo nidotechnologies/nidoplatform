@@ -1,0 +1,337 @@
+# Implement NIDO Owner Platform User Portal and Role-Based Access Control
+
+## Objective
+
+Implement a complete login and permission system for **NIDO Internal Users (Owner Platform Users)**.
+
+This is separate from the existing Client Portal.
+
+The platform must support two completely different user types:
+
+1. NIDO Users (Internal Employees)
+2. Client Users (Client Organization Employees)
+
+Both use the same application but have completely independent permissions and access.
+
+---
+
+# NIDO Users
+
+The existing module already exists:
+
+Configuration Hub
+
+↓
+
+NIDO Users
+
+↓
+
+Manage Users
+
+Reuse this module.
+
+Do not create a new one.
+
+Extend it to become the authentication source for all internal NIDO employees.
+
+---
+
+# Login Flow
+
+When a user logs in:
+
+Authenticate credentials.
+
+Determine User Type.
+
+If:
+
+User Type = NIDO User
+
+Load the NIDO Owner Platform.
+
+If:
+
+User Type = Client User
+
+Load the Client Portal.
+
+This logic should already exist.
+
+Extend it to authenticate NIDO Users using the existing NIDO Users module.
+
+---
+
+# NIDO Users Table
+
+Reuse the existing NIDO Users database.
+
+Each user should include:
+
+* User ID
+* Employee ID
+* Full Name
+* Email
+* Phone
+* Department
+* Designation
+* Role
+* Status
+* Last Login
+* Created Date
+* Updated Date
+
+No duplicate user tables.
+
+---
+
+# Manage Users
+
+The existing Manage Users page should become the master management page for all NIDO employees.
+
+Allow:
+
+* Create User
+* Edit User
+* Disable User
+* Enable User
+* Suspend User
+* Delete User
+* Reset Password
+* Unlock User
+* Force Password Change
+* Send Invitation
+* View Login History
+
+Every action should update immediately.
+
+---
+
+# Roles
+
+Reuse the existing Roles module.
+
+Do not create another Roles page.
+
+The Roles module should define the permissions for NIDO Users.
+
+Examples:
+
+Super Administrator
+
+Platform Administrator
+
+Operations Manager
+
+Procurement Manager
+
+Finance
+
+Sales
+
+Support
+
+Accounts
+
+Developer
+
+Viewer
+
+Custom Roles
+
+Unlimited roles should be supported.
+
+---
+
+# Permission Engine
+
+Each role should have configurable permissions.
+
+Example modules:
+
+Dashboard
+
+Shop
+
+Clients
+
+Vendors
+
+Orders
+
+Master Catalogue
+
+Configuration
+
+Reports
+
+Invoices
+
+Purchase Orders
+
+Bills
+
+Expenses
+
+Contracts
+
+Services
+
+Approvals
+
+Users
+
+Roles
+
+Audit Logs
+
+Departments
+
+Notifications
+
+General Settings
+
+System Settings
+
+For every module support permissions such as:
+
+* View
+* Create
+* Edit
+* Delete
+* Approve
+* Export
+* Import
+* Manage
+* Configure
+
+Permissions should be stored in the database and evaluated dynamically.
+
+Do not hardcode permissions.
+
+---
+
+# Dynamic Navigation
+
+After login, generate the sidebar automatically based on the logged-in user's role.
+
+Example:
+
+If a user does not have access to:
+
+Finance
+
+Hide the Finance menu completely.
+
+If a user does not have access to:
+
+Configuration
+
+Hide the Configuration Hub.
+
+If a user has read-only access:
+
+Allow viewing pages but disable create, edit, delete, approve, and configuration actions.
+
+Navigation, routes, buttons, menus, actions, APIs, and pages should all respect role permissions.
+
+---
+
+# Route Protection
+
+Every protected route must verify:
+
+* Authentication
+* User Status
+* Assigned Role
+* Assigned Permissions
+
+Users must never access restricted pages by manually entering URLs.
+
+Unauthorized access should return an Access Denied page.
+
+---
+
+# Owner Platform Behavior
+
+The NIDO Owner (Super Administrator) always has unrestricted access.
+
+The Super Administrator can:
+
+* View all modules
+* Manage all users
+* Manage all roles
+* Manage all permissions
+* Manage all clients
+* Manage all vendors
+* Access all reports
+* Configure the entire platform
+
+No restrictions apply to the Super Administrator.
+
+---
+
+# Real-Time Permission Updates
+
+Whenever a role is modified:
+
+* Update permissions immediately.
+* The next navigation, page load, or session validation should use the new permissions.
+* Do not require code changes or application deployment.
+
+Whenever a user's role changes:
+
+* Apply the new permissions immediately.
+* Update the sidebar and accessible modules automatically.
+
+---
+
+# Single Source of Truth
+
+There must be only one Roles module.
+
+There must be only one NIDO Users module.
+
+Do not duplicate:
+
+* Users
+* Roles
+* Permissions
+* Navigation Rules
+* Authentication Logic
+
+All modules should reuse the same services, APIs, and database tables.
+
+---
+
+# Security
+
+Protect every:
+
+* Page
+* API
+* Button
+* Action
+* Export
+* Import
+* Approval
+* Configuration Screen
+
+using the role-based permission engine.
+
+Never rely only on frontend permission checks.
+
+Backend APIs must also validate permissions before executing any action.
+
+---
+
+# Expected Result
+
+The NIDO Users module should become the complete authentication and authorization system for the Owner Platform.
+
+Each NIDO employee should log in with their own credentials and only see the modules and actions permitted by their assigned role.
+
+The sidebar, pages, buttons, APIs, and workflows should all be dynamically controlled by the existing Roles and Permissions module.
+
+The Super Administrator retains full control over the platform, while all other NIDO users receive role-based access without requiring duplicate implementations.

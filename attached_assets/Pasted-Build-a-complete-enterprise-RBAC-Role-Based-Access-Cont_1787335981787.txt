@@ -1,0 +1,1298 @@
+Build a complete enterprise RBAC (Role-Based Access Control) system for the NIDO platform.
+
+IMPORTANT:
+The RBAC system must be fully configurable from the NIDO platform UI in the future. Do NOT hard-code role permissions into frontend components or backend route files.
+
+The administrator must be able to add, edit, remove, activate/deactivate, and change:
+- Roles
+- Modules
+- Module groups
+- Permission actions
+- Role-module permissions
+- Permission assignments
+
+Any change made through the admin UI must immediately affect authorization throughout the application.
+
+==================================================
+1. NIDO MODULE STRUCTURE
+==================================================
+
+Create these 6 module groups and 63 modules.
+
+GROUP 1 — CORE NIDO MODULES
+
+1. Dashboard
+2. Shop
+3. Services
+4. Support
+5. Clients
+6. Vendors
+7. Orders
+8. Reports
+9. Sales
+10. Purchases
+11. Expenses
+12. Purchase Orders
+13. Bills
+14. Invoices
+15. Contracts
+16. Approvals
+17. Master Catalogue
+18. Users
+19. Roles
+20. Departments
+21. Audit Logs
+22. Notifications
+23. Configuration
+24. Client User Impersonation
+
+GROUP 2 — PROCUREMENT
+
+25. Vendor Quotations
+26. Vendor Payments
+27. Goods Receipt Notes
+28. Purchase Requisitions
+29. Stock Transfers
+30. Procurement Analytics
+31. Vendor Performance
+32. Vendor Compliance
+
+GROUP 3 — FINANCE
+
+33. Payments
+34. Credit Notes
+35. Debit Notes
+36. Tax Management
+37. Budgets
+38. Cost Centres
+39. Financial Reports
+40. Reconciliation
+
+GROUP 4 — OPERATIONS
+
+41. Warehouses
+42. Locations
+43. Deliveries
+44. Shipments
+45. Returns
+46. Quality Checks
+47. Service Requests
+48. Maintenance
+
+GROUP 5 — ADMINISTRATION
+
+49. Organization Settings
+50. Branches
+51. Teams
+52. User Groups
+53. Login History
+54. Security Settings
+55. API Access
+56. Data Import/Export
+
+GROUP 6 — CLIENT PORTAL
+
+57. Client Dashboard
+58. Client Catalogue
+59. Client Cart
+60. Client Checkout
+61. Client Orders
+62. Client Documents
+63. Client Support Tickets
+
+==================================================
+2. NIDO ROLES
+==================================================
+
+Create these 26 initial roles:
+
+1. Super Admin
+2. Platform Admin
+3. IT Platform Admin
+4. IT Application Admin
+5. Finance Head
+6. Finance Manager
+7. Finance Executive
+8. Procurement Head
+9. Procurement Lead
+10. Procurement Analyst
+11. Vendor Management Head
+12. Vendor Manager
+13. Vendor Coordinator
+14. Service Operation Head
+15. Service Manager
+16. Service Coordinator
+17. Support Head
+18. Support Lead
+19. Client Department Head
+20. Client Relationship Manager
+21. Client Team Lead
+22. Client Analyst
+23. Catalog Head
+24. Catalog Manager
+25. Catalog Coordinator
+26. Catalog Analyst
+
+==================================================
+3. PERMISSION ACTIONS
+==================================================
+
+Every role-module relationship can contain these permissions:
+
+1. View
+2. Create
+3. Edit
+4. Delete
+5. Approve
+6. Export
+7. Import
+8. Manage
+9. Configure
+
+Do NOT assume that every module needs every permission.
+
+Each role/module combination must independently support enabling/disabling each permission.
+
+Example:
+
+Procurement Lead → Vendor Quotations
+
+View = true
+Create = true
+Edit = true
+Delete = false
+Approve = true
+Export = true
+Import = true
+Manage = true
+Configure = false
+
+==================================================
+4. IMPORTANT — NO DATA SCOPE
+==================================================
+
+Do NOT include the following in this RBAC implementation:
+
+- All
+- Department
+- Team
+- Assigned
+- Own
+- No Access
+
+The current RBAC design is ONLY:
+
+Role → Module Group → Module → Permission Actions
+
+There should be NO Scope column in the permission matrix.
+
+==================================================
+5. DATABASE DESIGN
+==================================================
+
+Create a normalized database structure.
+
+Recommended tables:
+
+roles
+- id
+- name
+- description
+- is_active
+- created_at
+- updated_at
+
+module_groups
+- id
+- name
+- description
+- display_order
+- is_active
+- created_at
+- updated_at
+
+modules
+- id
+- module_group_id
+- name
+- description
+- display_order
+- is_active
+- created_at
+- updated_at
+
+permissions
+- id
+- name
+- description
+- is_active
+
+role_module_permissions
+- id
+- role_id
+- module_id
+- view
+- create
+- edit
+- delete
+- approve
+- export
+- import
+- manage
+- configure
+- created_at
+- updated_at
+
+users
+- id
+- name
+- email
+- role_id
+- is_active
+- created_at
+- updated_at
+
+If the existing NIDO application already has users/roles/module tables, inspect the current schema first and extend/reuse the existing structure instead of creating duplicate tables.
+
+==================================================
+6. ADMIN RBAC MANAGEMENT SCREEN
+==================================================
+
+Create a new Administration section:
+
+Administration
+    └── Role & Permission Management
+
+Inside it provide:
+
+A. Roles
+B. Module Groups
+C. Modules
+D. Permission Matrix
+E. Users & Role Assignment
+F. Permission Audit History
+
+==================================================
+7. ROLE MANAGEMENT UI
+==================================================
+
+Create a Roles page.
+
+Display:
+
+| Role | Description | Users | Status | Actions |
+
+Actions:
+
+- View
+- Edit
+- Duplicate
+- Activate/Deactivate
+- Delete
+
+Allow administrator to:
+
+- Create new role
+- Rename role
+- Edit description
+- Activate/deactivate role
+- Duplicate an existing role
+- Delete a role if it is not system-protected
+
+System roles such as Super Admin should have protection against accidental deletion.
+
+==================================================
+8. MODULE GROUP MANAGEMENT
+==================================================
+
+Create Module Groups management.
+
+Display:
+
+| Module Group | Number of Modules | Status | Actions |
+
+Allow administrator to:
+
+- Create module group
+- Rename module group
+- Edit description
+- Change display order
+- Activate/deactivate
+- Delete if no active modules depend on it
+
+==================================================
+9. MODULE MANAGEMENT
+==================================================
+
+Create Modules management.
+
+Display:
+
+| Module | Module Group | Status | Actions |
+
+Allow administrator to:
+
+- Add module
+- Edit module name
+- Edit description
+- Change module group
+- Change display order
+- Activate/deactivate module
+- Delete module if safe
+
+When a new module is created, automatically make it available in the Role Permission Matrix.
+
+Do NOT automatically grant permissions to all roles.
+
+New modules should initially have no permissions assigned unless the administrator explicitly chooses a template.
+
+==================================================
+10. PERMISSION MATRIX UI
+==================================================
+
+This is the most important screen.
+
+Create:
+
+Administration
+→ Role & Permission Management
+→ Permission Matrix
+
+The matrix should look like:
+
+ROLE: Procurement Lead
+
+| Module | View | Create | Edit | Delete | Approve | Export | Import | Manage | Configure |
+|---------|------|--------|------|--------|---------|--------|--------|--------|-----------|
+| Vendor Quotations | ✓ | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | — |
+| Purchase Requisitions | ✓ | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | — |
+| Purchase Orders | ✓ | ✓ | ✓ | — | ✓ | ✓ | ✓ | ✓ | — |
+| Goods Receipt Notes | ✓ | ✓ | ✓ | — | — | ✓ | ✓ | ✓ | — |
+| Procurement Analytics | ✓ | — | — | — | — | ✓ | — | — | — |
+| Vendor Performance | ✓ | — | ✓ | — | — | ✓ | — | ✓ | — |
+| Vendor Compliance | ✓ | — | ✓ | — | — | ✓ | — | ✓ | — |
+
+Use checkboxes/toggles for every permission.
+
+Allow administrators to:
+
+- Enable/disable individual permissions
+- Select an entire module
+- Select an entire permission column
+- Select an entire module group
+- Clear permissions
+- Copy permissions from another role
+- Duplicate role permissions
+- Save changes
+- Cancel changes
+
+==================================================
+11. FILTERS
+==================================================
+
+Permission Matrix must support:
+
+- Search role
+- Search module
+- Filter by module group
+- Filter by permission
+- Show only enabled permissions
+- Show only modules assigned to the selected role
+- Show all modules
+- Expand/collapse module groups
+
+Example:
+
+Procurement
+    Vendor Quotations
+    Vendor Payments
+    Goods Receipt Notes
+    Purchase Requisitions
+    Stock Transfers
+    Procurement Analytics
+    Vendor Performance
+    Vendor Compliance
+
+Finance
+    Payments
+    Credit Notes
+    Debit Notes
+    Tax Management
+    Budgets
+    Cost Centres
+    Financial Reports
+    Reconciliation
+
+==================================================
+12. ROLE COPY / CLONE
+==================================================
+
+Add:
+
+"Copy Permissions From"
+
+Example:
+
+Create new role:
+Procurement Senior Analyst
+
+Copy permissions from:
+Procurement Analyst
+
+Then allow administrator to modify permissions before saving.
+
+==================================================
+13. PERMISSION TEMPLATES
+==================================================
+
+Create optional templates:
+
+- Full Access
+- Read Only
+- Operational User
+- Manager
+- Department Head
+- Administrator
+- Finance User
+- Procurement User
+- Support User
+- Client User
+- Catalogue User
+
+Templates must NOT permanently control permissions.
+
+They are only shortcuts for administrators when creating roles.
+
+==================================================
+14. INITIAL PERMISSION CONFIGURATION
+==================================================
+
+Seed the system with the following recommended access structure.
+
+SUPER ADMIN
+- Full access to all 63 modules
+- All 9 permissions
+
+PLATFORM ADMIN
+- Core NIDO modules
+- Administration modules
+- Selected Client Portal modules
+- Strong administrative permissions
+
+IT PLATFORM ADMIN
+- Users
+- Roles
+- Departments
+- Audit Logs
+- Notifications
+- Configuration
+- Client User Impersonation
+- Organization Settings
+- Branches
+- Teams
+- User Groups
+- Login History
+- Security Settings
+- API Access
+- Data Import/Export
+- Technical access to Client Portal modules
+
+IT APPLICATION ADMIN
+- Users
+- Roles
+- Departments
+- Audit Logs
+- Notifications
+- Configuration
+- Client User Impersonation
+- Login History
+- Security Settings
+- API Access
+- Data Import/Export
+- Technical access to Client Portal modules
+
+FINANCE HEAD
+- Finance modules
+- Relevant financial Core modules
+- Vendor Payments
+- Purchases
+- Purchase Orders
+- Bills
+- Invoices
+- Expenses
+- Contracts
+- Approvals
+- Financial Reports
+- Reconciliation
+
+FINANCE MANAGER
+- Finance modules
+- Relevant finance-related Core modules
+- Vendor Payments
+- Purchases
+- Purchase Orders
+- Bills
+- Invoices
+- Expenses
+- Contracts
+- Approvals
+
+FINANCE EXECUTIVE
+- Payments
+- Credit Notes
+- Debit Notes
+- Tax Management
+- Reconciliation
+- Financial Reports
+- Bills
+- Invoices
+- Expenses
+- Purchases
+- Purchase Orders
+- Vendor Payments
+
+PROCUREMENT HEAD
+- Procurement modules
+- Vendors
+- Purchases
+- Purchase Orders
+- Approvals
+- Warehouses
+- Locations
+- Deliveries
+- Shipments
+- Quality Checks
+- Broad approval/manage permissions
+
+PROCUREMENT LEAD
+- Vendor Quotations
+- Goods Receipt Notes
+- Purchase Requisitions
+- Stock Transfers
+- Procurement Analytics
+- Vendor Performance
+- Vendor Compliance
+- Vendors
+- Purchases
+- Purchase Orders
+- Warehouses
+- Locations
+- Deliveries
+- Shipments
+- Quality Checks
+
+PROCUREMENT ANALYST
+- Vendors
+- Purchases
+- Purchase Orders
+- Vendor Quotations
+- Goods Receipt Notes
+- Purchase Requisitions
+- Stock Transfers
+- Procurement Analytics
+- Vendor Performance
+- Vendor Compliance
+- Selected operational modules
+
+VENDOR MANAGEMENT HEAD
+- Vendors
+- Vendor Quotations
+- Vendor Payments
+- Vendor Performance
+- Vendor Compliance
+- Procurement Analytics
+- Contracts
+- Reports
+
+VENDOR MANAGER
+- Vendors
+- Vendor Quotations
+- Vendor Payments
+- Vendor Performance
+- Vendor Compliance
+- Contracts
+- Procurement Analytics
+
+VENDOR COORDINATOR
+- Vendors
+- Vendor Quotations
+- Vendor Compliance
+- Vendor Performance
+- Contracts
+- Procurement Analytics
+
+SERVICE OPERATION HEAD
+- Services
+- Support
+- Orders
+- Deliveries
+- Shipments
+- Warehouses
+- Locations
+- Returns
+- Quality Checks
+- Service Requests
+- Maintenance
+- Reports
+
+SERVICE MANAGER
+- Services
+- Support
+- Orders
+- Deliveries
+- Shipments
+- Returns
+- Quality Checks
+- Service Requests
+- Maintenance
+- Reports
+
+SERVICE COORDINATOR
+- Services
+- Support
+- Orders
+- Deliveries
+- Shipments
+- Service Requests
+- Maintenance
+- Returns
+
+SUPPORT HEAD
+- Support
+- Clients
+- Orders
+- Returns
+- Quality Checks
+- Service Requests
+- Maintenance
+- Client Support Tickets
+- Client Orders
+- Client Documents
+- Reports
+
+SUPPORT LEAD
+- Support
+- Clients
+- Orders
+- Returns
+- Quality Checks
+- Service Requests
+- Maintenance
+- Client Support Tickets
+- Client Orders
+- Client Documents
+
+CLIENT DEPARTMENT HEAD
+- Clients
+- Orders
+- Sales
+- Invoices
+- Contracts
+- Approvals
+- Client Dashboard
+- Client Catalogue
+- Client Cart
+- Client Checkout
+- Client Orders
+- Client Documents
+- Client Support Tickets
+- Reports
+
+CLIENT RELATIONSHIP MANAGER
+- Clients
+- Orders
+- Sales
+- Contracts
+- Invoices
+- Client Dashboard
+- Client Catalogue
+- Client Cart
+- Client Checkout
+- Client Orders
+- Client Documents
+- Client Support Tickets
+
+CLIENT TEAM LEAD
+- Clients
+- Orders
+- Sales
+- Contracts
+- Client Dashboard
+- Client Catalogue
+- Client Orders
+- Client Documents
+- Client Support Tickets
+- Reports
+
+CLIENT ANALYST
+- Clients
+- Orders
+- Sales
+- Client Dashboard
+- Client Catalogue
+- Client Orders
+- Client Documents
+- Client Support Tickets
+- Reports
+
+CATALOG HEAD
+- Shop
+- Services
+- Master Catalogue
+- Client Catalogue
+- Client Dashboard
+- Client Orders
+- Client Documents
+- Reports
+
+CATALOG MANAGER
+- Shop
+- Services
+- Master Catalogue
+- Client Catalogue
+- Client Dashboard
+- Client Orders
+- Reports
+
+CATALOG COORDINATOR
+- Shop
+- Services
+- Master Catalogue
+- Client Catalogue
+- Client Dashboard
+- Client Orders
+- Client Documents
+
+CATALOG ANALYST
+- Shop
+- Services
+- Master Catalogue
+- Client Catalogue
+- Client Dashboard
+- Client Orders
+- Client Documents
+- Reports
+
+==================================================
+15. INITIAL PERMISSION RULES
+==================================================
+
+Use these principles when seeding permissions.
+
+ADMINISTRATORS:
+- More Configure permissions
+- More Manage permissions
+- Full CRUD where appropriate
+
+HEAD ROLES:
+- View
+- Create
+- Edit
+- Approve
+- Export
+- Manage
+- Limited Delete
+- No Configure unless explicitly required
+
+MANAGER ROLES:
+- View
+- Create
+- Edit
+- Approve where applicable
+- Export
+- Manage
+- Limited Delete
+
+LEAD ROLES:
+- View
+- Create
+- Edit
+- Approve where applicable
+- Export
+- Manage
+- Usually no Configure
+
+ANALYST / COORDINATOR ROLES:
+- View
+- Create
+- Edit
+- Export
+- Limited Manage
+- Generally no Approve
+- Generally no Configure
+- Generally no Delete
+
+==================================================
+16. SECURITY
+==================================================
+
+Authorization must be enforced on the backend.
+
+Do NOT rely only on hiding UI buttons.
+
+Every protected API endpoint must check:
+
+1. Authenticated user
+2. User's active role
+3. Module permission
+4. Requested action
+
+Example:
+
+User:
+Praveen
+
+Role:
+Procurement Analyst
+
+Request:
+DELETE /api/vendor-quotations/123
+
+System checks:
+
+Does Procurement Analyst have Vendor Quotations → Delete?
+
+If false:
+
+Return HTTP 403.
+
+Frontend should also hide/disable the Delete button, but backend authorization is mandatory.
+
+==================================================
+17. FRONTEND PERMISSION CHECKING
+==================================================
+
+Create reusable authorization helpers.
+
+Examples:
+
+hasPermission("Vendor Quotations", "view")
+
+hasPermission("Vendor Quotations", "create")
+
+hasPermission("Vendor Quotations", "edit")
+
+hasPermission("Vendor Quotations", "delete")
+
+hasPermission("Vendor Quotations", "approve")
+
+hasPermission("Vendor Quotations", "export")
+
+hasPermission("Vendor Quotations", "import")
+
+hasPermission("Vendor Quotations", "manage")
+
+hasPermission("Vendor Quotations", "configure")
+
+Use these helpers throughout the application.
+
+Do NOT duplicate permission logic in individual pages.
+
+==================================================
+18. MENU VISIBILITY
+==================================================
+
+Navigation should automatically respond to permissions.
+
+If user has:
+
+Vendor Quotations → View
+
+Show Vendor Quotations menu.
+
+If user has no permissions for Vendor Quotations:
+
+Hide Vendor Quotations from navigation.
+
+If user has View but not Edit:
+
+Show the module but hide/disable Edit actions.
+
+If user has View + Create:
+
+Show Create button.
+
+If user has Approve:
+
+Show Approve action.
+
+If user has Configure:
+
+Show configuration controls.
+
+==================================================
+19. AUDIT LOGGING
+==================================================
+
+Every RBAC change must be audited.
+
+Log:
+
+- Who changed it
+- Date/time
+- Role
+- Module
+- Permission
+- Previous value
+- New value
+- IP/device information if already supported by the platform
+
+Example:
+
+Admin changed:
+
+Procurement Lead
+Vendor Quotations
+Approve
+
+FROM:
+false
+
+TO:
+true
+
+Store this in a Permission Audit History.
+
+==================================================
+20. UNSAVED CHANGES
+==================================================
+
+When editing the permission matrix:
+
+- Detect unsaved changes
+- Show "Unsaved changes"
+- Warn before leaving
+- Provide Save
+- Provide Cancel
+- Provide Reset
+
+Use transaction/bulk update when saving many permissions.
+
+==================================================
+21. BULK OPERATIONS
+==================================================
+
+Support:
+
+- Enable all permissions for module
+- Disable all permissions for module
+- Enable permission across selected modules
+- Disable permission across selected modules
+- Copy module permissions
+- Copy role permissions
+- Reset role permissions
+- Reset module permissions
+
+Always show confirmation for destructive bulk operations.
+
+==================================================
+22. ROLE ASSIGNMENT
+==================================================
+
+Create:
+
+Administration
+→ Users
+→ User Role Assignment
+
+Display:
+
+| User | Email | Current Role | Status | Actions |
+
+Allow admin to:
+
+- Assign role
+- Change role
+- Remove role
+- Activate/deactivate user
+- View effective permissions
+
+==================================================
+23. EFFECTIVE PERMISSIONS VIEW
+==================================================
+
+For every user provide:
+
+"View Effective Permissions"
+
+Example:
+
+User:
+John
+
+Role:
+Procurement Lead
+
+Display:
+
+| Module | View | Create | Edit | Delete | Approve | Export | Import | Manage | Configure |
+|---|---|---|---|---|---|---|---|---|---|
+
+This must be read-only.
+
+==================================================
+24. ROLE COMPARISON
+==================================================
+
+Create a role comparison feature.
+
+Example:
+
+Compare:
+
+Procurement Head
+vs
+Procurement Lead
+vs
+Procurement Analyst
+
+Display differences clearly.
+
+==================================================
+25. DATA VALIDATION
+==================================================
+
+Prevent:
+
+- Duplicate role names
+- Duplicate module names within the same group
+- Invalid permission names
+- Assigning permissions to deleted/inactive modules
+- Deleting roles that are still assigned to users
+- Deleting modules that are actively used without confirmation
+
+==================================================
+26. SYSTEM PROTECTED ROLES
+==================================================
+
+Allow a role to have:
+
+is_system_role = true
+
+System roles cannot be deleted.
+
+At minimum:
+
+Super Admin
+Platform Admin
+
+should be protected.
+
+==================================================
+27. FUTURE EXTENSIBILITY
+==================================================
+
+The architecture must allow future additions without code changes.
+
+For example, an administrator should be able to create:
+
+Module Group:
+Human Resources
+
+Module:
+Employee Management
+
+Then assign:
+
+HR Manager → Employee Management
+
+View = true
+Create = true
+Edit = true
+Delete = false
+Approve = true
+Export = true
+Import = false
+Manage = true
+Configure = false
+
+This must work without modifying application source code.
+
+==================================================
+28. IMPORTANT UI REQUIREMENT
+==================================================
+
+Make the permission matrix easy to use.
+
+Use:
+
+- Sticky table headers
+- Sticky first column
+- Grouped modules
+- Expand/collapse groups
+- Search
+- Filters
+- Checkboxes/toggles
+- Bulk actions
+- Save button
+- Reset button
+- Unsaved-change warning
+- Permission summary
+
+For example:
+
+PROCUREMENT
+-----------------------------------------------------
+Module                  V C E D A E I M C
+Vendor Quotations       ✓ ✓ ✓ — ✓ ✓ ✓ ✓ —
+Vendor Payments         ✓ — ✓ — — ✓ — — —
+Goods Receipt Notes     ✓ ✓ ✓ — — ✓ ✓ ✓ —
+Purchase Requisitions   ✓ ✓ ✓ — ✓ ✓ ✓ ✓ —
+Stock Transfers         ✓ ✓ ✓ — ✓ ✓ ✓ ✓ —
+Procurement Analytics   ✓ — — — — ✓ — — —
+Vendor Performance      ✓ — ✓ — — ✓ — ✓ —
+Vendor Compliance       ✓ — ✓ — — ✓ — ✓ —
+
+==================================================
+29. ROLE SUMMARY
+==================================================
+
+On each role page show:
+
+Role name
+Description
+Status
+Number of assigned users
+Number of accessible modules
+Number of enabled permissions
+
+Example:
+
+Procurement Lead
+
+Users: 4
+Modules: 16
+Permissions: 72
+
+==================================================
+30. DO NOT BREAK EXISTING NIDO FEATURES
+==================================================
+
+Before implementing:
+
+1. Inspect the existing NIDO application.
+2. Identify current authentication.
+3. Identify current user model.
+4. Identify existing role/permission implementation.
+5. Identify existing navigation.
+6. Identify existing protected API routes.
+7. Reuse existing architecture where possible.
+
+Do not replace working authentication unnecessarily.
+
+Do not create duplicate user/role systems.
+
+Integrate RBAC into the existing NIDO application.
+
+==================================================
+31. MIGRATION
+==================================================
+
+Create a safe database migration.
+
+Seed:
+
+- 6 module groups
+- 63 modules
+- 9 permission types
+- 26 roles
+- Initial role-module permission assignments
+
+Do not delete existing users.
+
+If existing users already have roles, migrate them safely.
+
+Provide a rollback-safe migration strategy.
+
+==================================================
+32. TESTING
+==================================================
+
+Create automated tests for:
+
+- Role creation
+- Role editing
+- Module creation
+- Module editing
+- Permission assignment
+- Permission removal
+- Role duplication
+- Role deletion protection
+- Backend authorization
+- Frontend permission visibility
+- User role assignment
+- Permission audit logging
+- Bulk permission changes
+
+Test at least:
+
+Super Admin
+Procurement Head
+Procurement Lead
+Procurement Analyst
+Finance Head
+Finance Executive
+Support Head
+Client Department Head
+Catalog Analyst
+
+==================================================
+33. ACCEPTANCE CRITERIA
+==================================================
+
+The implementation is complete only when:
+
+1. All 63 modules exist.
+2. All 26 roles exist.
+3. All 9 permission actions exist.
+4. No scope functionality exists.
+5. Admin can create new roles from UI.
+6. Admin can create new modules from UI.
+7. Admin can create new module groups from UI.
+8. Admin can modify permissions from UI.
+9. Permission changes are stored in database.
+10. Permission changes immediately affect the application.
+11. Backend APIs enforce permissions.
+12. Frontend navigation respects permissions.
+13. Buttons/actions respect permissions.
+14. RBAC changes are audited.
+15. Roles can be duplicated.
+16. Permissions can be copied between roles.
+17. Users can be assigned roles.
+18. Effective permissions can be viewed per user.
+19. No permissions are hard-coded into business logic.
+20. Future modules and roles can be added without source-code changes.
+
+==================================================
+34. FINAL DELIVERABLE
+==================================================
+
+Build the complete RBAC system inside the existing NIDO platform.
+
+Do not just create a static permission table.
+
+Create a fully functional:
+
+Role Management
++
+Module Management
++
+Module Group Management
++
+Permission Management
++
+Permission Matrix
++
+User Role Assignment
++
+Effective Permission Viewer
++
+Role Comparison
++
+Permission Audit History
+
+The system must be production-ready, database-driven, secure, responsive, and easy for NIDO administrators to maintain in the future.
+
+Most importantly:
+
+I must be able to change permissions myself from the NIDO platform UI in the future without asking a developer to change the code.

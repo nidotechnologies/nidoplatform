@@ -1,0 +1,262 @@
+# Update Existing NIDO Client Price Engine - Client-wise Profit Rules
+
+## IMPORTANT
+
+Do NOT create a new pricing engine.
+
+Do NOT modify the existing architecture.
+
+Extend only the existing Client Price Engine and Client Price Settings.
+
+Maintain all existing functionality.
+
+---
+
+## Remove These Features
+
+Do NOT implement:
+
+* Client Category Profit Margin
+* Global Default Profit Margin
+* Client Category Pricing Rules
+* Global Pricing Rules
+
+NIDO will NOT use global profit rules or client category profit rules.
+
+Every client will have its own pricing configuration.
+
+---
+
+# Profit Rule Priority
+
+The pricing engine must use only the following hierarchy.
+
+### Priority 1
+
+Product Specific Profit %
+
+If a profit margin is configured for a specific product for that client, use it.
+
+Example:
+
+Dell Latitude 3550 → 4%
+
+Canon MF275dw → 5%
+
+---
+
+### Priority 2
+
+Product Category Profit %
+
+If no product-specific profit exists, use the product category profit configured for that client.
+
+Example:
+
+Computers → 5%
+
+Networking → 7%
+
+Office Supplies → 10%
+
+Furniture → 12%
+
+Electrical → 8%
+
+Cloud → 20%
+
+Software → 18%
+
+Stationery → 15%
+
+Pantry → 12%
+
+Cleaning Supplies → 15%
+
+Medical Supplies → 10%
+
+Services → 25%
+
+---
+
+### Priority 3
+
+Client Default Profit %
+
+If neither Product Profit nor Product Category Profit is configured, use the client's default profit percentage.
+
+There must be no other fallback.
+
+---
+
+# Client Configuration
+
+Location:
+
+Client Details
+
+→ Configuration
+
+→ Price Settings
+
+Add a new section:
+
+## Profit & Pricing Rules
+
+Fields:
+
+* Default Profit %
+* Minimum Profit %
+* Minimum Profit Amount
+* Maximum Discount Allowed
+* Enable Manual Override
+* Enable Market Price Validation
+* Enable Smart Pricing
+
+---
+
+## Product Category Profit
+
+Inside the same Client Price Settings page create a table.
+
+Every client maintains its own values.
+
+Categories:
+
+* Computers
+* Networking
+* Office Supplies
+* Furniture
+* Electrical
+* Cloud
+* Software
+* Stationery
+* Pantry
+* Cleaning Supplies
+* Medical Supplies
+* Services
+
+Each category should allow:
+
+* Profit %
+* Status (Enable/Disable)
+
+These values belong only to that client.
+
+Do NOT share them with other clients.
+
+---
+
+## Product Specific Profit
+
+Allow optional profit percentage for individual assigned products.
+
+If configured,
+
+this value overrides everything else.
+
+---
+
+# Price Calculation
+
+Existing Vendor Price Engine
+
+↓
+
+Vendor Landed Cost
+
+↓
+
+Product Profit %
+
+OR
+
+Product Category Profit %
+
+OR
+
+Client Default Profit %
+
+↓
+
+Buffer
+
+↓
+
+Client Charges
+
+↓
+
+Quantity Slab
+
+↓
+
+GST
+
+↓
+
+Final Selling Price
+
+---
+
+# Market Price Validation
+
+Maintain the existing Market Price Comparison.
+
+Display:
+
+* Retail Market Price
+* Best Vendor Cost
+* Client Selling Price
+* Profit %
+* Profit Amount
+* Client Savings %
+* Difference from Market %
+
+If Client Selling Price exceeds Retail Market Price:
+
+Display warning:
+
+"Current vendor cost is not competitive with the market."
+
+Display:
+
+* Difference Above Market
+* Suggested Selling Price
+* Required Vendor Cost
+
+Allow Admin Override.
+
+Allow Save with Approval.
+
+Do NOT block order creation.
+
+Log the approval.
+
+---
+
+# Automatic Recalculation
+
+Whenever any of the following changes:
+
+* Vendor Base Price
+* Vendor Charges
+* Client Profit Settings
+* Product Profit Rule
+* Product Category Profit Rule
+* Buffer
+* Client Charges
+* Quantity Slabs
+* Tax Rules
+
+Automatically recalculate the selling price.
+
+No manual recalculation should be required.
+
+---
+
+## Final Requirement
+
+Do not modify any existing database structure, APIs, workflows, or UI.
+
+Only extend the existing Client Price Engine and Client Price Settings using the architecture described above while maintaining complete backward compatibility.

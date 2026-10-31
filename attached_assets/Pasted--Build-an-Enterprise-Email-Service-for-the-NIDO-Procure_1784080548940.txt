@@ -1,0 +1,387 @@
+# Build an Enterprise Email Service for the NIDO Procurement Platform
+
+## Objective
+
+Implement a centralized, enterprise-grade email service for the NIDO Procurement Platform.
+
+This email service must become the single email engine used by every module within the platform.
+
+Do not allow individual modules to send emails directly.
+
+Every email should pass through one centralized Email Service.
+
+The system should be modular, secure, configurable, and scalable.
+
+---
+
+# Email Provider
+
+Integrate with **Resend** as the default email provider.
+
+Design the architecture so that additional providers (SendGrid, Amazon SES, Mailgun, SMTP, etc.) can be added later without changing the business logic.
+
+---
+
+# Email Configuration
+
+Create a new section under:
+
+Configuration Hub
+
+↓
+
+General Settings
+
+↓
+
+Email Configuration
+
+This page should allow the NIDO Super Administrator to configure:
+
+* Email Provider
+* Sender Name
+* Sender Email Address
+* Reply-To Email
+* Support Email
+* Company Logo
+* Email Footer
+* API Key (encrypted)
+* Default Signature
+* Default Language
+* Default Time Zone
+* Email Rate Limit
+* Retry Count
+* Retry Interval
+* Enable/Disable Email Service
+* Enable/Disable Individual Email Types
+
+Add a **Send Test Email** button to verify the configuration.
+
+---
+
+# Email Templates
+
+Create a dedicated Email Templates page.
+
+Allow the administrator to create and manage reusable templates.
+
+Examples:
+
+* Welcome Email
+* User Invitation
+* Password Reset
+* Account Activation
+* OTP Verification
+* Purchase Request Created
+* Purchase Request Approved
+* Purchase Order
+* Invoice Generated
+* Payment Reminder
+* Contract Assigned
+* Contract Renewal Reminder
+* Service Request Created
+* Service Request Updated
+* Support Ticket Created
+* Support Ticket Updated
+* Approval Request
+* Approval Completed
+* Vendor Invitation
+* Client Invitation
+* General Notification
+
+Each template should support:
+
+* Subject
+* HTML Body
+* Plain Text Version
+* Dynamic Variables
+* Preview
+* Test Send
+* Version History
+
+---
+
+# Dynamic Variables
+
+Templates should support placeholders such as:
+
+{{user_name}}
+
+{{client_name}}
+
+{{company_name}}
+
+{{order_number}}
+
+{{invoice_number}}
+
+{{po_number}}
+
+{{contract_name}}
+
+{{service_name}}
+
+{{approval_status}}
+
+{{amount}}
+
+{{due_date}}
+
+{{current_date}}
+
+{{support_email}}
+
+{{portal_url}}
+
+Replace these automatically before sending.
+
+---
+
+# Email Events
+
+Every module should call the centralized Email Service.
+
+Examples:
+
+User Management
+
+* User Invitation
+* Password Reset
+* Account Activation
+
+Client Management
+
+* Client Invitation
+* Client Portal Enabled
+
+Vendor Management
+
+* Vendor Invitation
+* Vendor Approval
+
+Orders
+
+* Purchase Request Submitted
+* Request Approved
+* Request Rejected
+* Order Placed
+* Order Delivered
+
+Finance
+
+* Invoice Generated
+* Payment Reminder
+* Payment Received
+
+Contracts
+
+* Contract Created
+* Contract Renewal Reminder
+* Contract Expiry
+
+Support
+
+* Ticket Created
+* Ticket Updated
+* Ticket Closed
+
+Services
+
+* Service Request Created
+* Service Completed
+
+Approvals
+
+* Approval Assigned
+* Approval Completed
+
+Notifications
+
+* Custom Notification
+
+---
+
+# Email Queue
+
+Implement an email queue.
+
+Every email should first be stored in the queue.
+
+Then processed asynchronously.
+
+Track:
+
+* Pending
+* Sending
+* Sent
+* Failed
+* Cancelled
+
+If sending fails:
+
+Automatically retry using the configured retry policy.
+
+---
+
+# Email Logs
+
+Create a new page:
+
+Configuration Hub
+
+↓
+
+Email Logs
+
+Display:
+
+* Date
+* Time
+* Recipient
+* Subject
+* Template
+* Trigger Module
+* Status
+* Provider
+* Error Message
+* Retry Count
+* Sent By
+
+Allow:
+
+* Search
+* Filter
+* Resend Email
+* View Email
+* Download Log
+
+---
+
+# Email Service
+
+Create a centralized Email Service.
+
+Every module should use this service.
+
+No module should communicate directly with the email provider.
+
+The Email Service should handle:
+
+* Template Rendering
+* Variable Replacement
+* Queue Processing
+* Logging
+* Retry Logic
+* Provider Selection
+* Error Handling
+* Attachments
+
+---
+
+# Attachments
+
+Support attachments including:
+
+* PDF
+* Excel
+* Word
+* Images
+* Purchase Orders
+* Invoices
+* Contracts
+* Reports
+
+Modules should be able to attach generated documents automatically.
+
+---
+
+# Branding
+
+Every outgoing email should automatically include:
+
+* NIDO Logo
+* Company Name
+* Company Address
+* Footer
+* Support Contact
+* Website
+* Social Links
+
+These values should come from:
+
+Configuration Hub
+
+↓
+
+General Settings
+
+↓
+
+Organization
+
+No hardcoded values.
+
+---
+
+# Security
+
+Encrypt all API keys.
+
+Never expose API keys to the frontend.
+
+Send emails only through backend APIs.
+
+Log all email activity.
+
+Validate recipient addresses.
+
+Protect against duplicate email sends.
+
+---
+
+# Future Scalability
+
+Design the Email Service so additional providers can be enabled without changing existing modules.
+
+The Email Service should support:
+
+* Resend
+* SendGrid
+* Amazon SES
+* Mailgun
+* SMTP
+
+through a provider abstraction layer.
+
+---
+
+# Integration
+
+Integrate the Email Service with:
+
+* NIDO Users
+* Client Users
+* Vendors
+* Clients
+* Orders
+* Purchase Requests
+* Purchase Orders
+* Invoices
+* Contracts
+* Services
+* Support
+* Reports
+* Approval Workflow
+* Notifications
+
+All email communication throughout the platform should use this single service.
+
+---
+
+# Expected Result
+
+The NIDO Procurement Platform should have a centralized enterprise email system where every module sends emails through one configurable Email Service.
+
+The Super Administrator should be able to configure providers, manage templates, test email delivery, monitor logs, resend failed emails, and update branding without changing application code.
+
+The system should be secure, scalable, reusable, and production-ready for supporting thousands of emails per day.

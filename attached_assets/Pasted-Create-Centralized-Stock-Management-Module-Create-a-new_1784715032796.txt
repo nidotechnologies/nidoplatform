@@ -1,0 +1,224 @@
+Create Centralized Stock Management Module
+
+Create a new module named "Stock Management" under Configuration Hub. This module will become the single source of truth for all inventory across the NIDO platform. Do not modify any existing UI, workflow, procurement logic, vendor allocation, PO generation, or order processing. Only centralize stock management and connect existing pages to this module.
+
+Module Location
+
+Configuration Hub → Stock Management
+
+Objective
+
+All stock-related data must be maintained in one place.
+
+The following pages must only read stock information from Stock Management:
+
+Shop
+Vendor Products
+Vendor Selection
+Orders
+Purchase Orders
+Dashboard
+Reports
+
+No page should maintain its own independent stock values.
+
+Stock Management Table
+
+Create one centralized stock table with the following columns:
+
+Master Product
+Product Code / SKU
+Total Vendors Assigned
+Total Physical Stock
+Reserved Stock
+Available Stock
+Low Stock Threshold
+Out of Stock Threshold
+Last Updated
+Status
+
+Available Stock should always be calculated automatically:
+
+Available Stock = Physical Stock − Reserved Stock
+
+Do not allow manual editing of Available Stock.
+
+Vendor Stock Details
+
+Clicking a product should open a details panel showing every assigned vendor.
+
+Example:
+
+Vendor Name
+
+Purchase Price
+
+MOQ
+
+Lead Time
+
+Physical Stock
+
+Reserved Stock
+
+Available Stock
+
+Last Updated
+
+This should display every assigned vendor.
+
+No vendor limit.
+
+Stock Synchronization
+
+Stock Management becomes the master source.
+
+Whenever stock changes anywhere in the system, update Stock Management first.
+
+Every other page reads from Stock Management.
+
+Vendor Products Integration
+
+The existing Vendor → Products page should remain unchanged.
+
+When stock is edited there:
+
+Update Stock Management automatically.
+Recalculate totals.
+Refresh all dependent pages.
+
+No UI changes.
+
+Shop Integration
+
+The Shop page should not maintain its own stock.
+
+Instead:
+
+Read Available Stock directly from Stock Management.
+
+The displayed quantity must always match Stock Management.
+
+Vendor Selection Integration
+
+Vendor Selection must fetch vendor stock directly from Stock Management.
+
+It must never calculate stock independently.
+
+Every assigned vendor must appear.
+
+The displayed stock must always match Stock Management.
+
+Order Integration
+
+When an order is created:
+
+Increase Reserved Stock in Stock Management.
+
+Recalculate Available Stock.
+
+Refresh:
+
+Shop
+Dashboard
+Vendor Selection
+Reports
+
+Do not deduct Physical Stock yet.
+
+Purchase Order Integration
+
+When a PO is raised:
+
+Reduce Physical Stock.
+
+Reduce Reserved Stock.
+
+Recalculate Available Stock.
+
+Update all connected modules.
+
+PO Cancellation
+
+Restore Physical Stock.
+
+Reduce Reserved Stock if applicable.
+
+Refresh all stock values automatically.
+
+Manual Stock Adjustment
+
+Allow manual adjustment from Stock Management.
+
+Options:
+
+Stock In
+Stock Out
+Stock Correction
+
+Each adjustment should require:
+
+Quantity
+Reason
+Remarks
+
+Automatically update all connected modules.
+
+Stock Summary Cards
+
+At the top of the Stock Management page, display summary cards:
+
+Total Products
+Total Vendor Stock
+Total Reserved Stock
+Total Available Stock
+Low Stock Products
+Out of Stock Products
+
+These update automatically.
+
+Stock Movement History
+
+Create a Stock History tab.
+
+Record:
+
+Date & Time
+Product
+Vendor
+Action
+Quantity Before
+Quantity Changed
+Quantity After
+Reference (Order / PO / Manual)
+User
+
+Do not allow editing of history.
+
+Synchronization Rules
+
+Whenever any stock event occurs, update Stock Management first.
+
+Events include:
+
+Vendor stock update
+Client order
+Order cancellation
+PO creation
+PO cancellation
+Manual stock adjustment
+
+All pages should refresh from the centralized stock data.
+
+Important Constraints
+Do not redesign any existing page.
+Do not modify Vendor Selection UI.
+Do not change Order flow.
+Do not change PO Generation.
+Do not change Vendor Products UI.
+Do not change Shop UI.
+Do not change existing database relationships unless required to centralize stock.
+Only add the new Configuration Hub → Stock Management module and make it the single source of truth for inventory.
+Ensure all existing pages simply read from this centralized module so that stock values remain consistent across the entire NIDO platform.
+
+This design is closer to how enterprise ERP systems work: inventory is maintained in one central inventory service, while procurement, orders, vendors, and the shop consume that centralized inventory rather than each keeping their own stock calculations

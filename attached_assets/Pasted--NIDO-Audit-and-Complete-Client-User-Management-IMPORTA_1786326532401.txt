@@ -1,0 +1,780 @@
+# NIDO – Audit and Complete Client User Management
+
+## IMPORTANT INSTRUCTION
+
+Do NOT rebuild, replace, or duplicate the existing NIDO authentication system, Client Portal, client management, database, user management, or protected-route system.
+
+First perform a complete audit of the existing codebase and database.
+
+Then identify what client-user-management functionality already exists.
+
+Only implement the missing functionality.
+
+Preserve all existing working functionality, UI, database records, authentication, routes, permissions, and client portal behavior.
+
+Do not create duplicate tables, duplicate authentication flows, duplicate user-management pages, or duplicate roles if equivalent functionality already exists.
+
+---
+
+# 1. AUDIT THE EXISTING NIDO PLATFORM FIRST
+
+Before making any changes, inspect the complete project.
+
+Audit:
+
+### Frontend
+
+Search for:
+
+* Login
+* Authentication
+* AuthContext
+* Protected Routes
+* Client Portal
+* Client Dashboard
+* Client Management
+* User Management
+* Client Users
+* Roles
+* Permissions
+* Profile
+* Password Reset
+* Invitation
+* User Status
+* Admin Settings
+
+Identify existing:
+
+* Pages
+* Components
+* Hooks
+* Contexts
+* Services
+* API calls
+* Forms
+* Modals
+* Routes
+* Permission checks
+
+### Backend
+
+Inspect:
+
+* Authentication logic
+* User APIs
+* Client APIs
+* Role APIs
+* Permission APIs
+* Invitation APIs
+* Password reset APIs
+* User status APIs
+* Session handling
+* Authorization middleware
+
+### Database
+
+Inspect all existing tables/models related to:
+
+* Users
+* Clients
+* Organizations
+* Roles
+* Permissions
+* User-role relationships
+* Client-user relationships
+* Invitations
+* Sessions
+* Password reset
+* Audit logs
+
+Also inspect:
+
+* Foreign keys
+* Unique constraints
+* Row-level security
+* Tenant/client isolation
+* Existing indexes
+* Existing triggers
+* Existing database functions
+
+---
+
+# 2. CREATE AN AUDIT REPORT BEFORE MODIFYING
+
+Determine whether each capability already exists.
+
+Create an internal implementation checklist:
+
+| Feature                  | Exists | Location | Complete | Action |
+| ------------------------ | ------ | -------- | -------- | ------ |
+| User authentication      |        |          |          |        |
+| Client-user relationship |        |          |          |        |
+| Client user creation     |        |          |          |        |
+| Username/email login     |        |          |          |        |
+| Password management      |        |          |          |        |
+| Invitation               |        |          |          |        |
+| Resend invitation        |        |          |          |        |
+| Password reset           |        |          |          |        |
+| Activate user            |        |          |          |        |
+| Deactivate user          |        |          |          |        |
+| Suspend user             |        |          |          |        |
+| Role assignment          |        |          |          |        |
+| Permission management    |        |          |          |        |
+| Client assignment        |        |          |          |        |
+| User status              |        |          |          |        |
+| Last login               |        |          |          |        |
+| Audit history            |        |          |          |        |
+| Client data isolation    |        |          |          |        |
+
+Do not implement anything until the audit has identified the existing functionality.
+
+---
+
+# 3. CLIENT USER MANAGEMENT REQUIREMENT
+
+If the functionality is missing, add it to the existing NIDO Admin platform.
+
+Location:
+
+NIDO Admin
+
+→ Client Management
+
+→ Select Client
+
+→ Users & Access
+
+This must be an extension of the existing Client Management module.
+
+Do not create a separate unrelated user-management system.
+
+---
+
+# 4. CLIENT USER LIST
+
+Create/use an existing Client Users page if one already exists.
+
+Display:
+
+* Name
+* Username
+* Email
+* Mobile
+* Role
+* Client
+* Status
+* Invitation Status
+* Last Login
+* Created Date
+* Actions
+
+Actions:
+
+* View
+* Edit
+* Activate
+* Deactivate
+* Suspend
+* Reset Password
+* Resend Invitation
+* Manage Permissions
+
+Only show actions that are compatible with the existing authentication provider.
+
+---
+
+# 5. CREATE CLIENT USER
+
+If missing, add a Create Client User function.
+
+Fields:
+
+* First Name
+* Last Name
+* Email
+* Username, if supported by the existing authentication system
+* Mobile Number
+* Client
+* Role
+* Permissions
+* Status
+
+The selected Client must automatically establish the relationship between the user and that client.
+
+Do not allow a client user to exist without a valid client relationship unless the existing architecture explicitly supports another user type.
+
+---
+
+# 6. TWO ACCOUNT-CREATION METHODS
+
+Support the following where compatible with the existing authentication architecture.
+
+## Method A – Invitation
+
+Recommended/default method.
+
+Admin enters:
+
+* Name
+* Email
+* Client
+* Role
+* Permissions
+
+Admin clicks:
+
+**Send Invitation**
+
+User receives an invitation.
+
+User opens invitation.
+
+User creates their password.
+
+Account becomes:
+
+Invitation Pending
+
+→ Invitation Accepted
+
+→ Password Created
+
+→ Active
+
+Do not expose or store plaintext passwords.
+
+Use the existing authentication provider's secure invitation/password setup mechanism.
+
+---
+
+# 7. METHOD B – ADMIN-CREATED CREDENTIALS
+
+If supported by the existing authentication system, allow an NIDO Admin to create the user directly.
+
+Admin can specify:
+
+* Username/email
+* Temporary password
+* Client
+* Role
+* Permissions
+
+The temporary password must never be stored as plaintext in the application database.
+
+Prefer forcing:
+
+**Change password on first login**
+
+If the current authentication provider does not safely support admin-created passwords, do NOT implement a custom password system.
+
+Instead use the existing authentication provider's invitation or password-reset mechanism.
+
+---
+
+# 8. USER STATUS
+
+Support, where missing:
+
+* Invited
+* Active
+* Inactive
+* Suspended
+
+Status changes must immediately affect authentication/authorization.
+
+Example:
+
+Inactive client user
+
+→ Cannot access Client Portal.
+
+Suspended client user
+
+→ Cannot log in.
+
+Do not merely hide the user in the UI; enforce the status at the authentication/authorization level.
+
+---
+
+# 9. CLIENT USER ROLES
+
+First reuse existing roles if they already exist.
+
+Do NOT create duplicate roles.
+
+If client-side roles are missing, implement a minimal role structure compatible with the current architecture:
+
+### Client Admin
+
+Can:
+
+* Access Client Portal
+* Shop
+* Manage client users, if permitted
+* View orders
+* View invoices
+* View reports
+* Manage client profile
+
+### Buyer
+
+Can:
+
+* Browse catalog
+* Select vendor
+* Add products to cart
+* Checkout
+* Place orders
+* View orders
+
+### Approver
+
+Can:
+
+* View orders
+* Approve/reject orders
+* View relevant purchasing information
+
+### Viewer
+
+Can:
+
+* View catalog
+* View orders
+* View invoices
+* Cannot place orders
+
+Do not implement these roles if equivalent roles already exist. Map the existing roles instead.
+
+---
+
+# 10. CLIENT DATA ISOLATION
+
+This is critical.
+
+Every client user must be associated with exactly the appropriate client/tenant.
+
+When a client user logs in:
+
+User
+
+→ Client ID
+
+→ Client-specific data
+
+The client user must only access:
+
+* Their client's catalog
+* Their client's pricing
+* Their client's vendors where permitted
+* Their client's cart
+* Their client's orders
+* Their client's invoices
+* Their client's reports
+* Their client's profile
+
+A client user must NEVER be able to access another client's data by changing:
+
+* URL parameters
+* IDs
+* API requests
+* Query parameters
+* Frontend state
+* Browser storage
+
+Enforce isolation on the backend/database level, not only in React.
+
+---
+
+# 11. USER INVITATION MANAGEMENT
+
+If invitations are missing, implement:
+
+### Invitation Status
+
+* Pending
+* Accepted
+* Expired
+* Revoked
+
+Admin actions:
+
+* Send Invitation
+* Resend Invitation
+* Revoke Invitation
+
+Do not create duplicate active invitations for the same user unnecessarily.
+
+Use secure, expiring invitation tokens through the existing authentication system.
+
+---
+
+# 12. PASSWORD MANAGEMENT
+
+Use the existing authentication provider.
+
+Support:
+
+* Forgot Password
+* Reset Password
+* Change Password
+* Temporary Password / First Login Password Change if supported
+
+Never:
+
+* Store plaintext passwords
+* Store passwords in client tables
+* Create a custom password hashing implementation if the authentication provider already handles authentication
+
+---
+
+# 13. LOGIN FLOW
+
+Preserve the existing NIDO login.
+
+Expected flow:
+
+```text
+NIDO Login
+    ↓
+Authentication
+    ↓
+Identify User
+    ↓
+Identify Client / Tenant
+    ↓
+Check User Status
+    ↓
+Check Role / Permissions
+    ↓
+Client Portal
+```
+
+Do not create another login page if one already exists.
+
+---
+
+# 14. CLIENT USER PROFILE
+
+Client users should be able to view/edit appropriate profile information according to existing permissions.
+
+Profile:
+
+* Name
+* Email
+* Mobile
+* Username
+* Client
+* Role
+
+Sensitive authentication fields must be handled through the authentication provider.
+
+---
+
+# 15. ADMIN USER MANAGEMENT ACTIONS
+
+NIDO Admin should be able to:
+
+* Create client user
+* Invite client user
+* Resend invitation
+* Revoke invitation
+* Edit user
+* Change role
+* Change permissions
+* Activate
+* Deactivate
+* Suspend
+* Reset password
+* View user details
+* View last login
+* View audit history
+
+Do not expose sensitive authentication information.
+
+---
+
+# 16. AUDIT LOG
+
+If NIDO already has an audit-log system, reuse it.
+
+Otherwise implement only the missing audit functionality.
+
+Record:
+
+* User created
+* Invitation sent
+* Invitation resent
+* Invitation accepted
+* User activated
+* User deactivated
+* User suspended
+* Role changed
+* Permission changed
+* Password reset requested
+* Password changed
+* User deleted
+
+Record:
+
+* Actor
+* Target user
+* Client
+* Action
+* Timestamp
+* Relevant metadata
+
+Never log passwords or authentication tokens.
+
+---
+
+# 17. INTEGRATION WITH THE EXISTING CLIENT PORTAL
+
+Do not redesign the Client Portal.
+
+The existing Client Portal should continue to work.
+
+The new user-management system must connect to the existing:
+
+Client User
+
+↓
+
+Client Portal
+
+↓
+
+Shop
+
+↓
+
+Vendor Selection
+
+↓
+
+Cart
+
+↓
+
+Checkout
+
+↓
+
+Order
+
+↓
+
+Draft Purchase Order
+
+---
+
+# 18. IMPORTANT – NEW VENDOR WORKFLOW
+
+Make sure client-user management works with the new procurement workflow.
+
+The authenticated Client User must be able to:
+
+1. Log into the Client Portal.
+2. Open Shop.
+3. View their client-specific catalog.
+4. View eligible vendors.
+5. See the recommended vendor.
+6. Select a vendor.
+7. Add the product to Cart.
+8. Reserve stock against that selected vendor.
+9. Checkout.
+10. Place the order.
+11. Automatically create Draft PO(s) for the selected vendor(s).
+
+The Client User must not access another client's vendors or orders.
+
+---
+
+# 19. DO NOT MODIFY UNRELATED FUNCTIONALITY
+
+Do NOT change:
+
+* Existing Shop design
+* Existing Cart design
+* Existing Checkout design
+* Existing Order workflow
+* Existing PO workflow
+* Existing vendor management
+* Existing product catalog
+* Existing pricing engine
+* Existing GST/HSN system
+* Existing stock management
+
+unless a change is strictly required to connect client-user management.
+
+---
+
+# 20. DATABASE SAFETY
+
+Before modifying the database:
+
+1. Identify existing schema.
+2. Reuse existing tables where possible.
+3. Do not create duplicate user tables.
+4. Do not duplicate authentication records.
+5. Do not duplicate client tables.
+6. Preserve existing data.
+7. Add migrations rather than destructive schema changes.
+8. Preserve foreign keys.
+9. Preserve tenant isolation.
+10. Do not delete existing production records.
+
+If a required field already exists under a different name, reuse it instead of creating another field.
+
+---
+
+# 21. CODE QUALITY
+
+Follow the existing NIDO architecture and coding conventions.
+
+Do not introduce a completely different authentication architecture.
+
+Reuse:
+
+* Existing components
+* Existing services
+* Existing hooks
+* Existing API patterns
+* Existing database utilities
+* Existing authentication provider
+* Existing UI components
+* Existing notification/toast system
+
+Keep the implementation modular and maintainable.
+
+---
+
+# 22. TESTING REQUIREMENTS
+
+After implementation, test all scenarios.
+
+### Test 1
+
+NIDO Admin creates a client user.
+
+Expected:
+
+User appears under the correct Client → Users & Access.
+
+### Test 2
+
+Admin sends invitation.
+
+Expected:
+
+Invitation status = Pending.
+
+### Test 3
+
+User accepts invitation.
+
+Expected:
+
+User creates password and account becomes Active.
+
+### Test 4
+
+User logs in.
+
+Expected:
+
+User enters the correct Client Portal.
+
+### Test 5
+
+User tries to access another client's order.
+
+Expected:
+
+Access denied.
+
+### Test 6
+
+Admin deactivates user.
+
+Expected:
+
+User cannot access the Client Portal.
+
+### Test 7
+
+Admin changes role.
+
+Expected:
+
+Permissions update correctly.
+
+### Test 8
+
+Admin resends invitation.
+
+Expected:
+
+Previous pending invitation is handled safely and a valid invitation is sent.
+
+### Test 9
+
+Client user purchases a product.
+
+Expected:
+
+Selected vendor is preserved through:
+
+Shop → Cart → Order → Draft PO.
+
+### Test 10
+
+Multiple client users belong to the same client.
+
+Expected:
+
+They can access only the data permitted for that client and their assigned roles.
+
+---
+
+# 23. FINAL IMPLEMENTATION REPORT
+
+After completing the audit and implementation, provide a concise report containing:
+
+### Already Existing
+
+List what NIDO already had.
+
+### Newly Implemented
+
+List only what was missing and has now been added.
+
+### Modified Files
+
+List the files changed.
+
+### Database Changes
+
+List tables/columns/migrations added or modified.
+
+### Authentication Changes
+
+Explain how the existing authentication system was reused.
+
+### Client Isolation
+
+Explain how tenant/client-level access is enforced.
+
+### Testing
+
+List the tests performed and their results.
+
+### Important
+
+Do not claim something was implemented unless it actually exists and has been tested in the current NIDO codebase.
+
+The primary objective is:
+
+**AUDIT FIRST → REUSE EXISTING FUNCTIONALITY → IMPLEMENT ONLY MISSING FEATURES → TEST → REPORT**
+
+Do not rebuild the existing NIDO Client Portal or authentication system.

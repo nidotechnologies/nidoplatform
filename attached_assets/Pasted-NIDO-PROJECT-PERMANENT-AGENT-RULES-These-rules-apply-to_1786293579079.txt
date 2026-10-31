@@ -1,0 +1,58 @@
+NIDO PROJECT — PERMANENT AGENT RULES
+
+These rules apply to EVERY future Agent session and EVERY future GitHub import/sync of this project.
+
+1. GitHub is the ONLY source of truth for this project.
+2. NEVER reinstall, recreate, or re-resolve dependencies unnecessarily.
+3. NEVER run npm install automatically.
+4. NEVER run npm install repeatedly.
+5. NEVER add, remove, upgrade, downgrade, or replace npm packages unless I explicitly instruct you to do so.
+6. NEVER modify package.json or package-lock.json unless I explicitly request it.
+7. If dependencies are already installed, DO NOT install them again.
+8. If a dependency installation is genuinely required, use the existing package-lock.json and run `npm ci` only once.
+9. NEVER regenerate node_modules or dependency files unnecessarily.
+10. NEVER analyze or rebuild the entire project during an import.
+11. NEVER refactor existing code during import or startup.
+12. NEVER modify working code, UI, database, authentication, routing, configuration, or environment variables unless I explicitly request it.
+13. NEVER automatically fix errors by installing packages or changing dependencies.
+14. If an error occurs, STOP and report the exact error before making any dependency or architectural change.
+15. Make the smallest possible change for every requested task.
+16. Only inspect files directly related to my current request.
+17. Do not run unnecessary tests, builds, scans, or background tasks.
+18. Do not regenerate files that already exist.
+19. Do not recreate components that already exist.
+20. Do not make "helpful" improvements that I did not request.
+21. Do not use Agent to repeatedly analyze the project after every GitHub import.
+22. Preserve the existing project structure and functionality.
+23. Do not change dependency versions simply because newer versions are available.
+24. Do not perform automatic security/dependency upgrades.
+25. Before making any dependency change, STOP and ask for my approval.
+
+IMPORT/SYNC RULE:
+
+When this project is imported or synchronized from GitHub:
+
+* Treat the repository as an existing finished project.
+* Do not modify anything.
+* Do not install packages unless the environment genuinely requires dependencies that are missing.
+* Do not run npm install.
+* If a clean dependency installation is absolutely necessary, use `npm ci` once using the existing package-lock.json.
+* After that, stop and wait for my instruction.
+
+ERROR RULE:
+
+If the project does not start:
+
+* Report the first actual error.
+* Do not attempt multiple fixes.
+* Do not install packages automatically.
+* Do not change package.json.
+* Wait for my instruction.
+
+CREDIT-SAVING RULE:
+
+Minimize Agent actions and credit usage at all times.
+Do not perform unnecessary reasoning, file scanning, dependency installation, testing, rebuilding, or repeated attempts.
+Only perform actions explicitly required by my request.
+
+These rules must remain active for all future Agent sessions unless I explicitly change them.

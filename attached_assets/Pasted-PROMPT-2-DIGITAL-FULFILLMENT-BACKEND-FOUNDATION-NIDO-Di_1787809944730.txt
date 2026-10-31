@@ -1,0 +1,334 @@
+PROMPT 2 — DIGITAL FULFILLMENT BACKEND FOUNDATION
+
+NIDO — Digital Fulfillment Backend Foundation
+IMPORTANT
+
+Do not rebuild, redesign, or replace existing NIDO modules.
+
+This prompt is only for creating the minimum backend/data foundation for Digital Fulfillment.
+
+The Shop, Product, Cart, Checkout, Order, and PO changes are handled separately.
+
+Before coding:
+
+Inspect the existing codebase.
+Identify the existing Order, Order Item, Product Type, Vendor/Product relationship, file storage, authentication, authorization, RBAC, and audit systems.
+Reuse existing models, APIs, services, storage, authentication, and authorization.
+Do not create duplicate Order, Product, Vendor, or file systems.
+Do not build the detailed Digital Order Details page yet.
+Do not redesign the existing Order page.
+Do not add unnecessary dependencies.
+Do not create mock data unless required for testing.
+Make the smallest possible implementation to reduce Replit usage.
+1. DIGITAL FULFILLMENT CREATION
+
+When a Digital Order Item is created, create one Digital Fulfillment record.
+
+Initial status:
+
+PENDING
+
+The Digital Fulfillment record must be linked to:
+
+Client Order
+Digital Order Item
+Digital Product
+Client
+Internal supplier/vendor if available
+
+Do not create a separate customer order for Digital Products.
+
+2. DIGITAL FULFILLMENT STATUSES
+
+Use the minimum status structure required for the future workflow.
+
+Suggested statuses:
+
+PENDING
+LICENSE_UPLOADED
+PENDING_RELEASE
+RELEASED
+DOWNLOADED
+COMPLETED
+CANCELLED
+
+If the existing system already has an equivalent status structure, reuse it.
+
+Do not create duplicate status systems.
+
+The Client Order status and Digital Fulfillment status must remain separate.
+
+Example:
+
+Client Order: PROCESSING
+Digital Fulfillment: PENDING
+3. DIGITAL FULFILLMENT DATA MODEL
+
+Inspect the existing schema first.
+
+Only add fields or a table if an equivalent structure does not already exist.
+
+A minimum Digital Fulfillment record should support:
+
+id
+order_item_id
+order_id if required by existing relationships
+product_id if required by existing relationships
+client_id if required by existing relationships
+supplier/vendor reference if needed
+status
+license file reference or secure storage path
+license file name
+encrypted password
+uploaded_by
+uploaded_at
+released_by
+released_at
+downloaded_at
+completed_at if needed
+cancelled_at if needed
+created_at
+updated_at
+
+Do not add duplicate fields if the existing Order Item already provides the relationship.
+
+Use existing naming conventions.
+
+Use existing migration and schema tools.
+
+4. LICENSE FILE SUPPORT
+
+Prepare the backend to support one password-protected license/digital asset file per Digital Fulfillment record.
+
+Reuse the existing NIDO file/storage system if available.
+
+The system should support:
+
+Secure file storage reference
+Original file name
+Stored file name or storage key
+File metadata if already supported
+Upload timestamp
+Uploading user
+Release timestamp
+Releasing user
+Download timestamp
+
+Do not build a complicated file management system.
+
+Do not expose the file before it is released.
+
+5. PASSWORD SECURITY
+
+The license file password must be securely stored.
+
+Requirements:
+
+Never store the password as plain text.
+Encrypt the password using the existing encryption/security utility if available.
+If no encryption utility exists, use the project’s existing secure secret/encryption approach.
+Do not return the password through client-facing APIs.
+Do not include the password in normal order responses.
+Only authorized internal users may create or update the password.
+Do not log the password.
+Do not expose the password in error messages.
+
+The client will receive the password separately through an approved communication method.
+
+6. FUTURE DIGITAL LICENSE WORKFLOW
+
+Prepare the backend for this workflow:
+
+Order Created
+→ Digital Fulfillment = PENDING
+→ Authorized NIDO employee uploads password-protected license file
+→ Authorized NIDO employee manually enters the file password
+→ File is stored securely
+→ Password is encrypted and stored
+→ Fulfillment becomes LICENSE_UPLOADED or PENDING_RELEASE
+→ Authorized NIDO employee releases the license
+→ Fulfillment becomes RELEASED
+→ Client downloads the file
+→ Download timestamp is recorded
+→ Fulfillment becomes DOWNLOADED or COMPLETED
+
+Do not build the detailed UI yet.
+
+7. MINIMUM API SUPPORT
+
+Inspect existing API patterns first.
+
+Reuse existing Order and authentication patterns.
+
+Add only the minimum backend endpoints required for the future Order Details UI.
+
+Possible internal endpoints:
+
+GET /internal/orders/:orderId/digital-fulfillments
+POST /internal/digital-fulfillments/:id/license
+POST /internal/digital-fulfillments/:id/release
+
+Possible client endpoint:
+
+GET /client/digital-fulfillments/:id/download
+
+Use the project’s existing route naming conventions instead of blindly creating these exact routes.
+
+Do not create duplicate APIs.
+
+8. AUTHORIZATION
+
+Reuse existing authentication and RBAC.
+
+Internal actions such as:
+
+Upload license
+Replace license
+Enter or update password
+Release license
+View fulfillment details
+
+must be restricted to authorized NIDO employees/admins.
+
+Client actions must be restricted to:
+
+The client who owns the order
+The specific Digital Fulfillment linked to that order
+
+Do not create a new authentication system.
+
+9. DOWNLOAD SECURITY
+
+The client must not be able to download the file before release.
+
+Download rules:
+
+Verify the user is authenticated.
+Verify the user owns the related order.
+Verify the Digital Fulfillment belongs to that order.
+Verify status is RELEASED, DOWNLOADED, or COMPLETED as appropriate.
+Reject access if status is PENDING, LICENSE_UPLOADED, PENDING_RELEASE, or CANCELLED.
+Use a secure file response or signed URL according to the existing storage system.
+Do not expose internal storage paths.
+Record downloaded_at if not already recorded.
+Record download activity if the existing audit system supports it.
+
+Do not return the password to the client.
+
+10. DIGITAL FULFILLMENT STATUS TRANSITIONS
+
+Use controlled transitions.
+
+Recommended transitions:
+
+PENDING
+→ LICENSE_UPLOADED
+→ PENDING_RELEASE
+→ RELEASED
+→ DOWNLOADED
+→ COMPLETED
+
+Cancellation may occur where appropriate:
+
+PENDING → CANCELLED
+LICENSE_UPLOADED → CANCELLED
+PENDING_RELEASE → CANCELLED
+RELEASED → CANCELLED
+
+Do not allow invalid transitions without authorization.
+
+If the existing system has a status transition service, reuse it.
+
+11. ORDER CREATION INTEGRATION
+
+Integrate with the existing Order creation process.
+
+When an order contains Digital Order Items:
+
+Create one Digital Fulfillment record per Digital Order Item.
+Set status to PENDING.
+Do not create a PO.
+Do not reserve physical inventory.
+Do not change the existing Client Order status.
+Do not split the order.
+
+For mixed orders:
+
+Physical items continue through the existing PO and inventory flow.
+Digital items create Digital Fulfillment records.
+One Client Order remains.
+12. AUDIT TRAIL
+
+Reuse the existing audit system if available.
+
+Record these events where supported:
+
+Digital Fulfillment created
+License uploaded
+License replaced
+Password updated
+License released
+License downloaded
+Fulfillment completed
+Fulfillment cancelled
+
+Never record the actual password in the audit log.
+
+13. UI SCOPE — DO NOT BUILD NOW
+
+Do not build:
+
+Detailed Digital Order Details page
+License upload form
+Password input UI
+Release button UI
+Client download page
+Download history UI
+Digital Fulfillment dashboard
+New Order page
+New Shop page
+
+Only create the backend/data/API foundation required for these features later.
+
+If a minimal admin-only API test is needed, use the existing API/testing tools rather than building new UI.
+
+14. ACCEPTANCE TESTS
+Digital Order
+Create a Digital Product.
+Add it to the Client Catalogue.
+Add it to the cart.
+Place the order.
+Confirm one Client Order is created.
+Confirm one Digital Fulfillment record is created.
+Confirm status is PENDING.
+Confirm no PO is created.
+Confirm no physical inventory is reserved.
+Mixed Order
+Add one Physical Product and one Digital Product to the same cart.
+Place the order.
+Confirm one Client Order is created.
+Confirm the Physical Product follows the existing PO flow.
+Confirm one Digital Fulfillment record is created for the Digital Product.
+Confirm no PO is created for the Digital Product.
+Confirm Digital Fulfillment status is PENDING.
+Security
+Confirm the license file cannot be downloaded before RELEASED.
+Confirm unauthorized users cannot upload or release a license.
+Confirm a client cannot access another client’s fulfillment.
+Confirm the password is not stored as plain text.
+Confirm the password is not returned by client-facing APIs.
+Confirm the password is not written to logs.
+Confirm download activity is recorded if audit support exists.
+FINAL IMPLEMENTATION RULE
+
+Implement only the Digital Fulfillment backend foundation.
+
+Do not build the detailed Order Details page yet.
+
+Do not redesign existing pages.
+
+Do not modify unrelated modules.
+
+Do not duplicate existing systems.
+
+Use the existing NIDO architecture and make the smallest safe changes possible.

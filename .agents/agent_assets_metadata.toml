@@ -1,0 +1,24 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "PTHHGVeZzHRpHlHg2SR2w"
+uri = "file://generated/Nido_Tech_Current_Platform_Process_Flow.docx"
+type = "word_document"
+title = "Nido Tech Current Platform Process Flow"
+description = "Updated Word document matching the attached format and reflecting the current platform process flow."
+logical_id = "6f09e743-e6c4-4122-b762-1dbc9fd68503"
+
+[[outputs]]
+id = "LARr_b_If8inXaK3GQHRN"
+uri = "file://generated-artifacts/NIDO_Operational_Workflow_Blueprint_Filled.xlsx"
+type = "table"
+title = "Filled NIDO Operational Workflow Blueprint"
+description = "Completed workbook template with 9 operational workflows, 8 operating decisions, and 41 detailed process steps. The detail sheet distinguishes implemented app behavior from target controls and unconnected production dependencies."
+logical_id = "f6cf5427-ea07-4247-a91c-911a4aaa094e"
+content_hash = "sha256:573c8563ed330bb892e225ec4a0175ed46591560740f87c423f4cc025214e392"
+size = 16207
+mtime_ms = 1792286029160
+storage_uri = "gcs://replit-rams-assets-pike/rams/assets/repl:8d629dbf-41e5-45a3-b419-86f1b15e0e27/f6cf5427-ea07-4247-a91c-911a4aaa094e/d3fe30d3-e58d-4162-8fa1-25c3539e816d"
+storage_version_token = "1792286095942489"
+content_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

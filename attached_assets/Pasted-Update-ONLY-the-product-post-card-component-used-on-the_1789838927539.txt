@@ -1,0 +1,520 @@
+Update **ONLY the product post/card component used on the existing NIDO Shop page** to support a professional, universal **Cloud Service Product Card**.
+
+## CRITICAL SCOPE RULE
+
+**Do not change anything else in the NIDO Shop page or anywhere else in the platform.**
+
+The following must remain exactly as they are:
+
+* Shop page layout
+* Header
+* Navigation
+* Sidebar
+* Search
+* Filters
+* Sorting
+* Category navigation
+* Existing product grid
+* Existing product cards for Physical Products
+* Existing product cards for Digital Licences
+* Existing product cards for Subscriptions
+* Existing product cards for Hybrid Products
+* Existing cart functionality
+* Existing checkout
+* Existing pricing engine
+* Existing vendor logic
+* Existing client logic
+* Existing database structure unless absolutely required for the cloud card's existing data rendering
+* Existing authentication and permissions
+* Existing routes
+* Existing APIs
+* Existing Shop page styling and responsive behavior
+
+**Do not redesign the Shop page.**
+
+Only detect products whose **Product Type = Cloud Service** and render those products using the new Cloud Service Product Card.
+
+All other product types must continue using their existing cards without any visual or functional changes.
+
+---
+
+# OBJECTIVE
+
+Create a **universal Cloud Service Product Card** that is not specific to AWS.
+
+The same card must support cloud services from different providers, including but not limited to:
+
+* Amazon Web Services (AWS)
+* Microsoft Azure
+* Google Cloud
+* Oracle Cloud
+* IBM Cloud
+* DigitalOcean
+* Cloudflare
+* Other cloud providers
+
+Do not hard-code AWS-specific terminology into the card structure.
+
+The card must be provider-neutral and data-driven.
+
+---
+
+# CLOUD SERVICE CARD
+
+The Cloud Service card should display:
+
+### Header
+
+* Provider logo/icon
+* Provider name
+* Cloud service/product name
+* Product Type badge: `Cloud Service`
+* Category
+* Short description
+
+### Service information
+
+Display available information dynamically depending on the product data:
+
+* Cloud Provider
+* Service Category
+* Service Type
+* Region availability
+* Deployment model
+* Billing model
+* Pricing unit
+* Service status/availability
+* Number of available variations/configurations
+
+Do not display empty fields.
+
+If a field is unavailable, hide that field rather than showing `N/A`.
+
+---
+
+# UNIVERSAL SERVICE CATEGORIES
+
+The card should support these categories:
+
+* Compute
+* Storage
+* Database
+* Networking
+* Security
+* Backup & Disaster Recovery
+* AI & Machine Learning
+* Analytics & Big Data
+* DevOps & Developer Tools
+* Application Services
+* Migration
+* Monitoring & Management
+* CDN & Edge Services
+* Containers & Kubernetes
+* Serverless
+* SaaS / Cloud Applications
+* Other
+
+Do not force every provider to use every category.
+
+Categories must come from the product data.
+
+---
+
+# PRICING DISPLAY
+
+Cloud services can use different pricing models.
+
+The card must support:
+
+* Usage Based
+* Hourly
+* Monthly
+* Annual
+* Per User
+* Per GB
+* Per Request
+* Per API Call
+* Per Transaction
+* Tiered Pricing
+* Subscription
+* Reserved / Committed
+* One-Time
+* Custom Quote
+
+Show the actual pricing model from the product data.
+
+Examples:
+
+`Usage Based`
+
+`₹ X.XX / GB`
+
+`₹ X.XX / hour`
+
+`₹ X,XXX / month`
+
+`Custom Quote`
+
+Do not invent a price.
+
+If the product does not have a fixed price, show:
+
+**Usage Based**
+
+or
+
+**Custom Quote**
+
+according to the product data.
+
+---
+
+# UNIVERSAL VARIATION SUPPORT
+
+A cloud service can have many variations.
+
+The card must support a dynamic number of variations.
+
+Examples:
+
+### Compute
+
+* Region
+* Operating System
+* Machine/Instance Type
+* CPU
+* Memory
+* Storage
+* Architecture
+
+### Storage
+
+* Storage Type
+* Storage Class
+* Capacity
+* Region
+* Retrieval frequency
+* Data transfer
+
+### Database
+
+* Database Engine
+* Instance/Compute Type
+* CPU
+* Memory
+* Storage
+* Availability
+* Backup
+* Region
+
+### Networking
+
+* Network Type
+* Bandwidth
+* Region
+* Data Transfer
+* Number of Connections
+
+### AI / ML
+
+* Model
+* GPU/CPU
+* Memory
+* Inference type
+* Requests
+* Tokens
+* Region
+
+### SaaS / Cloud Application
+
+* Plan
+* Number of Users
+* Storage
+* Features
+* Billing Cycle
+
+These are examples only.
+
+**Do not hard-code these fields into every product.**
+
+The card must read the available configuration/variation data dynamically.
+
+---
+
+# CARD ACTIONS
+
+The Cloud Service Card should have:
+
+### `View Services`
+
+Open the existing product/service detail mechanism if one already exists.
+
+Do not create a new unrelated route unless the existing architecture requires it.
+
+### `Configure`
+
+Open a configuration interface for the selected cloud service.
+
+The configuration interface must be generated from the available product variation/configuration data.
+
+Do not assume that every cloud service has the same configuration fields.
+
+### `Add to Cart`
+
+Use the existing NIDO cart functionality.
+
+Do not create a separate cart system.
+
+The selected cloud service configuration must be passed to the existing cart correctly.
+
+---
+
+# CONFIGURATION EXPERIENCE
+
+When the user clicks `Configure`, show the available configuration options for that specific cloud service.
+
+Example:
+
+**AWS — Virtual Machine**
+
+Region:
+`Mumbai`
+
+Operating System:
+`Linux`
+
+Instance:
+`t3.medium`
+
+Storage:
+`100 GB`
+
+Quantity:
+`1`
+
+Estimated Price:
+`₹X,XXX / month`
+
+But if the client selects another service such as cloud storage, show the relevant fields for that service instead.
+
+For example:
+
+**Cloud Storage**
+
+Storage Class:
+`Standard`
+
+Capacity:
+`500 GB`
+
+Region:
+`Mumbai`
+
+Expected Data Transfer:
+`100 GB`
+
+Estimated Price:
+`₹X,XXX / month`
+
+The UI must therefore be **dynamic and configuration-driven**.
+
+---
+
+# ESTIMATED PRICING
+
+For usage-based cloud services, clearly label the price as:
+
+**Estimated Price**
+
+Do not represent usage-based pricing as a guaranteed fixed price.
+
+Where applicable, display:
+
+* Provider Cost
+* NIDO Service/Handling Charge
+* NIDO Margin
+* Discount
+* Tax
+* Client Selling Price
+
+However, **use the existing NIDO pricing engine and existing pricing data**.
+
+Do not create a new pricing engine.
+
+Do not modify the existing Price Engine.
+
+---
+
+# VISUAL DESIGN
+
+The new Cloud Service Product Card must visually belong to the existing NIDO Shop.
+
+Use the existing:
+
+* Colors
+* Typography
+* Border radius
+* Shadows
+* Spacing
+* Buttons
+* Icons
+* Responsive behavior
+* Design system
+* Dark/light theme behavior
+
+Do not introduce a completely different visual style.
+
+The card should look like a natural extension of the existing NIDO product cards.
+
+Use a clean professional B2B SaaS/cloud-services appearance.
+
+---
+
+# CARD INFORMATION HIERARCHY
+
+Prioritize information in this order:
+
+1. Provider
+2. Cloud Service Name
+3. Product Type
+4. Category
+5. Short Description
+6. Important service specifications
+7. Billing model
+8. Pricing / estimated pricing
+9. Available variations
+10. Actions
+
+Do not overload the card with every technical specification.
+
+Show the most important information on the card and allow detailed configuration through `View Services` or `Configure`.
+
+---
+
+# PROVIDER EXAMPLES
+
+The component must work with data such as:
+
+### AWS
+
+Provider: Amazon Web Services
+Service: EC2
+Category: Compute
+
+### Microsoft Azure
+
+Provider: Microsoft Azure
+Service: Virtual Machines
+Category: Compute
+
+### Google Cloud
+
+Provider: Google Cloud
+Service: Compute Engine
+Category: Compute
+
+### Oracle Cloud
+
+Provider: Oracle Cloud
+Service: Compute
+Category: Compute
+
+### DigitalOcean
+
+Provider: DigitalOcean
+Service: Droplets
+Category: Compute
+
+The same React/UI component should render all of these using their product data.
+
+Do not create separate hard-coded components for AWS, Azure, Google Cloud, etc.
+
+---
+
+# IMPORTANT DATA RULE
+
+Use the existing NIDO product/catalogue data structure wherever possible.
+
+Map the new card to:
+
+* Product name
+* Product type
+* Vendor/provider
+* Category
+* Description
+* Product image/icon
+* Price
+* Currency
+* Billing model
+* Variations
+* Configuration options
+* Availability
+* Region
+* Client assignment
+* Vendor assignment
+
+Do not break existing product data.
+
+If the current schema already contains suitable fields, reuse them.
+
+Do not rename existing fields unnecessarily.
+
+Do not migrate or restructure unrelated product data.
+
+---
+
+# RESPONSIVE BEHAVIOR
+
+The Cloud Service Product Card must work correctly on:
+
+* Desktop
+* Laptop
+* Tablet
+* Mobile
+
+Maintain the existing Shop grid behavior.
+
+Do not change the number of columns or Shop page layout unless the existing responsive system automatically handles it.
+
+---
+
+# STRICT NON-REGRESSION REQUIREMENT
+
+After implementation, verify:
+
+1. Physical Product cards are unchanged.
+2. Digital Licence cards are unchanged.
+3. Subscription cards are unchanged.
+4. Hybrid Product cards are unchanged.
+5. Cloud Service cards use the new design.
+6. Shop filters still work.
+7. Shop search still works.
+8. Existing category filtering still works.
+9. Existing cart still works.
+10. Existing checkout still works.
+11. Existing pricing logic still works.
+12. Existing vendor selection logic still works.
+13. Existing client-specific product visibility still works.
+14. Existing permissions still work.
+15. No existing routes are broken.
+16. No unrelated components are modified.
+17. No existing data is deleted or altered.
+18. No existing functionality is removed.
+
+## FINAL INSTRUCTION
+
+**Make the smallest possible code change required.**
+
+Modify only the existing **Shop Product Card rendering/component for products where Product Type = `Cloud Service`**.
+
+Everything else must remain unchanged.
+
+Do not redesign the Shop page.
+
+Do not redesign the entire product-card system.
+
+Do not change the existing product cards for other product types.
+
+Do not change the backend unless absolutely necessary for the existing cloud-service data to render.
+
+The final result should be a **universal, provider-neutral, dynamic Cloud Service Product Card** that can support AWS, Azure, Google Cloud, Oracle Cloud, IBM Cloud, DigitalOcean, Cloudflare and future cloud providers without requiring a new card design for each provider.

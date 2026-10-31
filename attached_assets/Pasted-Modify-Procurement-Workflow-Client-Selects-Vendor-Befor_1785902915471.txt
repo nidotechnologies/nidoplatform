@@ -1,0 +1,123 @@
+Modify Procurement Workflow – Client Selects Vendor Before Add to Cart
+Objective
+
+Refactor the procurement workflow so that vendor selection happens on the Shop page before a product is added to the cart.
+
+Remove the automatic Vendor Selection Engine from the Order Details page. The selected vendor should travel with the cart item, order item, and purchase order throughout the workflow.
+
+This change should affect the entire application including Shop, Cart, Checkout, Orders, Purchase Orders, Stock Management, Database, APIs, and UI.
+
+PART 1 – CLIENT-FACING PROCUREMENT FLOW
+Phase 1 – Shop
+
+Client browses the client-specific product catalog.
+
+Each product card must display:
+
+Product Name
+Client Selling Price
+Available Vendors
+Vendor Price
+Vendor Rating
+Vendor Lead Time
+Available Stock
+Expected Delivery
+Vendor Badge (Preferred / Best Price / Fastest)
+Vendor Selection Panel (Updated Requirement)
+
+When selecting a vendor, the UI must show:
+
+Recommended Vendor (highlighted at top)
+Remaining Vendors listed separately in a Vendor Selection Tab
+
+The vendor selection interface must be split into:
+
+1. Recommended Vendor Section
+Automatically highlighted based on system logic
+Displayed first
+Clearly marked as Recommended
+2. Vendor Selection Tab
+Lists all remaining vendors
+Allows manual selection of any vendor
+Shows same vendor attributes:
+Vendor Name
+Vendor Rating
+Landed Cost
+Base Price
+Available Stock
+Lead Time
+Delivery Days
+Preferred Vendor Badge
+
+The client must select one vendor before clicking Add to Cart.
+
+The Add to Cart button must remain disabled until a vendor is selected.
+
+When Add to Cart is clicked:
+
+Reserve stock against the selected vendor
+Save the selected Vendor ID inside the cart item
+Lock the vendor for that cart line
+Save vendor price snapshot
+Save landed cost snapshot
+Save GST and HSN snapshot
+
+Do NOT execute any automatic vendor selection engine.
+
+Phase 2 – Cart
+
+Each cart item must display:
+
+Selected Vendor
+Vendor Rating
+Lead Time
+Vendor Stock
+Vendor Price
+Landed Cost
+
+The client may:
+
+Change quantity
+Remove item
+
+Changing quantity updates reservation only for the selected vendor.
+
+Changing vendor should only be possible from the Shop page (or via an explicit "Change Vendor" action that releases the old reservation and creates a new one).
+
+Phase 3 – Checkout
+
+No vendor selection occurs.
+
+Only collect:
+
+Delivery Address
+Payment Terms
+Delivery Notes
+
+Review order and submit.
+
+Phase 4 – Place Order
+
+When Place Order is clicked:
+
+Create:
+
+Master Order
+Order Items
+
+Each Order Item must already contain:
+
+Vendor ID
+Vendor Name
+Vendor Price
+Landed Cost
+Reserved Quantity
+
+DO NOT execute:
+
+Vendor Recommendation
+Vendor Scoring
+Cheapest First Fill
+Vendor Allocation Engine
+
+These are removed from the order creation workflow.
